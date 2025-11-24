@@ -1,0 +1,57 @@
+{
+  "models": {
+    "local": {
+      "llama3.2:3b": {
+        "description": "Small local model for testing",
+        "context_window": 8192,
+        "cost": "free"
+      }
+    },
+    "cloud": {
+      "gpt-os:120b-cloud": {
+        "description": "Large cloud model for production",
+        "context_window": 131072,
+        "cost": "paid"
+      },
+      "deepseek-v3.1:671b-cloud": {
+        "description": "Very large model for complex analysis",
+        "context_window": 262144,
+        "cost": "paid"
+      }
+    }
+  },
+  "analysis_strategies": {
+    "hybrid_global_first": {
+      "description": "Provides complete global overview before details",
+      "stages": [
+        "global_statistics_and_patterns",
+        "structural_summary_with_key_edges",
+        "detailed_regional_analysis_if_needed",
+        "global_refinement"
+      ],
+      "advantages": [
+        "Agent sees entire graph structure from the start",
+        "Better clustering decisions with global context",
+        "Avoids suboptimal local decisions"
+      ],
+      "recommended": true
+    },
+    "incremental_batch": {
+      "description": "Legacy: analyzes graph in small batches",
+      "advantages": ["Handles very large graphs", "Lower memory usage"],
+      "disadvantages": [
+        "Limited global view initially",
+        "May make suboptimal local decisions"
+      ],
+      "recommended": false
+    }
+  },
+  "default_settings": {
+    "strategy": "hybrid_global_first",
+    "model": "gpt-os:120b-cloud",
+    "target_clusters": null,
+    "ollama_host": "http://localhost:11434",
+    "timeout": 300,
+    "temperature": 0
+  }
+}
