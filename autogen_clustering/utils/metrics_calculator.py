@@ -12,6 +12,9 @@ class MetricsCalculator:
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "experiments"
         )
         
+        # Try to find Java executable
+        self.java_cmd = self._find_java()
+        
         # Validate dependency RSF exists
         if self.dependency_rsf_path and not os.path.exists(self.dependency_rsf_path):
             pass
@@ -24,6 +27,29 @@ class MetricsCalculator:
             #     for f in os.listdir(dirname):
             #         if f.endswith('.rsf'):
             #             print(f"     - {f}")
+    
+    def _find_java(self):
+        """Find the Java executable, trying common locations"""
+        import shutil
+        
+        # Try to find java in PATH
+        java_path = shutil.which('java')
+        if java_path:
+            return java_path
+        
+        # Try common macOS locations
+        common_paths = [
+            '/usr/bin/java',
+            '/Library/Java/JavaVirtualMachines/*/Contents/Home/bin/java',
+            '/opt/homebrew/bin/java',
+        ]
+        
+        for path in common_paths:
+            if os.path.exists(path):
+                return path
+        
+        # Default to 'java' and hope it's in PATH
+        return 'java'
     
     def clusters_to_rsf(self, clusters, output_path):
         """Convert clusters dict to RSF format"""
@@ -38,16 +64,17 @@ class MetricsCalculator:
         turbomq_jar = os.path.join(self.experiments_dir, "turbomq.jar")
         
         if not os.path.exists(turbomq_jar):
-            # print(f"⚠ Warning: {turbomq_jar} not found, skipping TurboMQ")
+            print(f"⚠ TurboMQ jar not found: {turbomq_jar}")
+            print(f"   Experiments dir: {self.experiments_dir}")
             return None
         
         # Validate input files exist
         if not os.path.exists(self.dependency_rsf_path):
-            # print(f"⚠ TurboMQ error: Dependency RSF not found: {self.dependency_rsf_path}")
+            print(f"⚠ TurboMQ error: Dependency RSF not found: {self.dependency_rsf_path}")
             return None
         
         if not os.path.exists(clustering_rsf_path):
-            # print(f"⚠ TurboMQ error: Clustering RSF not found: {clustering_rsf_path}")
+            print(f"⚠ TurboMQ error: Clustering RSF not found: {clustering_rsf_path}")
             return None
         
         try:
@@ -62,13 +89,15 @@ class MetricsCalculator:
             cmd = ["java", "-jar", "turbomq.jar", "temp_dependency.rsf", "temp_clustering.rsf"]
             print(f"   Executing: {' '.join(cmd)}")
             print(f"   CWD: {self.experiments_dir}")
+            print(f"   Java: {self.java_cmd}")
             
             result = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
                 timeout=30,
-                cwd=self.experiments_dir
+                cwd=self.experiments_dir,
+                env={**os.environ, 'PATH': os.path.dirname(self.java_cmd) + ':' + os.environ.get('PATH', '')}
             )
             
             # Clean up temp files
@@ -103,12 +132,17 @@ class MetricsCalculator:
         mojo_jar = os.path.join(self.experiments_dir, "mojo.jar")
         
         if not os.path.exists(mojo_jar):
-            # print(f"⚠ Warning: {mojo_jar} not found, skipping MoJo-FM")
+            print(f"⚠ MoJo jar not found: {mojo_jar}")
+            print(f"   Experiments dir: {self.experiments_dir}")
             return None
         
         # If no reference, skip MoJo-FM (it needs a reference clustering)
-        if not reference_rsf_path or not os.path.exists(reference_rsf_path):
-            # print(f"⚠ No reference RSF provided, skipping MoJo-FM")
+        if not reference_rsf_path:
+            print(f"⚠ No reference RSF provided for MoJo-FM")
+            return None
+            
+        if not os.path.exists(reference_rsf_path):
+            print(f"⚠ Reference RSF not found: {reference_rsf_path}")
             return None
         
         try:
@@ -116,16 +150,30 @@ class MetricsCalculator:
             clust_rsf_abs = os.path.abspath(clustering_rsf_path)
             ref_rsf_abs = os.path.abspath(reference_rsf_path)
             
+            # Verify the files exist
+            if not os.path.exists(clust_rsf_abs):
+                print(f"⚠ MoJo-FM error: Clustering RSF not found: {clust_rsf_abs}")
+                return None
+            
             cmd = ["java", "-jar", "mojo.jar", clust_rsf_abs, ref_rsf_abs, "-fm"]
-            # print(f"   Executing MoJo: {' '.join(cmd)}")
+            print(f"   Executing MoJo: {' '.join(cmd)}")
+            print(f"   CWD: {self.experiments_dir}")
+            print(f"   Java: {self.java_cmd}")
             
             result = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
                 timeout=30,
-                cwd=self.experiments_dir
+                cwd=self.experiments_dir,
+                env={**os.environ, 'PATH': os.path.dirname(self.java_cmd) + ':' + os.environ.get('PATH', '')}
             )
+            
+            # Debug output
+            if result.stderr:
+                print(f"   MoJo stderr: {result.stderr[:200]}")
+            if result.stdout:
+                print(f"   MoJo stdout: {result.stdout[:200]}")
             
             if result.returncode == 0:
                 # Parse MoJo-FM output (format may vary)
@@ -135,13 +183,18 @@ class MetricsCalculator:
                 match = re.search(r'[\d.]+', output)
                 if match:
                     score = float(match.group())
+                    print(f"   ✓ MoJo-FM score: {score}")
                     return score
-                return None
+                else:
+                    print(f"⚠ MoJo-FM: Could not parse score from output: {output}")
+                    return None
             else:
-                print(f"⚠ MoJo-FM error: {result.stderr}")
+                print(f"⚠ MoJo-FM error (exit code {result.returncode}): {result.stderr}")
                 return None
         except Exception as e:
             print(f"⚠ MoJo-FM calculation failed: {e}")
+            import traceback
+            traceback.print_exc()
             return None
     
     def calculate_metrics(self, clusters, reference_rsf_path=None):
