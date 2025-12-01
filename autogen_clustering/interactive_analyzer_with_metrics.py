@@ -287,10 +287,16 @@ class MetricsCalculator:
 class InteractiveAnalyzerWithMetrics:
     """Analyzer with integrated metrics evaluation and improvement loop"""
     
-    def __init__(self, ollama_host="http://localhost:11434", model="gpt-oss:120b-cloud",
-                 dependency_rsf_path=None, reference_rsf_path=None):
+    def __init__(self, ollama_host="http://localhost:11434", 
+                 clustering_model="gpt-oss:120b-cloud",
+                 metrics_model=None,
+                 dependency_rsf_path=None, reference_rsf_path=None,
+                 timeout=600, temperature=0):
         self.ollama_host = ollama_host
-        self.model = model
+        self.clustering_model = clustering_model
+        self.metrics_model = metrics_model or clustering_model  # Default to clustering model if not specified
+        self.timeout = timeout
+        self.temperature = temperature
         self.graph = None
         self.graph_provider = None
         self.metrics_calculator = None
@@ -318,11 +324,11 @@ class InteractiveAnalyzerWithMetrics:
         system_prompt = CLUSTERING_SYSTEM_PROMPT + f"\n\nYour goal: Create {num_clusters} clusters from the graph."
         
         config_list = [{
-            "model": self.model,
+            "model": self.clustering_model,
             "base_url": f"{self.ollama_host}/v1",
             "api_key": "ollama",
             "api_type": "openai",
-            "temperature": 0,
+            "temperature": self.temperature,
         }]
         
         self.clustering_agent = AssistantAgent(
@@ -330,7 +336,7 @@ class InteractiveAnalyzerWithMetrics:
             system_message=system_prompt,
             llm_config={
                 "config_list": config_list,
-                "timeout": 600,
+                "timeout": self.timeout,
                 "cache_seed": None,
             }
         )
@@ -350,11 +356,11 @@ class InteractiveAnalyzerWithMetrics:
     def setup_metrics_agent(self):
         """Setup metrics evaluation agent"""
         config_list = [{
-            "model": self.model,
+            "model": self.metrics_model,
             "base_url": f"{self.ollama_host}/v1",
             "api_key": "ollama",
             "api_type": "openai",
-            "temperature": 0,
+            "temperature": self.temperature,
         }]
         
         self.metrics_agent = AssistantAgent(
@@ -362,7 +368,7 @@ class InteractiveAnalyzerWithMetrics:
             system_message=METRICS_SYSTEM_PROMPT,
             llm_config={
                 "config_list": config_list,
-                "timeout": 300,
+                "timeout": self.timeout,
                 "cache_seed": None,
             }
         )
@@ -468,7 +474,8 @@ class InteractiveAnalyzerWithMetrics:
         print(f"\n{'='*70}")
         print(f"INTERACTIVE ANALYSIS WITH METRICS")
         print(f"{'='*70}")
-        print(f"Model: {self.model}")
+        print(f"Clustering Model: {self.clustering_model}")
+        print(f"Metrics Model: {self.metrics_model}")
         print(f"Target clusters: {num_clusters}")
         print(f"Max iterations: {max_iterations}")
         
@@ -533,7 +540,8 @@ class InteractiveAnalyzerWithMetrics:
         stats = self._compute_stats(best_clusters)
         
         result = {
-            "model": self.model,
+            "clustering_model": self.clustering_model,
+            "metrics_model": self.metrics_model,
             "approach": "interactive_with_metrics",
             "clusters": best_clusters,
             "statistics": stats,
@@ -712,46 +720,95 @@ def main():
     parser = argparse.ArgumentParser(
         description="Interactive analyzer with metrics evaluation and improvement"
     )
-    parser.add_argument("graph_file", help="Path to pickled graph file")
-    parser.add_argument("--dependency-rsf", help="Path to dependency RSF file (for metrics)")
-    parser.add_argument("--reference-rsf", help="Path to reference clustering RSF (for MoJo-FM)")
-    parser.add_argument("--model", default="gpt-oss:120b-cloud", 
-                       help="Ollama model (default: gpt-oss:120b-cloud)")
-    parser.add_argument("--clusters", type=int, default=10,
-                       help="Number of clusters (default: 10)")
-    parser.add_argument("--iterations", type=int, default=1,
-                       help="Max improvement iterations (default: 1)")
-    parser.add_argument("--output", default="clusters_with_metrics.json",
-                       help="Output file (default: clusters_with_metrics.json)")
-    parser.add_argument("--host", default="http://localhost:11434",
-                       help="Ollama host (default: http://localhost:11434)")
+    parser.add_argument("--config", default="config.json",
+                       help="Path to config file (default: config.json)")
+    parser.add_argument("graph_file", nargs='?', default=None,
+                       help="Path to pickled graph file (overrides config)")
+    parser.add_argument("--dependency-rsf", 
+                       help="Path to dependency RSF file (for metrics, overrides config)")
+    parser.add_argument("--reference-rsf", 
+                       help="Path to reference clustering RSF (for MoJo-FM, overrides config)")
+    parser.add_argument("--clustering-model",
+                       help="Ollama model for clustering agent (overrides config)")
+    parser.add_argument("--metrics-model",
+                       help="Ollama model for metrics agent (overrides config)")
+    parser.add_argument("--clusters", type=int,
+                       help="Number of clusters (overrides config)")
+    parser.add_argument("--iterations", type=int,
+                       help="Max improvement iterations (overrides config)")
+    parser.add_argument("--output",
+                       help="Output file (overrides config)")
+    parser.add_argument("--host",
+                       help="Ollama host (overrides config)")
+    parser.add_argument("--timeout", type=int,
+                       help="Request timeout in seconds (overrides config)")
+    parser.add_argument("--temperature", type=float,
+                       help="Temperature for LLM (overrides config)")
 
     args = parser.parse_args()
 
+    # Load config file
+    config_path = os.path.join(os.path.dirname(__file__), args.config)
+    config = {}
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+            print(f"✓ Loaded config from {config_path}")
+        except Exception as e:
+            print(f"⚠ Warning: Could not load config file: {e}")
+            print("   Using defaults and command line arguments")
+    else:
+        print(f"⚠ Warning: Config file not found: {config_path}")
+        print("   Using defaults and command line arguments")
+
+    # Get run_config or default_settings
+    run_config = config.get("run_config", config.get("default_settings", {}))
+    
+    # Merge config with command line arguments (CLI overrides config)
+    graph_file = args.graph_file or run_config.get("graph_file")
+    if not graph_file:
+        print("❌ Error: graph_file must be provided either in config or as argument")
+        sys.exit(1)
+    
+    dependency_rsf = args.dependency_rsf if args.dependency_rsf is not None else run_config.get("dependency_rsf")
+    reference_rsf = args.reference_rsf if args.reference_rsf is not None else run_config.get("reference_rsf")
+    clustering_model = args.clustering_model or run_config.get("clustering_model") or run_config.get("model", "gpt-oss:120b-cloud")
+    metrics_model = args.metrics_model or run_config.get("metrics_model") or clustering_model
+    clusters = args.clusters if args.clusters is not None else run_config.get("clusters", 10)
+    iterations = args.iterations if args.iterations is not None else run_config.get("iterations", 1)
+    output = args.output or run_config.get("output", "clusters_with_metrics.json")
+    host = args.host or run_config.get("ollama_host", "http://localhost:11434")
+    timeout = args.timeout if args.timeout is not None else run_config.get("timeout", 600)
+    temperature = args.temperature if args.temperature is not None else run_config.get("temperature", 0)
+
     # Create analyzer
     analyzer = InteractiveAnalyzerWithMetrics(
-        ollama_host=args.host,
-        model=args.model,
-        dependency_rsf_path=args.dependency_rsf,
-        reference_rsf_path=args.reference_rsf
+        ollama_host=host,
+        clustering_model=clustering_model,
+        metrics_model=metrics_model,
+        dependency_rsf_path=dependency_rsf,
+        reference_rsf_path=reference_rsf,
+        timeout=timeout,
+        temperature=temperature
     )
 
     # Load graph
     try:
-        analyzer.load_graph(args.graph_file)
+        analyzer.load_graph(graph_file)
     except FileNotFoundError:
-        print(f"❌ Graph file not found: {args.graph_file}")
+        print(f"❌ Graph file not found: {graph_file}")
         sys.exit(1)
 
     # Run analysis with metrics
     result = analyzer.analyze_with_metrics(
-        num_clusters=args.clusters,
-        max_iterations=args.iterations
+        num_clusters=clusters,
+        max_iterations=iterations
     )
 
     if result:
         # Save
-        analyzer.save_results(result, args.output)
+        analyzer.save_results(result, output)
 
         # Display summary
         print(f"\n{'='*70}")

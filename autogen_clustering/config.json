@@ -46,6 +46,19 @@
       "recommended": false
     }
   },
+  "run_config": {
+    "graph_file": "./dataset/bash/graph.pkl",
+    "dependency_rsf": "./dataset/bash/bash-dependency_compact.rsf",
+    "reference_rsf": null,
+    "clustering_model": "gpt-os:120b-cloud",
+    "metrics_model": "gpt-os:120b-cloud",
+    "clusters": 10,
+    "iterations": 1,
+    "output": "clusters_with_metrics.json",
+    "ollama_host": "http://localhost:11434",
+    "timeout": 600,
+    "temperature": 0
+  },
   "default_settings": {
     "strategy": "hybrid_global_first",
     "model": "gpt-os:120b-cloud",
