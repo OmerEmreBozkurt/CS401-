@@ -20,7 +20,6 @@ except ImportError:
 
 import networkx as nx
 
-# Add current directory to path to ensure imports work
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 CLUSTERING_SYSTEM_PROMPT = """You are an expert in microservice architecture and dependency analysis.
@@ -39,25 +38,16 @@ Strategy:
 2. Call get_all_edges() to see all dependencies
 3. Analyze the dependency patterns
 4. Create clusters that minimize inter-cluster dependencies
-5. Output your clustering in SIMPLE TEXT FORMAT (easier than JSON!)
+5. Output your clustering in JSON format:
 
-CRITICAL OUTPUT FORMAT - Use this simple text format:
-```
-CLUSTER cluster_1:
-node1
-node2
-node3
-
-CLUSTER cluster_2:
-node4
-node5
-node6
-```
-
-Each cluster starts with "CLUSTER cluster_X:" then list one node per line.
-Put a blank line between clusters.
-
-Important: Call the functions to get the data you need!"""
+Output your clustering as JSON:
+{{
+  "clusters": {{
+    "cluster_1": ["node1", "node2", ...],
+    "cluster_2": ["node3", "node4", ...],
+    ...
+  }}
+}}"""
 
 
 INSPECTOR_SYSTEM_PROMPT = """You are the Lead Software Architect and Quality Inspector. 
@@ -187,16 +177,16 @@ class MetricsCalculator:
         turbomq_jar = os.path.join(self.experiments_dir, "turbomq.jar")
         
         if not os.path.exists(turbomq_jar):
-            print(f"⚠ TurboMQ jar not found: {turbomq_jar}")
+            print(f"TurboMQ jar not found: {turbomq_jar}")
             print(f"   Experiments dir: {self.experiments_dir}")
             return None
         
         if not os.path.exists(self.dependency_rsf_path):
-            print(f"⚠ Dependency RSF not found: {self.dependency_rsf_path}")
+            print(f"Dependency RSF not found: {self.dependency_rsf_path}")
             return None
         
         if not os.path.exists(clustering_rsf_path):
-            print(f"⚠ Clustering RSF not found: {clustering_rsf_path}")
+            print(f"Clustering RSF not found: {clustering_rsf_path}")
             return None
         
         try:
@@ -229,13 +219,13 @@ class MetricsCalculator:
                 try:
                     return float(result.stdout.strip())
                 except ValueError:
-                    print(f"⚠ TurboMQ: Could not parse output: {result.stdout.strip()}")
+                    print(f"TurboMQ: Could not parse output: {result.stdout.strip()}")
                     return None
             else:
-                print(f"⚠ TurboMQ error: {result.stderr}")
+                print(f"TurboMQ error: {result.stderr}")
                 return None
         except Exception as e:
-            print(f"⚠ TurboMQ calculation failed: {e}")
+            print(f"TurboMQ calculation failed: {e}")
             return None
     
     def calculate_mojo_fm(self, clustering_rsf_path, reference_rsf_path=None):
@@ -245,16 +235,16 @@ class MetricsCalculator:
         mojo_jar = os.path.join(self.experiments_dir, "mojo.jar")
         
         if not os.path.exists(mojo_jar):
-            print(f"⚠ MoJo jar not found: {mojo_jar}")
+            print(f"MoJo jar not found: {mojo_jar}")
             print(f"   Experiments dir: {self.experiments_dir}")
             return None
             
         if not reference_rsf_path:
-            print(f"⚠ No reference RSF provided for MoJo-FM")
+            print(f"No reference RSF provided for MoJo-FM")
             return None
         
         if not os.path.exists(reference_rsf_path):
-            print(f"⚠ Reference RSF not found: {reference_rsf_path}")
+            print(f"Reference RSF not found: {reference_rsf_path}")
             return None
         
         try:
@@ -263,7 +253,7 @@ class MetricsCalculator:
             
             # Verify the files exist
             if not os.path.exists(clust_rsf_abs):
-                print(f"⚠ MoJo-FM error: Clustering RSF not found: {clust_rsf_abs}")
+                print(f"MoJo-FM error: Clustering RSF not found: {clust_rsf_abs}")
                 return None
             
             cmd = ["java", "-jar", "mojo.jar", clust_rsf_abs, ref_rsf_abs, "-fm"]
@@ -294,13 +284,13 @@ class MetricsCalculator:
                     print(f"   ✓ MoJo-FM score: {score}")
                     return score
                 else:
-                    print(f"⚠ MoJo-FM: Could not parse score from output: {output}")
+                    print(f"MoJo-FM: Could not parse score from output: {output}")
                     return None
             else:
-                print(f"⚠ MoJo-FM error (exit code {result.returncode}): {result.stderr}")
+                print(f"MoJo-FM error (exit code {result.returncode}): {result.stderr}")
                 return None
         except Exception as e:
-            print(f"⚠ MoJo-FM calculation failed: {e}")
+            print(f"MoJo-FM calculation failed: {e}")
             import traceback
             traceback.print_exc()
             return None
@@ -393,7 +383,6 @@ IMPORTANT:
 - Create as many clusters as makes sense (could be 3, could be 20+)
 - Quality over quantity - don't force a specific number"""
         else:
-            # Fixed number of clusters
             cluster_instruction = f"""
 
 Your goal: Create exactly {num_clusters} clusters from the graph."""
@@ -419,7 +408,7 @@ Make sure ALL nodes are assigned to exactly one cluster."""
             "base_url": f"{self.ollama_host}/v1",
             "api_key": self.api_key,
             "api_type": "openai",
-            "temperature": 0.1,  # Slightly higher for variation
+            "temperature": 0.1,  
         }]
         
         self.clustering_agent = AssistantAgent(
@@ -427,18 +416,17 @@ Make sure ALL nodes are assigned to exactly one cluster."""
             system_message=system_prompt,
             llm_config={
                 "config_list": config_list,
-                "timeout": 900,  # Increased timeout for large models
+                "timeout": 900,  
                 "cache_seed": None,
             }
         )
         
         def termination_check(msg):
             content = msg.get("content", "")
-            self.last_llm_output = content  # Capture for debugging
+            self.last_llm_output = content  
             
-            # Look for "CLUSTER" keyword which indicates our simple format
+            
             if "CLUSTER" in content or ("clusters" in content.lower() and "{" in content):
-                # Try to verify it's actually parseable
                 try:
                     clusters = self._extract_clusters_from_content(content)
                     if clusters and len(clusters) > 0:
@@ -448,7 +436,7 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                 except:
                     pass
             
-            # Allow termination after many turns even without perfect format
+            
             if self.verbose:
                 print(f"[DEBUG] Termination check: No valid clusters yet")
             return False
@@ -456,7 +444,7 @@ Make sure ALL nodes are assigned to exactly one cluster."""
         self.user_proxy = UserProxyAgent(
             name="GraphProvider",
             human_input_mode="NEVER",
-            max_consecutive_auto_reply=25,  # Increased to give LLM more chances
+            max_consecutive_auto_reply=25,  
             code_execution_config=False,
             default_auto_reply="Please continue with your analysis and output the final clustering in simple text format (CLUSTER cluster_X: followed by node names).",
             is_termination_msg=termination_check,
@@ -488,7 +476,7 @@ Make sure ALL nodes are assigned to exactly one cluster."""
         self.metrics_proxy = UserProxyAgent(
             name="InspectorExecutor",
             human_input_mode="NEVER",
-            max_consecutive_auto_reply=3,  # Limit to 3 replies to avoid infinite loops
+            max_consecutive_auto_reply=3,  
             code_execution_config=False,
             is_termination_msg=lambda msg: "specific_orders" in msg.get("content", ""),
             silent=not self.verbose,
@@ -575,12 +563,11 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                         if self.verbose:
                             print(f"\n[DEBUG] Checking message ({len(content)} chars): {content[:500]}...")
                         
-                        # Try to extract clusters (tries both text and JSON formats)
+                        
                         clusters = self._extract_clusters_from_content(content)
                         if clusters:
                             return clusters
             
-            # If nothing found, save the last content for debugging
             if all_content and self.verbose:
                 print(f"\n[DEBUG] Full last message:\n{all_content[0]}")
                 
@@ -594,14 +581,13 @@ Make sure ALL nodes are assigned to exactly one cluster."""
     def _extract_clusters_from_content(self, content: str) -> Optional[Dict]:
         """Extract clusters from content - tries simple text format first, then JSON"""
         
-        # Strategy 1: Simple text format (CLUSTER cluster_name: ... nodes ...)
+        
         clusters = self._extract_text_clusters(content)
         if clusters:
             if self.verbose:
                 print(f"[DEBUG] Extracted using simple text format")
             return clusters
         
-        # Strategy 2: JSON format (fallback)
         clusters = self._extract_json_clusters(content)
         if clusters:
             return clusters
@@ -625,9 +611,9 @@ Make sure ALL nodes are assigned to exactly one cluster."""
             for line in lines:
                 line = line.strip()
                 
-                # Check for cluster header
+                
                 if line.upper().startswith('CLUSTER'):
-                    # Extract cluster name: "CLUSTER cluster_1:" or "CLUSTER cluster_1"
+                    
                     parts = line.split()
                     if len(parts) >= 2:
                         cluster_name = parts[1].rstrip(':')
@@ -635,13 +621,12 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                         if current_cluster not in clusters:
                             clusters[current_cluster] = []
                 
-                # Add node to current cluster
+                
                 elif current_cluster and line and not line.startswith('#') and not line.startswith('//'):
-                    # Skip common separator lines
+                    
                     if line not in ['---', '===', '```', '```text']:
                         clusters[current_cluster].append(line)
             
-            # Return only if we found at least one cluster with nodes
             if clusters and any(len(nodes) > 0 for nodes in clusters.values()):
                 if self.verbose:
                     print(f"[DEBUG] Text format found {len(clusters)} clusters")
@@ -656,7 +641,6 @@ Make sure ALL nodes are assigned to exactly one cluster."""
     def _extract_json_clusters(self, content: str) -> Optional[Dict]:
         """Try multiple strategies to extract clusters from content"""
         
-        # Strategy 1: Look for ```json blocks
         json_block_match = re.search(r'```json\s*(\{.*?\})\s*```', content, re.DOTALL)
         if json_block_match:
             try:
@@ -669,7 +653,6 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                 if self.verbose:
                     print(f"[DEBUG] Failed to parse ```json block: {e}")
         
-        # Strategy 2: Look for any code blocks
         code_block_match = re.search(r'```\w*\s*(\{.*?\})\s*```', content, re.DOTALL)
         if code_block_match:
             try:
@@ -682,7 +665,6 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                 if self.verbose:
                     print(f"[DEBUG] Failed to parse ``` block: {e}")
         
-        # Strategy 3: Brace matching to find largest JSON object containing "clusters"
         brace_count = 0
         start_idx = None
         
@@ -706,9 +688,7 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                             if self.verbose:
                                 print(f"[DEBUG] Failed brace match parse: {e}")
                     start_idx = None
-        
-        # Strategy 4: Look for JSON-like structure with clusters key
-        # More aggressive regex that captures nested structures
+    
         patterns = [
             r'\{\s*"clusters"\s*:\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}\s*\}',
             r'"clusters"\s*:\s*(\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\})',
@@ -718,7 +698,6 @@ Make sure ALL nodes are assigned to exactly one cluster."""
             json_match = re.search(pattern, content, re.DOTALL)
             if json_match:
                 try:
-                    # Try to extract just the clusters part if pattern captured it
                     if len(json_match.groups()) > 0:
                         clusters_json = json_match.group(1)
                         data = json.loads(clusters_json)
@@ -737,7 +716,6 @@ Make sure ALL nodes are assigned to exactly one cluster."""
         
         if self.verbose:
             print("[DEBUG] No valid JSON clusters found")
-            # Show a snippet of what we're looking at
             if len(content) > 0:
                 print(f"[DEBUG] Content preview: {content[:1000]}...")
         return None
@@ -769,10 +747,9 @@ Make sure ALL nodes are assigned to exactly one cluster."""
             print(f"ITERATION {iteration + 1}/{max_iterations}")
             print(f"{'='*70}")
             
-            # Step 1: Cluster
+           
             print(f"\n📍 Step 1: Clustering...")
             
-            # Retry logic: try up to 3 times to get valid LLM clustering
             max_retries = 3
             clusters = None
             for retry in range(max_retries):
@@ -792,8 +769,7 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                     break
                 else:
                     if retry < max_retries - 1:
-                        print(f"⚠ LLM clustering failed, retrying...")
-                        # Reset the agent for a fresh attempt
+                        print(f"LLM clustering failed, retrying...")
                         self.clustering_agent.reset()
                     else:
                         print(f"❌ LLM clustering failed after {max_retries} attempts")
@@ -803,7 +779,7 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                         print(f"   3. Model has enough context window for {self.graph.number_of_nodes()} nodes")
                         raise RuntimeError(f"LLM failed to produce valid clustering after {max_retries} attempts")
             
-            # Step 2: Evaluate
+           
             print(f"\n📍 Step 2: Evaluating metrics...")
             scores = self._evaluate_metrics(clusters)
             
@@ -815,16 +791,16 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                 "used_fallback": clusters == best_clusters  # Track if we used fallback
             })
             
-            # Step 3: Inspector Analysis
+           
             if self.metrics_agent and scores:
                 print(f"\n📍 Step 3: Inspector is investigating...")
                 analysis = self._analyze_scores(scores, clusters)
                 
-                # Check if we should continue improving
+                
                 if iteration < max_iterations - 1:
                     turbomq = scores.get('turbomq', 0) or 0
                     
-                    # Only continue if there's room for improvement
+                    
                     if turbomq < 0.85:  # Target threshold
                         print(f"\n📍 Step 4: Preparing for improvement (TurboMQ={turbomq:.4f} < 0.85)...")
                         best_clusters = clusters
@@ -845,7 +821,7 @@ Make sure ALL nodes are assigned to exactly one cluster."""
                 best_scores = scores
                 break
         
-        # Final results
+        
         stats = self._compute_stats(best_clusters)
         
         return {
@@ -974,19 +950,19 @@ Start by calling get_all_nodes() to see the complete list of nodes you must clus
                 
                 missing = all_nodes - clustered_nodes
                 if missing:
-                    print(f"⚠ {len(missing)} nodes not assigned, distributing by dependencies...")
+                    print(f"{len(missing)} nodes not assigned, distributing by dependencies...")
                     clusters = self._distribute_missing_nodes(clusters, missing)
                 
                 extra_nodes = clustered_nodes - all_nodes
                 if extra_nodes:
-                    print(f"⚠ Removing {len(extra_nodes)} non-existent nodes from clusters")
+                    print(f"Removing {len(extra_nodes)} non-existent nodes from clusters")
                     for cluster_name in clusters:
                         clusters[cluster_name] = [n for n in clusters[cluster_name] if n in all_nodes]
             
             return clusters
             
         except Exception as e:
-            print(f"⚠ Clustering error: {e}")
+            print(f"Clustering error: {e}")
             if self.verbose:
                 import traceback
                 traceback.print_exc()
@@ -1037,7 +1013,7 @@ Start by calling get_all_nodes() to see the complete list of nodes you must clus
             print(f"✓ Metrics: TurboMQ={turbomq_str}, MoJo={mojo_str}")
             return result
         except Exception as e:
-            print(f"⚠ Metrics evaluation error: {e}")
+            print(f"Metrics evaluation error: {e}")
             import traceback
             if self.verbose:
                 traceback.print_exc()
@@ -1072,13 +1048,13 @@ Output JSON: {{"specific_orders": ["Move X to cluster_Y", ...], "analysis": "...
                     self.metrics_proxy.initiate_chat(
                         self.metrics_agent,
                         message=message,
-                        max_turns=2,  # Limit to just 2 turns: ask + respond
+                        max_turns=2,  
                     )
             else:
                 self.metrics_proxy.initiate_chat(
                     self.metrics_agent,
                     message=message,
-                    max_turns=2,  # Limit to just 2 turns: ask + respond
+                    max_turns=2,  
                 )
             
             for conv_id, messages in self.metrics_agent.chat_messages.items():
@@ -1089,7 +1065,7 @@ Output JSON: {{"specific_orders": ["Move X to cluster_Y", ...], "analysis": "...
                             return content
                         return content
         except Exception as e:
-            print(f"⚠ Analysis error: {e}")
+            print(f"Analysis error: {e}")
             return None
     
     def _compute_stats(self, clusters):
@@ -1125,11 +1101,6 @@ Output JSON: {{"specific_orders": ["Move X to cluster_Y", ...], "analysis": "...
             json.dump(result, f, indent=2)
         print(f"\n✓ Results saved to {output_file}")
 
-
-# ============================================================================
-# Main
-# ============================================================================
-
 def main():
     parser = argparse.ArgumentParser(description="Improved Interactive analyzer with Inspector Agent")
     parser.add_argument("graph_file", help="Path to pickled graph file")
@@ -1145,7 +1116,7 @@ def main():
 
     args = parser.parse_args()
     
-    # Get API key from args or environment variable
+    
     api_key = args.api_key or os.environ.get("OLLAMA_API_KEY")
 
     analyzer = InteractiveAnalyzerImproved(

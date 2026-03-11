@@ -17,21 +17,16 @@ try:
     import autogen
     from autogen import AssistantAgent, UserProxyAgent, register_function
 except ImportError:
-    print("❌ Error: AutoGen not installed")
-    print("Install with: pip install pyautogen")
     sys.exit(1)
 
-# Add current directory to path to ensure imports work
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from utils.graph_provider import GraphDataProvider
 from utils.metrics_calculator import MetricsCalculator
-# Import the new Inspector prompt
 from prompts.prompts import CLUSTERING_SYSTEM_PROMPT, INSPECTOR_SYSTEM_PROMPT
 
-# ============================================================================
-# Interactive Analyzer with Metrics
-# ============================================================================
+
 
 class InteractiveAnalyzerWithMetrics:
     """Analyzer with integrated metrics evaluation and improvement loop"""
@@ -57,7 +52,7 @@ class InteractiveAnalyzerWithMetrics:
         print(f"✓ Loaded graph: {self.graph.number_of_nodes()} nodes, {self.graph.number_of_edges()} edges")
         self.graph_provider = GraphDataProvider(self.graph)
         
-        # Initialize metrics calculator if dependency RSF provided
+        
         if self.dependency_rsf_path:
             self.metrics_calculator = MetricsCalculator(self.dependency_rsf_path)
 
@@ -93,7 +88,7 @@ class InteractiveAnalyzerWithMetrics:
             silent=True,
         )
         
-        # Register graph functions for clustering agent
+       
         self._register_graph_functions(self.clustering_agent, self.user_proxy)
     
     def setup_metrics_agent(self):
@@ -106,7 +101,7 @@ class InteractiveAnalyzerWithMetrics:
             "temperature": 0,
         }]
         
-        # Use INSPECTOR prompt
+        
         self.metrics_agent = AssistantAgent(
             name="InspectorArchitecture",
             system_message=INSPECTOR_SYSTEM_PROMPT,
@@ -120,12 +115,12 @@ class InteractiveAnalyzerWithMetrics:
         self.metrics_proxy = UserProxyAgent(
             name="InspectorExecutor",
             human_input_mode="NEVER",
-            max_consecutive_auto_reply=10, # Allow turns for investigation
+            max_consecutive_auto_reply=10, 
             code_execution_config=False,
             silent=True,
         )
         
-        # Register BOTH metrics functions AND graph functions (so Inspector isn't blind)
+        
         self._register_metrics_functions()
         self._register_graph_functions(self.metrics_agent, self.metrics_proxy)
     
@@ -133,7 +128,7 @@ class InteractiveAnalyzerWithMetrics:
         """Register graph query functions for a specific agent"""
         provider = self.graph_provider
         
-        # Wrapper functions
+       
         def get_graph_info(): return provider.get_graph_info()
         def get_all_nodes(): return provider.get_all_nodes()
         def get_all_edges(): return provider.get_all_edges()
@@ -216,7 +211,7 @@ class InteractiveAnalyzerWithMetrics:
         
         best_clusters = None
         best_scores = None
-        last_analysis = None  # Store the Inspector's feedback
+        last_analysis = None  
         iteration_history = []
         
         for iteration in range(max_iterations):
@@ -225,7 +220,7 @@ class InteractiveAnalyzerWithMetrics:
             print(f"{'='*70}")
             
             # Step 1: Cluster (Passing feedback if we have it)
-            print(f"\n📍 Step 1: Clustering...")
+            print(f"\n Step 1: Clustering...")
             clusters = self._run_clustering(
                 num_clusters, 
                 iteration > 0, 
@@ -235,11 +230,11 @@ class InteractiveAnalyzerWithMetrics:
             )
             
             if not clusters:
-                print("⚠ Clustering failed, using fallback")
+                print(" Clustering failed, using fallback")
                 clusters = self._fallback_clustering()
             
             # Step 2: Evaluate
-            print(f"\n📍 Step 2: Evaluating metrics...")
+            print(f"\n Step 2: Evaluating metrics...")
             scores = self._evaluate_metrics(clusters)
             
             iteration_history.append({
@@ -251,18 +246,14 @@ class InteractiveAnalyzerWithMetrics:
             
             # Step 3: Inspector Analysis
             if self.metrics_agent and scores:
-                print(f"\n📍 Step 3: Inspector is investigating...")
+                print(f"\n Step 3: Inspector is investigating...")
                 analysis = self._analyze_scores(scores, clusters)
                 
                 if iteration < max_iterations - 1 and analysis:
-                    print(f"\n📍 Step 4: Preparing for improvement...")
+                    print(f"\n Step 4: Preparing for improvement...")
                     best_clusters = clusters
                     best_scores = scores
                     last_analysis = analysis
-                    
-                    # CRITICAL: Reset Clustering Agent so it treats the feedback as a fresh, urgent command
-                    # rather than just part of a long chat history
-                    print("   (Resetting clustering agent memory for fresh attempt)")
                     self.clustering_agent.reset()
                     continue
                 else:
@@ -335,9 +326,7 @@ Output your clustering as JSON:
     "cluster_2": ["node3", "node4", ...],
     ...
   }}
-}}
-
-Start by calling the functions to explore the graph!"""
+}}"""
         
         try:
             # Suppress verbose output
@@ -349,7 +338,7 @@ Start by calling the functions to explore the graph!"""
                 )
             return self.extract_clusters(self.clustering_agent)
         except Exception as e:
-            print(f"⚠ Clustering error: {e}")
+            print(f" Clustering error: {e}")
             return None
     
     def _evaluate_metrics(self, clusters):
@@ -359,7 +348,7 @@ Start by calling the functions to explore the graph!"""
             print(f"✓ Metrics: TurboMQ={result.get('turbomq'):.4f}, MoJo={result.get('mojo_fm')}")
             return result
         except Exception as e:
-            print(f"⚠ Metrics evaluation error: {e}")
+            print(f" Metrics evaluation error: {e}")
             return None
     
     def _analyze_scores(self, scores, clusters):
@@ -404,7 +393,7 @@ Output JSON: {{"specific_orders": ["..."], "analysis": "..."}}"""
                         # If simple text, return it all
                         return content
         except Exception as e:
-            print(f"⚠ Analysis error: {e}")
+            print(f" Analysis error: {e}")
             return None
     
     def _fallback_clustering(self):
