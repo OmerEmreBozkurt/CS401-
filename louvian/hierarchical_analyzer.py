@@ -1,18 +1,3 @@
-#!/usr/bin/env python3
-"""
-Interactive Graph Analyzer with Hierarchical Louvain Pre-processing
-
-This version uses Louvain algorithm to coarsen the graph BEFORE sending to LLM:
-1. Louvain coarsening: N nodes → ~20-50 super-nodes
-2. LLM clustering: Works on the smaller super-node graph
-3. Expansion: Map LLM's clustering back to original nodes
-4. Metrics: Calculate on original node clustering
-
-Benefits:
-- LLM sees a manageable number of nodes
-- LLM can focus on high-level structure
-- Original granularity preserved through expansion
-"""
 
 import sys
 import os
@@ -471,15 +456,28 @@ class HierarchicalAnalyzer:
                 for msg in reversed(messages):
                     if msg.get('role') == 'assistant':
                         content = msg.get('content', '')
+                        if '"clusters"' not in content:
+                            continue
                         
-                        json_match = re.search(r'\{.*"clusters".*?\}', content, re.DOTALL)
-                        if json_match:
-                            try:
-                                data = json.loads(json_match.group())
-                                if 'clusters' in data:
-                                    return data['clusters']
-                            except json.JSONDecodeError:
-                                pass
+                        # Find balanced JSON by tracking braces
+                        start = content.find('{')
+                        while start != -1:
+                            depth = 0
+                            for i in range(start, len(content)):
+                                if content[i] == '{':
+                                    depth += 1
+                                elif content[i] == '}':
+                                    depth -= 1
+                                    if depth == 0:
+                                        candidate = content[start:i+1]
+                                        try:
+                                            data = json.loads(candidate)
+                                            if isinstance(data, dict) and 'clusters' in data:
+                                                return data['clusters']
+                                        except json.JSONDecodeError:
+                                            pass
+                                        break
+                            start = content.find('{', start + 1)
         except Exception as e:
             if self.verbose:
                 print(f"[DEBUG] Extraction error: {e}")
