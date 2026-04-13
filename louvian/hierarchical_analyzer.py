@@ -3,7 +3,7 @@
 Interactive Graph Analyzer with Hierarchical Louvain Pre-processing
 
 This version uses Louvain algorithm to coarsen the graph BEFORE sending to LLM:
-1. Louvain coarsening: 234 nodes → ~20-50 super-nodes
+1. Louvain coarsening: N nodes → ~20-50 super-nodes
 2. LLM clustering: Works on the smaller super-node graph
 3. Expansion: Map LLM's clustering back to original nodes
 4. Metrics: Calculate on original node clustering
@@ -37,94 +37,113 @@ except ImportError:
 
 import networkx as nx
 
-# Import our custom Louvain implementation
 from louvain_hierarchical import LouvainGraph, LouvainAlgorithm, HierarchicalLouvain, compute_modularity
 
-
-# ============================================================================
-# Prompts
-# ============================================================================
-
 CLUSTERING_SYSTEM_PROMPT = """You are an expert in microservice architecture and dependency analysis.
-
-You are working with a PRE-PROCESSED graph where nodes have been grouped into "super-nodes" 
-using the Louvain algorithm. Each super-node represents a group of related original nodes.
-
-You have access to these functions:
-- get_graph_info() - Get statistics about the super-node graph
-- get_all_super_nodes() - Get list of all super-nodes with their sizes and sample members
-- get_super_node_edges() - Get edges between super-nodes (with weights = # of original edges)
-- get_super_node_details(super_node) - Get details about a specific super-node
-
-Your task: Cluster the SUPER-NODES into microservice clusters.
-
+You have access to a dependency graph through these functions:
+- get_graph_info() - Get basic graph statistics
+- get_all_nodes() - Get list of all nodes  
+- get_all_edges() - Get all dependency edges
+- get_node_dependencies(node) - Get dependencies of a specific node
+- get_node_dependents(node) - Get what depends on a specific node
+Your task: Analyze the graph and cluster nodes into microservices.
 Strategy:
 1. First, call get_graph_info() to understand the graph
-2. Call get_all_super_nodes() to see what super-nodes exist and their sizes
-3. Call get_super_node_edges() to see connections between super-nodes
-4. Group related super-nodes together based on edge weights
-5. Output your clustering in SIMPLE TEXT FORMAT
-
-CRITICAL: You are clustering SUPER-NODES (like super_0, super_1, etc), NOT original nodes!
-
-Output format:
-```
-CLUSTER cluster_1:
-super_0
-super_3
-super_5
-
-CLUSTER cluster_2:
-super_1
-super_2
-```
-
-Each cluster should contain super-node names (super_X format).
-The super-nodes will later be expanded back to original nodes."""
-
+2. Call get_all_edges() to see all dependencies
+3. Analyze the dependency patterns
+4. Create clusters that minimize inter-cluster dependencies
+5. Output your clustering as JSON:
+{
+  "clusters": {
+    "cluster_1": ["node1", "node2", ...],
+    "cluster_2": ["node3", "node4", ...],
+    ...
+  }
+}"""
 
 INSPECTOR_SYSTEM_PROMPT = """You are the Lead Software Architect and Quality Inspector.
+You are critical, strict, and detail-oriented.
 
-You are reviewing a clustering of SUPER-NODES (pre-grouped communities of nodes).
-Each super-node represents multiple original nodes that were grouped by the Louvain algorithm.
+Your goal: Analyze the clustering and identify specific improvements.
 
-Your goal: Identify problems in the super-node clustering.
-
-You have access to:
-- get_super_node_details(super_node) - See what's inside a super-node
-- get_super_node_edges() - See connections between super-nodes
+You have access to the graph tools:
+- get_node_dependencies(node)
+- get_node_dependents(node)
+- get_all_edges()
 
 Process:
-1. Review the proposed clustering and metrics
-2. Check if highly-connected super-nodes are split across clusters
-3. Look for super-nodes that should be moved
+1. Receive the proposed clusters and the TurboMQ/MoJo scores.
+2. If the score is low (TurboMQ < 0.7), DO NOT just accept it.
+3. INVESTIGATE:
+   - Pick clusters that seem confused or too large.
+   - Use get_node_dependencies to check edges between them.
+   - Find specific nodes that are in the wrong place.
+4. PROVIDE SPECIFIC ORDERS:
+   - "Move node X to cluster Y"
+   - "Merge cluster A and cluster B"
+   - "Split cluster C"
 
-Output your feedback as specific orders:
-{
-  "analysis": "Your analysis...",
-  "specific_orders": ["Move super_X to cluster_Y", "Merge cluster_A and cluster_B"]
-}
-"""
+Output JSON: {"specific_orders": ["..."], "analysis": "..."}"""
 
-
-# ============================================================================
-# Graph Data Provider for Coarsened Graph
-# ============================================================================
+class GraphDataProvider:
+    """Provides query functions for the graph"""
+    
+    def __init__(self, graph: nx.DiGraph):
+        self.graph = graph
+    
+    def get_graph_info(self) -> str:
+        """Get basic graph statistics"""
+        G = self.graph
+        info = {
+            "total_nodes": G.number_of_nodes(),
+            "total_edges": G.number_of_edges(),
+            "density": round(nx.density(G), 4),
+            "is_dag": nx.is_directed_acyclic_graph(G),
+            "avg_in_degree": round(sum(d for _, d in G.in_degree()) / G.number_of_nodes(), 2) if G.number_of_nodes() > 0 else 0,
+            "avg_out_degree": round(sum(d for _, d in G.out_degree()) / G.number_of_nodes(), 2) if G.number_of_nodes() > 0 else 0
+        }
+        return json.dumps(info, indent=2)
+    
+    def get_all_nodes(self) -> str:
+        """Get list of all nodes"""
+        return json.dumps(list(self.graph.nodes()))
+    
+    def get_all_edges(self) -> str:
+        """Get all dependency edges"""
+        edges = [{"source": str(u), "target": str(v)} for u, v in self.graph.edges()]
+        return json.dumps(edges)
+    
+    def get_node_dependencies(self, node: str) -> str:
+        """Get what a node depends on (successors)"""
+        if node not in self.graph:
+            return json.dumps({"error": f"Node '{node}' not found"})
+        return json.dumps(list(self.graph.successors(node)))
+    
+    def get_node_dependents(self, node: str) -> str:
+        """Get what depends on this node (predecessors)"""
+        if node not in self.graph:
+            return json.dumps({"error": f"Node '{node}' not found"})
+        return json.dumps(list(self.graph.predecessors(node)))
 
 class CoarseGraphProvider:
     """Provides query functions for the coarsened (super-node) graph"""
     
-    def __init__(self, hierarchical_louvain: HierarchicalLouvain):
+    def __init__(self, hierarchical_louvain: HierarchicalLouvain, original_graph: nx.DiGraph):
         self.hier = hierarchical_louvain
+        self.original_graph = original_graph
+        
+        self.node_to_super = {}
+        for super_node, original_nodes in self.hier.super_node_to_original.items():
+            for node in original_nodes:
+                self.node_to_super[node] = super_node
     
     def get_graph_info(self) -> str:
         """Get basic statistics about the super-node graph"""
         info = self.hier.get_coarse_graph_info()
         
-        # Simplify for LLM
         summary = {
-            "num_super_nodes": info["num_super_nodes"],
-            "num_edges_between_super_nodes": info["num_coarse_edges"],
+            "total_nodes": info["num_super_nodes"],
+            "total_edges": info["num_coarse_edges"],
             "original_nodes_total": sum(sn["size"] for sn in info["super_nodes"].values()),
             "average_super_node_size": round(
                 sum(sn["size"] for sn in info["super_nodes"].values()) / info["num_super_nodes"], 1
@@ -132,57 +151,47 @@ class CoarseGraphProvider:
         }
         return json.dumps(summary, indent=2)
     
-    def get_all_super_nodes(self) -> str:
-        """Get all super-nodes with their sizes and sample members"""
+    def get_all_nodes(self) -> str:
+        """Get list of all super-nodes"""
         super_nodes = []
-        
         for super_node, original_nodes in self.hier.super_node_to_original.items():
             super_nodes.append({
                 "name": super_node,
                 "size": len(original_nodes),
-                "sample_members": original_nodes[:5],  # First 5 as sample
-                "all_members_if_small": original_nodes if len(original_nodes) <= 10 else None
+                "members": original_nodes[:10]  # First 10 as sample
             })
-        
-        # Sort by size descending
         super_nodes.sort(key=lambda x: x["size"], reverse=True)
-        
         return json.dumps(super_nodes, indent=2)
     
-    def get_super_node_edges(self) -> str:
+    def get_all_edges(self) -> str:
         """Get edges between super-nodes with weights"""
-        # Filter out self-loops and sort by weight
         edges = [e for e in self.hier.coarse_edges if e["source"] != e["target"]]
         edges.sort(key=lambda x: x["weight"], reverse=True)
-        
         return json.dumps(edges, indent=2)
     
-    def get_super_node_details(self, super_node: str) -> str:
-        """Get detailed information about a specific super-node"""
-        if super_node not in self.hier.super_node_to_original:
-            return json.dumps({"error": f"Super-node '{super_node}' not found"})
+    def get_node_dependencies(self, node: str) -> str:
+        """Get what a super-node depends on"""
+        if node not in self.hier.super_node_to_original:
+            return json.dumps({"error": f"Super-node '{node}' not found"})
         
-        original_nodes = self.hier.super_node_to_original[super_node]
-        
-        # Find edges to other super-nodes
         connected_to = defaultdict(float)
         for edge in self.hier.coarse_edges:
-            if edge["source"] == super_node and edge["target"] != super_node:
+            if edge["source"] == node and edge["target"] != node:
                 connected_to[edge["target"]] += edge["weight"]
-            elif edge["target"] == super_node and edge["source"] != super_node:
-                connected_to[edge["source"]] += edge["weight"]
         
-        return json.dumps({
-            "name": super_node,
-            "size": len(original_nodes),
-            "members": original_nodes,
-            "connected_to": dict(connected_to)
-        }, indent=2)
-
-
-# ============================================================================
-# Metrics Calculator (User's Original Working Version)
-# ============================================================================
+        return json.dumps(dict(connected_to), indent=2)
+    
+    def get_node_dependents(self, node: str) -> str:
+        """Get what depends on this super-node"""
+        if node not in self.hier.super_node_to_original:
+            return json.dumps({"error": f"Super-node '{node}' not found"})
+        
+        connected_from = defaultdict(float)
+        for edge in self.hier.coarse_edges:
+            if edge["target"] == node and edge["source"] != node:
+                connected_from[edge["source"]] += edge["weight"]
+        
+        return json.dumps(dict(connected_from), indent=2)
 
 class MetricsCalculator:
     """Calculates TurboMQ and MoJo-FM metrics"""
@@ -192,10 +201,6 @@ class MetricsCalculator:
         self.experiments_dir = experiments_dir or os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "experiments"
         )
-        
-        # Validate dependency RSF exists
-        if self.dependency_rsf_path and not os.path.exists(self.dependency_rsf_path):
-            pass
     
     def clusters_to_rsf(self, clusters, output_path):
         """Convert clusters dict to RSF format"""
@@ -211,30 +216,22 @@ class MetricsCalculator:
         turbomq_jar = os.path.join(self.experiments_dir, "turbomq.jar")
         
         if not os.path.exists(turbomq_jar):
-            print(f"⚠ Warning: {turbomq_jar} not found, skipping TurboMQ")
             return None
         
-        # Validate input files exist
         if not os.path.exists(self.dependency_rsf_path):
-            print(f"⚠ TurboMQ error: Dependency RSF not found: {self.dependency_rsf_path}")
             return None
         
         if not os.path.exists(clustering_rsf_path):
-            print(f"⚠ TurboMQ error: Clustering RSF not found: {clustering_rsf_path}")
             return None
         
         try:
-            # Copy files to experiments directory to avoid path issues with the jar
             dep_rsf_temp = os.path.join(self.experiments_dir, "temp_dependency.rsf")
             clust_rsf_temp = os.path.join(self.experiments_dir, "temp_clustering.rsf")
             
             shutil.copy2(self.dependency_rsf_path, dep_rsf_temp)
             shutil.copy2(clustering_rsf_path, clust_rsf_temp)
             
-            # Debug output
             cmd = ["java", "-jar", "turbomq.jar", "temp_dependency.rsf", "temp_clustering.rsf"]
-            print(f"   Executing: {' '.join(cmd)}")
-            print(f"   CWD: {self.experiments_dir}")
             
             result = subprocess.run(
                 cmd,
@@ -244,31 +241,17 @@ class MetricsCalculator:
                 cwd=self.experiments_dir
             )
             
-            # Clean up temp files
-            try:
-                if os.path.exists(dep_rsf_temp):
-                    os.remove(dep_rsf_temp)
-                if os.path.exists(clust_rsf_temp):
-                    os.remove(clust_rsf_temp)
-            except:
-                pass
-            
-            # Debug output
-            if result.stderr:
-                print(f"   TurboMQ stderr: {result.stderr[:200]}")
+            for f in [dep_rsf_temp, clust_rsf_temp]:
+                if os.path.exists(f):
+                    os.remove(f)
             
             if result.returncode == 0:
                 try:
-                    score = float(result.stdout.strip())
-                    return score
-                except ValueError as e:
-                    print(f"⚠ TurboMQ error: Could not parse output as float: {result.stdout.strip()}")
+                    return float(result.stdout.strip())
+                except ValueError:
                     return None
-            else:
-                print(f"⚠ TurboMQ error (exit code {result.returncode}): {result.stderr}")
-                return None
+            return None
         except Exception as e:
-            print(f"⚠ TurboMQ calculation failed: {e}")
             return None
     
     def calculate_mojo_fm(self, clustering_rsf_path, reference_rsf_path=None):
@@ -276,22 +259,16 @@ class MetricsCalculator:
         mojo_jar = os.path.join(self.experiments_dir, "mojo.jar")
         
         if not os.path.exists(mojo_jar):
-            print(f"⚠ Warning: {mojo_jar} not found, skipping MoJo-FM")
             return None
         
-        # If no reference, skip MoJo-FM (it needs a reference clustering)
         if not reference_rsf_path or not os.path.exists(reference_rsf_path):
-            print(f"⚠ No reference RSF provided, skipping MoJo-FM")
             return None
         
         try:
-            # Use absolute paths
             clust_rsf_abs = os.path.abspath(clustering_rsf_path)
             ref_rsf_abs = os.path.abspath(reference_rsf_path)
             
             cmd = ["java", "-jar", "mojo.jar", clust_rsf_abs, ref_rsf_abs, "-fm"]
-            print(f"   Executing: {' '.join(cmd)}")
-            print(f"   CWD: {self.experiments_dir}")
             
             result = subprocess.run(
                 cmd,
@@ -302,57 +279,36 @@ class MetricsCalculator:
             )
             
             if result.returncode == 0:
-                # Parse MoJo-FM output (format may vary)
-                output = result.stdout.strip()
-                # Try to extract number
-                match = re.search(r'[\d.]+', output)
+                match = re.search(r'[\d.]+', result.stdout.strip())
                 if match:
-                    score = float(match.group())
-                    return score
-                return None
-            else:
-                print(f"⚠ MoJo-FM error: {result.stderr}")
-                return None
-        except Exception as e:
-            print(f"⚠ MoJo-FM calculation failed: {e}")
+                    return float(match.group())
+            return None
+        except Exception:
             return None
     
     def calculate_metrics(self, clusters, reference_rsf_path=None):
         """Calculate all metrics for given clusters"""
         import tempfile
         
-        # Create temporary RSF file
         with tempfile.NamedTemporaryFile(mode='w', suffix='.rsf', delete=False) as f:
             temp_rsf = f.name
         
         try:
-            # Convert clusters to RSF
             self.clusters_to_rsf(clusters, temp_rsf)
-            
-            # Calculate metrics
             turbomq = self.calculate_turbomq(temp_rsf)
             mojo_fm = self.calculate_mojo_fm(temp_rsf, reference_rsf_path)
             
             return {
                 "turbomq": turbomq,
-                "mojo_fm": mojo_fm,
-                "clustering_rsf": temp_rsf  # Keep for reference
+                "mojo_fm": mojo_fm
             }
         except Exception as e:
-            print(f"⚠ Metrics calculation error: {e}")
-            return {"turbomq": None, "mojo_fm": None, "clustering_rsf": temp_rsf}
-        finally:
-            # Don't delete temp file yet - might need it
-            pass
-
-
-# ============================================================================
-# Main Analyzer
-# ============================================================================
+            return {"turbomq": None, "mojo_fm": None}
 
 class HierarchicalAnalyzer:
     """
     Graph analyzer with Louvain pre-processing for LLM-friendly clustering.
+    Uses prompts matching the paper listings.
     """
     
     def __init__(self, ollama_host="http://localhost:11434", model="llama3:8b",
@@ -369,7 +325,7 @@ class HierarchicalAnalyzer:
         # Components
         self.graph = None
         self.hierarchical_louvain: Optional[HierarchicalLouvain] = None
-        self.coarse_provider: Optional[CoarseGraphProvider] = None
+        self.graph_provider: Optional[CoarseGraphProvider] = None
         self.metrics_calculator: Optional[MetricsCalculator] = None
         
         # AutoGen agents
@@ -389,7 +345,6 @@ class HierarchicalAnalyzer:
         print(f"✓ Loaded graph: {self.graph.number_of_nodes()} nodes, "
               f"{self.graph.number_of_edges()} edges")
         
-        # Run Louvain coarsening
         self.hierarchical_louvain = HierarchicalLouvain(
             self.graph,
             num_coarsening_levels=self.louvain_levels,
@@ -398,19 +353,17 @@ class HierarchicalAnalyzer:
         )
         self.hierarchical_louvain.coarsen()
         
-        # Create provider for coarse graph
-        self.coarse_provider = CoarseGraphProvider(self.hierarchical_louvain)
+        self.graph_provider = CoarseGraphProvider(self.hierarchical_louvain, self.graph)
         
-        # Initialize metrics calculator
         if self.dependency_rsf_path:
             self.metrics_calculator = MetricsCalculator(self.dependency_rsf_path)
     
     def setup_clustering_agent(self, num_clusters):
-        """Setup the clustering agent for super-node clustering"""
+        """Setup the clustering agent"""
         if num_clusters is None or num_clusters <= 0:
-            cluster_goal = "Decide the optimal number of clusters based on the super-node structure."
+            cluster_goal = "Decide the optimal number of clusters based on the graph structure."
         else:
-            cluster_goal = f"Create exactly {num_clusters} clusters from the super-nodes."
+            cluster_goal = f"Create exactly {num_clusters} clusters from the graph."
         
         system_prompt = CLUSTERING_SYSTEM_PROMPT + f"\n\nYour goal: {cluster_goal}"
         
@@ -434,7 +387,7 @@ class HierarchicalAnalyzer:
         
         def termination_check(msg):
             content = msg.get("content", "")
-            if "CLUSTER" in content and "super_" in content:
+            if "clusters" in content.lower() and "{" in content:
                 return True
             return False
         
@@ -443,12 +396,12 @@ class HierarchicalAnalyzer:
             human_input_mode="NEVER",
             max_consecutive_auto_reply=15,
             code_execution_config=False,
-            default_auto_reply="Please continue and output the final clustering.",
+            default_auto_reply="Please continue and output the final clustering as JSON.",
             is_termination_msg=termination_check,
             silent=not self.verbose,
         )
         
-        self._register_coarse_functions(self.clustering_agent, self.user_proxy)
+        self._register_graph_functions(self.clustering_agent, self.user_proxy)
     
     def setup_inspector_agent(self):
         """Setup the inspector agent"""
@@ -473,92 +426,66 @@ class HierarchicalAnalyzer:
         self.inspector_proxy = UserProxyAgent(
             name="InspectorExecutor",
             human_input_mode="NEVER",
-            max_consecutive_auto_reply=3,
+            max_consecutive_auto_reply=5,
             code_execution_config=False,
-            is_termination_msg=lambda msg: "specific_orders" in msg.get("content", ""),
+            is_termination_msg=lambda msg: "specific_orders" in msg.get("content", "").lower(),
             silent=not self.verbose,
         )
         
-        self._register_coarse_functions(self.inspector_agent, self.inspector_proxy)
+        self._register_graph_functions(self.inspector_agent, self.inspector_proxy)
     
-    def _register_coarse_functions(self, agent, executor):
-        """Register functions for querying the coarse graph"""
-        provider = self.coarse_provider
+    def _register_graph_functions(self, agent, executor):
+        """Register functions for querying the graph"""
+        provider = self.graph_provider
         
         def get_graph_info() -> str:
             return provider.get_graph_info()
         
-        def get_all_super_nodes() -> str:
-            return provider.get_all_super_nodes()
+        def get_all_nodes() -> str:
+            return provider.get_all_nodes()
         
-        def get_super_node_edges() -> str:
-            return provider.get_super_node_edges()
+        def get_all_edges() -> str:
+            return provider.get_all_edges()
         
-        def get_super_node_details(super_node: str) -> str:
-            return provider.get_super_node_details(super_node)
+        def get_node_dependencies(node: str) -> str:
+            return provider.get_node_dependencies(node)
+        
+        def get_node_dependents(node: str) -> str:
+            return provider.get_node_dependents(node)
         
         functions = [
-            (get_graph_info, "get_graph_info", "Get statistics about the super-node graph"),
-            (get_all_super_nodes, "get_all_super_nodes", "Get all super-nodes with sizes and members"),
-            (get_super_node_edges, "get_super_node_edges", "Get edges between super-nodes"),
-            (get_super_node_details, "get_super_node_details", "Get details about a specific super-node"),
+            (get_graph_info, "get_graph_info", "Get basic graph statistics"),
+            (get_all_nodes, "get_all_nodes", "Get list of all nodes"),
+            (get_all_edges, "get_all_edges", "Get all dependency edges"),
+            (get_node_dependencies, "get_node_dependencies", "Get what a node depends on"),
+            (get_node_dependents, "get_node_dependents", "Get what depends on a node"),
         ]
         
         for func, name, desc in functions:
             register_function(func, caller=agent, executor=executor, name=name, description=desc)
     
-    def extract_super_node_clusters(self, agent) -> Optional[Dict[str, List[str]]]:
-        """Extract clustering of super-nodes from agent conversation"""
+    def extract_clusters(self, agent) -> Optional[Dict[str, List[str]]]:
+        """Extract clustering from agent conversation"""
         try:
             for conv_id, messages in agent.chat_messages.items():
                 for msg in reversed(messages):
                     if msg.get('role') == 'assistant':
                         content = msg.get('content', '')
                         
-                        # Parse simple text format
-                        clusters = self._parse_text_clusters(content)
-                        if clusters:
-                            return clusters
+                        json_match = re.search(r'\{.*"clusters".*?\}', content, re.DOTALL)
+                        if json_match:
+                            try:
+                                data = json.loads(json_match.group())
+                                if 'clusters' in data:
+                                    return data['clusters']
+                            except json.JSONDecodeError:
+                                pass
         except Exception as e:
             if self.verbose:
                 print(f"[DEBUG] Extraction error: {e}")
         return None
     
-    def _parse_text_clusters(self, content: str) -> Optional[Dict[str, List[str]]]:
-        """Parse simple text format clustering"""
-        clusters = {}
-        current_cluster = None
-        
-        for line in content.split('\n'):
-            line = line.strip()
-            
-            if line.upper().startswith('CLUSTER'):
-                parts = line.split()
-                if len(parts) >= 2:
-                    cluster_name = parts[1].rstrip(':')
-                    current_cluster = cluster_name
-                    clusters[current_cluster] = []
-            
-            elif current_cluster and line.startswith('super_'):
-                # Extract super-node name
-                super_node = line.split()[0] if line else None
-                if super_node:
-                    clusters[current_cluster].append(super_node)
-        
-        # Validate we got something
-        if clusters and any(len(nodes) > 0 for nodes in clusters.values()):
-            return clusters
-        return None
-    
     def analyze(self, num_clusters=None, max_iterations=1):
-        """
-        Main analysis pipeline:
-        1. Louvain coarsening (done in load_graph)
-        2. LLM clustering of super-nodes
-        3. Expand to original nodes
-        4. Calculate metrics
-        5. Optional: iterate with inspector
-        """
         num_super_nodes = len(self.hierarchical_louvain.super_node_to_original)
         
         print(f"\n{'='*70}")
@@ -571,13 +498,13 @@ class HierarchicalAnalyzer:
         print(f"Target clusters: {num_clusters if num_clusters else 'LLM decides'}")
         print(f"Max iterations: {max_iterations}")
         
-        # Setup agents
         self.setup_clustering_agent(num_clusters)
         if self.metrics_calculator:
             self.setup_inspector_agent()
         
         best_clusters = None
         best_scores = None
+        last_analysis = None
         iteration_history = []
         
         for iteration in range(max_iterations):
@@ -585,27 +512,31 @@ class HierarchicalAnalyzer:
             print(f"ITERATION {iteration + 1}/{max_iterations}")
             print(f"{'='*70}")
             
-            # Step 1: Cluster super-nodes
             print(f"\n📍 Step 1: Clustering {num_super_nodes} super-nodes...")
-            super_node_clusters = self._run_clustering(num_clusters)
             
-            if not super_node_clusters:
-                print("⚠ LLM clustering failed, using Louvain directly")
-                super_node_clusters = self._fallback_clustering(num_clusters)
+            if iteration == 0:
+                clusters = self._run_initial_clustering(num_clusters)
             else:
-                print(f"✓ LLM created {len(super_node_clusters)} clusters of super-nodes")
+                clusters = self._run_clustering_with_feedback(
+                    num_clusters, 
+                    best_scores, 
+                    best_clusters, 
+                    last_analysis
+                )
             
-            # Step 2: Expand to original nodes
+            if not clusters:
+                print("❌ LLM clustering failed. Only LLM results are accepted (no Louvain fallback).")
+                return None
+            print(f"✓ LLM created {len(clusters)} clusters")
+            
             print(f"\n📍 Step 2: Expanding super-nodes to original nodes...")
-            original_clusters = self.hierarchical_louvain.expand_clustering(super_node_clusters)
+            original_clusters = self._expand_clusters(clusters)
             
-            # Validate all nodes covered
             original_clusters = self._validate_and_fix_clusters(original_clusters)
             
             total_nodes = sum(len(nodes) for nodes in original_clusters.values())
             print(f"✓ Expanded to {total_nodes} original nodes in {len(original_clusters)} clusters")
             
-            # Step 3: Calculate metrics
             print(f"\n📍 Step 3: Calculating metrics...")
             scores = self._evaluate_metrics(original_clusters)
             
@@ -616,19 +547,30 @@ class HierarchicalAnalyzer:
                 "mojo_fm": scores.get('mojo_fm') if scores else None,
             })
             
-            # Step 4: Inspector (if enabled and more iterations)
             if self.inspector_agent and scores and iteration < max_iterations - 1:
                 turbomq = scores.get('turbomq', 0) or 0
                 
-                if turbomq < 0.80:
-                    print(f"\n📍 Step 4: Inspector analyzing (TurboMQ={turbomq:.4f} < 0.80)...")
-                    # Could add inspector logic here for future improvement
-                    pass
+                if turbomq < 0.85:
+                    print(f"\n📍 Step 4: Inspector analyzing (TurboMQ={turbomq:.4f} < 0.85)...")
+                    analysis = self._run_inspector(scores, original_clusters)
+                    
+                    if analysis:
+                        print(f"✓ Inspector provided feedback")
+                        last_analysis = analysis
+                        best_clusters = original_clusters
+                        best_scores = scores
+                        
+                        self.clustering_agent.reset()
+                        continue
+                    else:
+                        print("⚠ Inspector analysis failed")
+                else:
+                    print(f"✓ TurboMQ={turbomq:.4f} meets threshold, stopping")
             
             best_clusters = original_clusters
             best_scores = scores
+            break
         
-        # Compute final statistics
         stats = self._compute_stats(best_clusters)
         
         return {
@@ -645,36 +587,36 @@ class HierarchicalAnalyzer:
             }
         }
     
-    def _run_clustering(self, num_clusters) -> Optional[Dict[str, List[str]]]:
-        """Run LLM clustering on super-nodes"""
-        num_super_nodes = len(self.hierarchical_louvain.super_node_to_original)
+    def _run_initial_clustering(self, num_clusters) -> Optional[Dict[str, List[str]]]:
+        """
+        Run initial clustering (Listing 1 prompt style)
+        """
+        total_nodes = len(self.hierarchical_louvain.super_node_to_original)
         
         if num_clusters is None or num_clusters <= 0:
-            cluster_goal = f"""Analyze the {num_super_nodes} super-nodes and decide the optimal number of clusters.
-Consider the edge weights between super-nodes to group related ones together."""
+            cluster_instruction = f"Analyze the graph and decide the optimal number of clusters."
         else:
-            cluster_goal = f"""Create exactly {num_clusters} clusters from the {num_super_nodes} super-nodes.
-Group super-nodes with high edge weights together."""
+            cluster_instruction = f"Create exactly {num_clusters} clusters."
         
-        message = f"""{cluster_goal}
+        message = f"""Please analyze the dependency graph and create microservice clusters.
+
+{cluster_instruction}
 
 Steps:
-1. Call get_graph_info() to see overview
-2. Call get_all_super_nodes() to see all super-nodes and their sizes
-3. Call get_super_node_edges() to see which super-nodes are connected
-4. Create clusters of super-nodes that minimize cross-cluster edges
+1. Use get_graph_info() to understand the graph structure
+2. Use get_all_nodes() to see all {total_nodes} nodes
+3. Use get_all_edges() to see all dependencies
+4. Analyze the dependency patterns
+5. Create clusters that minimize inter-cluster dependencies
 
-Output format (simple text):
-```
-CLUSTER cluster_1:
-super_0
-super_2
-super_5
-
-CLUSTER cluster_2:
-super_1
-super_3
-```
+Output your clustering as JSON:
+{{
+  "clusters": {{
+    "cluster_1": ["node1", "node2", ...],
+    "cluster_2": ["node3", "node4", ...],
+    ...
+  }}
+}}
 
 Start by calling the functions!"""
         
@@ -693,59 +635,123 @@ Start by calling the functions!"""
                     max_turns=15,
                 )
             
-            return self.extract_super_node_clusters(self.clustering_agent)
+            return self.extract_clusters(self.clustering_agent)
             
         except Exception as e:
             print(f"⚠ Clustering error: {e}")
-            if self.verbose:
-                import traceback
-                traceback.print_exc()
             return None
     
-    def _fallback_clustering(self, num_clusters) -> Dict[str, List[str]]:
-        """Fallback: group super-nodes based on edge weights"""
-        super_nodes = list(self.hierarchical_louvain.super_node_to_original.keys())
+    def _run_inspector(self, scores, clusters) -> Optional[str]:
+        """
+        Run inspector analysis (Listing 2 prompt style)
+        """
+        clusters_str = json.dumps(clusters, indent=2)
+        turbomq = scores.get('turbomq', 'N/A')
+        mojo_fm = scores.get('mojo_fm', 'N/A')
+        message = f"""Perform a quality inspection on this clustering.
+
+Scores:
+- TurboMQ: {turbomq} (Target > 0.7)
+- MoJo-FM: {mojo_fm}
+
+Proposed Clusters:
+{clusters_str}
+
+INSTRUCTIONS:
+1. If TurboMQ is low, use `get_node_dependencies` to check edges between clusters.
+2. Identify nodes that are "misplaced" (heavily coupled to a different cluster).
+3. Provide a list of specific ORDERS to fix the problems.
+
+Output JSON: {{"specific_orders": ["..."], "analysis": "..."}}"""
         
-        if num_clusters is None or num_clusters <= 0:
-            # Default to roughly sqrt(n) clusters
-            num_clusters = max(2, int(len(super_nodes) ** 0.5))
-        
-        # Simple greedy clustering based on edge weights
-        # Start with each super-node in its own cluster
-        clusters = {f"cluster_{i}": [sn] for i, sn in enumerate(super_nodes)}
-        
-        # If we have too many clusters, merge the smallest/least connected
-        while len(clusters) > num_clusters:
-            # Find smallest cluster
-            smallest = min(clusters.keys(), key=lambda c: len(clusters[c]))
-            smallest_nodes = clusters.pop(smallest)
-            
-            # Find best cluster to merge into (based on edge connections)
-            best_target = None
-            best_weight = -1
-            
-            for target_name, target_nodes in clusters.items():
-                weight = 0
-                for sn in smallest_nodes:
-                    for edge in self.hierarchical_louvain.coarse_edges:
-                        if edge["source"] == sn and edge["target"] in target_nodes:
-                            weight += edge["weight"]
-                        elif edge["target"] == sn and edge["source"] in target_nodes:
-                            weight += edge["weight"]
-                
-                if weight > best_weight:
-                    best_weight = weight
-                    best_target = target_name
-            
-            if best_target:
-                clusters[best_target].extend(smallest_nodes)
+        try:
+            if not self.verbose:
+                with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                    self.inspector_proxy.initiate_chat(
+                        self.inspector_agent,
+                        message=message,
+                        max_turns=5,
+                    )
             else:
-                # No connections, just merge with first cluster
-                first_cluster = list(clusters.keys())[0]
-                clusters[first_cluster].extend(smallest_nodes)
+                self.inspector_proxy.initiate_chat(
+                    self.inspector_agent,
+                    message=message,
+                    max_turns=5,
+                )
+            
+            for conv_id, messages in self.inspector_agent.chat_messages.items():
+                for msg in reversed(messages):
+                    if msg.get('role') == 'assistant':
+                        content = msg.get('content', '')
+                        if "specific_orders" in content.lower() or "move" in content.lower():
+                            return content
+            return None
+            
+        except Exception as e:
+            print(f"⚠ Inspector error: {e}")
+            return None
+    
+    def _run_clustering_with_feedback(self, num_clusters, previous_scores, 
+                                       current_clusters, analysis_feedback) -> Optional[Dict[str, List[str]]]:
+        """
+        Run clustering with inspector feedback (Listing 3 prompt style)
+        """
+        clusters_str = json.dumps(current_clusters, indent=2)
+        turbomq = previous_scores.get('turbomq', 'N/A') if previous_scores else 'N/A'
+        mojo_fm = previous_scores.get('mojo_fm', 'N/A') if previous_scores else 'N/A'
         
-        # Renumber clusters
-        return {f"cluster_{i}": nodes for i, (_, nodes) in enumerate(clusters.items())}
+        feedback_text = ""
+        if analysis_feedback:
+            feedback_text = f"\n🚨 INSPECTOR ORDERS & FEEDBACK:\n{analysis_feedback}\n"
+        
+        message = f"""You must improve the clustering based on the Inspector's feedback.
+
+Previous Metrics:
+- TurboMQ: {turbomq} (Target > 0.7)
+- MoJo-FM: {mojo_fm} (Target -> Lower is better)
+
+{feedback_text}
+
+Here is your previous attempt:
+{clusters_str}
+
+CRITICAL INSTRUCTION: 
+1. Read the Inspector's orders carefully.
+2. Move nodes as requested to fix dependencies.
+3. Do NOT return the exact same JSON.
+4. Output the complete, improved JSON.
+
+{{
+  "clusters": {{
+    "cluster_1": ["node1", "node2", ...],
+    ...
+  }}
+}}"""
+        
+        try:
+            if not self.verbose:
+                with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                    self.user_proxy.initiate_chat(
+                        self.clustering_agent,
+                        message=message,
+                        max_turns=15,
+                    )
+            else:
+                self.user_proxy.initiate_chat(
+                    self.clustering_agent,
+                    message=message,
+                    max_turns=15,
+                )
+            
+            return self.extract_clusters(self.clustering_agent)
+            
+        except Exception as e:
+            print(f"⚠ Clustering with feedback error: {e}")
+            return None
+    
+    def _expand_clusters(self, super_node_clusters: Dict[str, List[str]]) -> Dict[str, List[str]]:
+        """Expand super-node clustering back to original nodes"""
+        return self.hierarchical_louvain.expand_clustering(super_node_clusters)
     
     def _validate_and_fix_clusters(self, clusters: Dict[str, List[str]]) -> Dict[str, List[str]]:
         """Ensure all original nodes are in exactly one cluster"""
@@ -755,18 +761,15 @@ Start by calling the functions!"""
         for nodes in clusters.values():
             clustered.update(nodes)
         
-        # Find missing nodes
         missing = all_nodes - clustered
         if missing:
             print(f"   ⚠ {len(missing)} nodes missing, distributing by connections...")
             
-            # Create node-to-cluster mapping
             node_to_cluster = {}
             for cname, nodes in clusters.items():
                 for node in nodes:
                     node_to_cluster[node] = cname
             
-            # Assign missing nodes based on neighbors
             for node in missing:
                 cluster_votes = defaultdict(int)
                 
@@ -781,15 +784,13 @@ Start by calling the functions!"""
                 if cluster_votes:
                     best_cluster = max(cluster_votes, key=cluster_votes.get)
                 else:
-                    # No connections - assign to smallest cluster
                     best_cluster = min(clusters.keys(), key=lambda c: len(clusters[c]))
                 
                 clusters[best_cluster].append(node)
         
-        # Remove non-existent nodes
         extra = clustered - all_nodes
         if extra:
-            print(f"   ⚠ Removing {len(extra)} non-existent nodes")
+            print(f"Removing {len(extra)} non-existent nodes")
             for cname in clusters:
                 clusters[cname] = [n for n in clusters[cname] if n in all_nodes]
         
@@ -850,9 +851,6 @@ Start by calling the functions!"""
         print(f"\n✓ Results saved to {output_file}")
 
 
-# ============================================================================
-# Main
-# ============================================================================
 
 def main():
     parser = argparse.ArgumentParser(
@@ -910,7 +908,6 @@ def main():
             print(f"TurboMQ: {metrics.get('turbomq', 'N/A')}")
             print(f"MoJo-FM: {metrics.get('mojo_fm', 'N/A')}")
         
-        # Show cluster size distribution
         sizes = list(result['statistics']['cluster_sizes'].values())
         print(f"\nCluster sizes: min={min(sizes)}, max={max(sizes)}, avg={sum(sizes)/len(sizes):.1f}")
     else:
