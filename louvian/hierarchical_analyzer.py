@@ -483,7 +483,8 @@ class HierarchicalAnalyzer:
                 print(f"[DEBUG] Extraction error: {e}")
         return None
     
-    def analyze(self, num_clusters=None, max_iterations=1):
+    def analyze(self, num_clusters=None, max_iterations=50):
+        start_time = time.time()
         num_super_nodes = len(self.hierarchical_louvain.super_node_to_original)
         
         print(f"\n{'='*70}")
@@ -495,6 +496,7 @@ class HierarchicalAnalyzer:
         print(f"Louvain levels: {self.louvain_levels}")
         print(f"Target clusters: {num_clusters if num_clusters else 'LLM decides'}")
         print(f"Max iterations: {max_iterations}")
+        print(f"Early stop: enabled (stops when TurboMQ stops improving)")
         
         self.setup_clustering_agent(num_clusters)
         if self.metrics_calculator:
@@ -502,6 +504,7 @@ class HierarchicalAnalyzer:
         
         best_clusters = None
         best_scores = None
+        best_turbomq = -1.0
         last_analysis = None
         iteration_history = []
         
@@ -524,6 +527,9 @@ class HierarchicalAnalyzer:
             
             if not clusters:
                 print("❌ LLM clustering failed. Only LLM results are accepted (no Louvain fallback).")
+                if best_clusters:
+                    print("↩ Returning best result from previous iterations.")
+                    break
                 return None
             print(f"✓ LLM created {len(clusters)} clusters")
             
@@ -538,6 +544,8 @@ class HierarchicalAnalyzer:
             print(f"\n📍 Step 3: Calculating metrics...")
             scores = self._evaluate_metrics(original_clusters)
             
+            current_turbomq = (scores.get('turbomq', 0) or 0) if scores else 0
+            
             iteration_history.append({
                 "iteration": iteration + 1,
                 "num_clusters": len(original_clusters),
@@ -545,29 +553,37 @@ class HierarchicalAnalyzer:
                 "mojo_fm": scores.get('mojo_fm') if scores else None,
             })
             
-            if self.inspector_agent and scores and iteration < max_iterations - 1:
-                turbomq = scores.get('turbomq', 0) or 0
-                
-                if turbomq < 0.85:
-                    print(f"\n📍 Step 4: Inspector analyzing (TurboMQ={turbomq:.4f} < 0.85)...")
-                    analysis = self._run_inspector(scores, original_clusters)
-                    
-                    if analysis:
-                        print(f"✓ Inspector provided feedback")
-                        last_analysis = analysis
-                        best_clusters = original_clusters
-                        best_scores = scores
-                        
-                        self.clustering_agent.reset()
-                        continue
-                    else:
-                        print("⚠ Inspector analysis failed")
-                else:
-                    print(f"✓ TurboMQ={turbomq:.4f} meets threshold, stopping")
+            if current_turbomq > best_turbomq:
+                best_turbomq = current_turbomq
+                best_clusters = original_clusters
+                best_scores = scores
             
-            best_clusters = original_clusters
-            best_scores = scores
-            break
+            if iteration > 0 and current_turbomq <= (iteration_history[-2].get('turbomq') or 0):
+                print(f"⛔ TurboMQ did not improve ({current_turbomq:.4f} <= previous "
+                      f"{iteration_history[-2].get('turbomq', 0):.4f}). Stopping early.")
+                break
+            
+            if current_turbomq >= 0.85:
+                print(f"✓ TurboMQ={current_turbomq:.4f} meets threshold (0.85), stopping.")
+                break
+            
+            if self.inspector_agent and scores and iteration < max_iterations - 1:
+                print(f"\n📍 Step 4: Inspector analyzing (TurboMQ={current_turbomq:.4f} < 0.85)...")
+                analysis = self._run_inspector(scores, original_clusters)
+                
+                if analysis:
+                    print(f"✓ Inspector provided feedback")
+                    last_analysis = analysis
+                    self.clustering_agent.reset()
+                    continue
+                else:
+                    print("⚠ Inspector analysis failed, stopping.")
+                    break
+            else:
+                break
+        
+        elapsed = time.time() - start_time
+        total_iterations = len(iteration_history)
         
         stats = self._compute_stats(best_clusters)
         
@@ -580,6 +596,8 @@ class HierarchicalAnalyzer:
             "statistics": stats,
             "metrics": best_scores,
             "iteration_history": iteration_history,
+            "total_iterations": total_iterations,
+            "elapsed_seconds": round(elapsed, 2),
             "metadata": {
                 "timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
             }
@@ -864,7 +882,8 @@ def main():
                        help="Number of Louvain coarsening levels (more = smaller graph)")
     parser.add_argument("--louvain-resolution", type=float, default=1.0,
                        help="Louvain resolution parameter (higher = more communities)")
-    parser.add_argument("--iterations", type=int, default=1, help="Max improvement iterations")
+    parser.add_argument("--iterations", type=int, default=50, 
+                       help="Max improvement iterations (default: 50, stops early if TurboMQ stops improving)")
     parser.add_argument("--output", default="hierarchical_clusters.json", help="Output file")
     parser.add_argument("--host", default="http://localhost:11434", help="Ollama host")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
@@ -908,6 +927,12 @@ def main():
         
         sizes = list(result['statistics']['cluster_sizes'].values())
         print(f"\nCluster sizes: min={min(sizes)}, max={max(sizes)}, avg={sum(sizes)/len(sizes):.1f}")
+        
+        elapsed = result.get('elapsed_seconds', 0)
+        total_iter = result.get('total_iterations', 0)
+        minutes, seconds = divmod(elapsed, 60)
+        print(f"\nIterations: {total_iter}")
+        print(f"Total runtime: {int(minutes)}m {seconds:.1f}s ({elapsed:.2f}s)")
     else:
         print("❌ Analysis failed")
         sys.exit(1)
