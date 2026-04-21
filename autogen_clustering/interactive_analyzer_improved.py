@@ -40,6 +40,10 @@ Strategy:
 4. Create clusters that minimize inter-cluster dependencies
 5. Output your clustering in JSON format:
 
+🚫 FORBIDDEN PATTERNS (these will be rejected):
+- Do NOT place ALL supernodes into a single cluster. Supernodes must be distributed across multiple clusters.
+- Do NOT place each supernode in its own dedicated cluster (one supernode per cluster is forbidden). Supernodes must share clusters with regular nodes and/or with each other in a meaningful grouping.
+
 Output your clustering as JSON:
 {{
   "clusters": {{
@@ -862,7 +866,11 @@ CRITICAL INSTRUCTION:
 1. Read the Inspector's orders carefully.
 2. Move nodes as requested to fix dependencies.
 3. Do NOT return the exact same clustering.
-4. Output the complete, improved clustering in SIMPLE TEXT FORMAT:
+4. Output the complete, improved clustering in SIMPLE TEXT FORMAT.
+
+🚫 FORBIDDEN PATTERNS (these will be REJECTED even in improved versions):
+- Do NOT put ALL supernodes into a single cluster.
+- Do NOT place each supernode in its own dedicated cluster (one supernode per cluster is forbidden).
 
 ```
 CLUSTER cluster_1:
@@ -906,6 +914,10 @@ IMPORTANT RULES:
 - Every single node must appear in exactly ONE cluster
 - Do not skip any nodes
 - Verify your output includes all {total_nodes} nodes
+
+🚫 FORBIDDEN PATTERNS (these will be REJECTED — do not do these):
+- Do NOT put ALL supernodes into a single cluster. Supernodes must be spread across multiple clusters together with related regular nodes.
+- Do NOT create one separate cluster per supernode (i.e., each supernode alone in its own cluster is forbidden). A supernode must coexist with other nodes in its cluster.
 
 Output your clustering in SIMPLE TEXT FORMAT (easier than JSON):
 ```
