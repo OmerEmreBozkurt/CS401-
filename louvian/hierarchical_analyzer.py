@@ -38,6 +38,12 @@ Strategy:
 3. Analyze the dependency patterns
 4. Create clusters that minimize inter-cluster dependencies
 5. Output your clustering as JSON:
+
+🚫 FORBIDDEN PATTERNS (these will be REJECTED):
+- Do NOT place ALL nodes into a single cluster.
+- Do NOT place each node in its own dedicated cluster (one node per cluster is forbidden).
+  Every cluster MUST contain multiple nodes; nodes must be grouped meaningfully.
+
 {
   "clusters": {
     "cluster_1": ["node1", "node2", ...],
@@ -527,10 +533,12 @@ class HierarchicalAnalyzer:
             
             if not clusters:
                 print("❌ LLM clustering failed. Only LLM results are accepted (no Louvain fallback).")
-                if best_clusters:
+                if best_clusters is not None:
                     print("↩ Returning best result from previous iterations.")
                     break
-                return None
+                else:
+                    print("❌ No valid clustering produced in any iteration. Aborting.")
+                    return None
             print(f"✓ LLM created {len(clusters)} clusters")
             
             print(f"\n📍 Step 2: Expanding super-nodes to original nodes...")
@@ -610,7 +618,7 @@ class HierarchicalAnalyzer:
         total_nodes = len(self.hierarchical_louvain.super_node_to_original)
         
         if num_clusters is None or num_clusters <= 0:
-            cluster_instruction = f"Analyze the graph and decide the optimal number of clusters."
+            cluster_instruction = "Analyze the graph and decide the optimal number of clusters."
         else:
             cluster_instruction = f"Create exactly {num_clusters} clusters."
         
@@ -618,23 +626,30 @@ class HierarchicalAnalyzer:
 
 {cluster_instruction}
 
+The graph has {total_nodes} nodes in total. ALL nodes must be assigned to a cluster.
+
 Steps:
-1. Use get_graph_info() to understand the graph structure
-2. Use get_all_nodes() to see all {total_nodes} nodes
-3. Use get_all_edges() to see all dependencies
-4. Analyze the dependency patterns
-5. Create clusters that minimize inter-cluster dependencies
+1. Call get_graph_info() to understand the overall graph structure
+2. Call get_all_nodes() to retrieve the full list of nodes you must cluster
+3. Call get_all_edges() to see all dependencies between nodes
+4. Analyze dependency patterns and identify natural groupings
+5. Create clusters that minimize inter-cluster dependencies and maximize cohesion
+
+🚫 FORBIDDEN PATTERNS (these will be REJECTED — do not produce these):
+- Do NOT put ALL nodes into a single cluster.
+- Do NOT create one cluster per node (i.e. every cluster having exactly 1 node is forbidden).
+  Each cluster MUST group multiple nodes together based on shared dependencies.
 
 Output your clustering as JSON:
 {{
   "clusters": {{
-    "cluster_1": ["node1", "node2", ...],
-    "cluster_2": ["node3", "node4", ...],
+    "cluster_1": ["nodeA", "nodeB", "nodeC"],
+    "cluster_2": ["nodeD", "nodeE"],
     ...
   }}
 }}
 
-Start by calling the functions!"""
+Start by calling get_graph_info() and get_all_nodes()!"""
         
         try:
             if not self.verbose:
@@ -736,6 +751,11 @@ CRITICAL INSTRUCTION:
 2. Move nodes as requested to fix dependencies.
 3. Do NOT return the exact same JSON.
 4. Output the complete, improved JSON.
+
+🚫 FORBIDDEN PATTERNS (these will be REJECTED even in improved versions):
+- Do NOT put ALL nodes into a single cluster.
+- Do NOT create one cluster per node (one node per cluster is forbidden).
+  Each cluster MUST group multiple nodes together.
 
 {{
   "clusters": {{
