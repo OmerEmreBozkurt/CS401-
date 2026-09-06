@@ -64,10 +64,9 @@ pip install networkx requests
 # macOS / Linux
 curl -fsSL https://ollama.com/install.sh | sh
 
-# Pull a model (choose based on your hardware)
-ollama pull llama3.2:3b        # small — for testing, ~2 GB
-ollama pull llama3:8b          # medium — good balance
-ollama pull qwen3-coder:7b     # code-focused alternative
+# Pull a model
+ollama pull qwen3-vl:235b-cloud
+ollama pull qwen3-coder:480b-cloud
 
 # Start the server (runs on http://localhost:11434)
 ollama serve
@@ -132,7 +131,7 @@ python louvian/louvain_hierarchical_single.py \
 ```bash
 python louvian/louvain_hierarchical_single.py \
   --dependency-rsf dataset/bash/bash-dependency.rsf \
-  --model llama3:8b \
+  --model qwen3-coder:480b-cloud \
   --louvain-levels 1 \
   --louvain-resolution 1.0 \
   --output test_results/bash_result.json \
@@ -146,7 +145,7 @@ python louvian/louvain_hierarchical_single.py \
   test_results/bash-g.pkl \
   --dependency-rsf dataset/bash/bash-dependency.rsf \
   --reference-rsf  dataset/bash/bash-clustering.rsf \
-  --model llama3:8b \
+  --model qwen3-coder:480b-cloud \
   --louvain-levels 1 \
   --louvain-resolution 1.0 \
   --output test_results/bash_result.json \
@@ -208,7 +207,7 @@ contain  cluster_0  bash_execute
 python louvian/hierarchical_analyzer.py test_results/bash-g.pkl \
   --dependency-rsf dataset/bash/bash-dependency.rsf \
   --reference-rsf  dataset/bash/bash-clustering.rsf \
-  --model llama3:8b \
+  --model qwen3-coder:480b-cloud \
   --louvain-levels 2 \
   --iterations 50 \
   --output test_results/bash_hierarchical_result.json
@@ -255,18 +254,13 @@ Both are computed automatically when you pass `--turbomq-jar` and `--reference-r
 
 ```
 [ ] 1. Install Python deps:   pip install networkx requests
-[ ] 2. Install + start Ollama, pull a model (e.g. ollama pull llama3:8b)
+[ ] 2. Install + start Ollama, pull a model (e.g. ollama pull qwen3-coder:480b-cloud)
 [ ] 3. Verify Java is available:  java -version
 [ ] 4. Run single-agent pipeline on bash (smallest system):
         python louvian/louvain_hierarchical_single.py \
           --dependency-rsf dataset/bash/bash-dependency.rsf \
-          --model llama3:8b \
+          --model qwen3-coder:480b-cloud \
           --output test_results/bash_result.json
 [ ] 5. Inspect test_results/bash_result.json for cluster assignments and scores
 ```
 
----
-
-## Citation / Contact
-
-This project is part of the CS401/CS402 capstone research at Özyeğin University.
