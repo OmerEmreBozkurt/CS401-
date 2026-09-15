@@ -56,7 +56,7 @@ CS401-/
 pip install networkx requests
 ```
 
-> The single-agent pipeline (`louvain_hierarchical_single.py`) only needs `networkx` and `requests`. No AutoGen or heavy dependencies required.
+> `louvain_hierarchical_single.py` only needs `networkx` and `requests`. No AutoGen or heavy dependencies required.
 
 ### Install and start Ollama
 
@@ -126,7 +126,7 @@ python louvian/louvain_hierarchical_single.py \
   --output test_results/bash_louvain_only.json
 ```
 
-#### Standard run with local LLM
+#### Standard run with LLM
 
 ```bash
 python louvian/louvain_hierarchical_single.py \
