@@ -1,4 +1,4 @@
-# CS401- — LLM-Guided Louvain Hierarchical Software Clustering
+# LLM-Guided Louvain Hierarchical Software Clustering
 
 This repository contains the research code for **automatic software architecture recovery** using a two-stage pipeline:
 
