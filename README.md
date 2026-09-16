@@ -46,7 +46,7 @@ CS401-/
 |---|---|---|
 | Python | >= 3.10 | |
 | Java | >= 11 | Required for TurboMQ / MoJo JAR tools |
-| [Ollama](https://ollama.com) | latest | Local LLM server |
+| [Ollama](https://ollama.com) | latest
 | networkx | >= 3.0 | `pip install networkx` |
 | requests | any | `pip install requests` |
 
