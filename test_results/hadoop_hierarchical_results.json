@@ -1,0 +1,4114 @@
+{
+  "mode": "single_agent_louvain_then_one_llm_call",
+  "graph_file": "test_results/had.pkl",
+  "dependency_rsf": "dataset/hadoop/hadoop-dependency.rsf",
+  "reference_rsf": "dataset/hadoop/hadoop-clustering.rsf",
+  "louvain_resolution": 1.0,
+  "louvain_levels": 0,
+  "model": "qwen3-coder:480b-cloud",
+  "iterations_requested": 1,
+  "note": "--iterations is kept for compatibility; this script calls the LLM once.",
+  "super_nodes_used": 682,
+  "clusters": 682,
+  "turbomq": null,
+  "mojofm": 100.0,
+  "super_node_clustering": {
+    "cluster_0": [
+      "0__Metrics"
+    ],
+    "cluster_1": [
+      "11__Balancer"
+    ],
+    "cluster_2": [
+      "13__Connectors"
+    ],
+    "cluster_3": [
+      "14__Task_(Data_storage_component)"
+    ],
+    "cluster_4": [
+      "16__Namenode"
+    ],
+    "cluster_5": [
+      "16a__NameNode_HDFS_Protocol_Core"
+    ],
+    "cluster_6": [
+      "16b__Transfer_HDFS_over_HTTP"
+    ],
+    "cluster_7": [
+      "16c__Client-facing_Exceptions"
+    ],
+    "cluster_8": [
+      "16d__Secondary_Name_Node"
+    ],
+    "cluster_9": [
+      "16e__Core_Name_Node_Structures"
+    ],
+    "cluster_10": [
+      "17__Task_Tracking_and_Running"
+    ],
+    "cluster_11": [
+      "19__Distributed_File_System"
+    ],
+    "cluster_12": [
+      "1__Other_utilities"
+    ],
+    "cluster_13": [
+      "20__DataNode"
+    ],
+    "cluster_14": [
+      "21__JobClient"
+    ],
+    "cluster_15": [
+      "22__Job_History"
+    ],
+    "cluster_16": [
+      "23__Progress"
+    ],
+    "cluster_17": [
+      "24__FS_Logging"
+    ],
+    "cluster_18": [
+      "27__DFS_Tools"
+    ],
+    "cluster_19": [
+      "28__HTTP_Protocol_Access"
+    ],
+    "cluster_20": [
+      "29__Namenode_Protocol"
+    ],
+    "cluster_21": [
+      "29a__Datanode_Protocol"
+    ],
+    "cluster_22": [
+      "2__Join_utilities"
+    ],
+    "cluster_23": [
+      "30__InterDataNode_Protocol"
+    ],
+    "cluster_24": [
+      "31__Client_Protocol"
+    ],
+    "cluster_25": [
+      "32__Client_Datanode_Protocol"
+    ],
+    "cluster_26": [
+      "32__Protocol_Utilities"
+    ],
+    "cluster_27": [
+      "33__Orphaned_Protocol_Utilities"
+    ],
+    "cluster_28": [
+      "34__Mapred_utilities"
+    ],
+    "cluster_29": [
+      "34a__Mapred_client"
+    ],
+    "cluster_30": [
+      "35__Job_Tracking"
+    ],
+    "cluster_31": [
+      "36__Sequence_File_Handling"
+    ],
+    "cluster_32": [
+      "37__Tracker_Protocols"
+    ],
+    "cluster_33": [
+      "39__JobQueueClient"
+    ],
+    "cluster_34": [
+      "3__Domain_data_structures"
+    ],
+    "cluster_35": [
+      "3a__Security_Data_Structures"
+    ],
+    "cluster_36": [
+      "3b__Input_Format_Data_Structures"
+    ],
+    "cluster_37": [
+      "40__JobShell"
+    ],
+    "cluster_38": [
+      "41__JvmManager"
+    ],
+    "cluster_39": [
+      "42__Chain_MapReduce"
+    ],
+    "cluster_40": [
+      "43__Multiple_Output_File_Formatting"
+    ],
+    "cluster_41": [
+      "44__DelegatingMapper"
+    ],
+    "cluster_42": [
+      "45__TotalOrderPartitioner"
+    ],
+    "cluster_43": [
+      "46__KeyFieldBasedPartitioner"
+    ],
+    "cluster_44": [
+      "47__Value_Aggregator"
+    ],
+    "cluster_45": [
+      "48__DB_I/O"
+    ],
+    "cluster_46": [
+      "49__C++_Pipes_Job"
+    ],
+    "cluster_47": [
+      "4__DFS_Utils"
+    ],
+    "cluster_48": [
+      "4a__HDFS_Upgrade_Management"
+    ],
+    "cluster_49": [
+      "50__C++_Pipes_Protocol"
+    ],
+    "cluster_50": [
+      "5__FSDataSet"
+    ],
+    "cluster_51": [
+      "7__Filters"
+    ],
+    "cluster_52": [
+      "9__Network_Utilities"
+    ],
+    "cluster_53": [
+      "org.apache.hadoop.conf"
+    ],
+    "cluster_54": [
+      "org.apache.hadoop.conf.Configurable"
+    ],
+    "cluster_55": [
+      "org.apache.hadoop.conf.Configuration"
+    ],
+    "cluster_56": [
+      "org.apache.hadoop.conf.Configured"
+    ],
+    "cluster_57": [
+      "org.apache.hadoop.filecache"
+    ],
+    "cluster_58": [
+      "org.apache.hadoop.filecache.DistributedCache"
+    ],
+    "cluster_59": [
+      "org.apache.hadoop.fs"
+    ],
+    "cluster_60": [
+      "org.apache.hadoop.fs.BlockLocation"
+    ],
+    "cluster_61": [
+      "org.apache.hadoop.fs.BufferedFSInputStream"
+    ],
+    "cluster_62": [
+      "org.apache.hadoop.fs.ChecksumException"
+    ],
+    "cluster_63": [
+      "org.apache.hadoop.fs.ChecksumFileSystem"
+    ],
+    "cluster_64": [
+      "org.apache.hadoop.fs.ContentSummary"
+    ],
+    "cluster_65": [
+      "org.apache.hadoop.fs.DF"
+    ],
+    "cluster_66": [
+      "org.apache.hadoop.fs.DU"
+    ],
+    "cluster_67": [
+      "org.apache.hadoop.fs.FSDataInputStream"
+    ],
+    "cluster_68": [
+      "org.apache.hadoop.fs.FSDataOutputStream"
+    ],
+    "cluster_69": [
+      "org.apache.hadoop.fs.FSError"
+    ],
+    "cluster_70": [
+      "org.apache.hadoop.fs.FSInputChecker"
+    ],
+    "cluster_71": [
+      "org.apache.hadoop.fs.FSInputStream"
+    ],
+    "cluster_72": [
+      "org.apache.hadoop.fs.FSOutputSummer"
+    ],
+    "cluster_73": [
+      "org.apache.hadoop.fs.FileChecksum"
+    ],
+    "cluster_74": [
+      "org.apache.hadoop.fs.FileStatus"
+    ],
+    "cluster_75": [
+      "org.apache.hadoop.fs.FileSystem"
+    ],
+    "cluster_76": [
+      "org.apache.hadoop.fs.FileUtil"
+    ],
+    "cluster_77": [
+      "org.apache.hadoop.fs.FilterFileSystem"
+    ],
+    "cluster_78": [
+      "org.apache.hadoop.fs.FsShell"
+    ],
+    "cluster_79": [
+      "org.apache.hadoop.fs.FsShellPermissions"
+    ],
+    "cluster_80": [
+      "org.apache.hadoop.fs.FsUrlConnection"
+    ],
+    "cluster_81": [
+      "org.apache.hadoop.fs.FsUrlStreamHandler"
+    ],
+    "cluster_82": [
+      "org.apache.hadoop.fs.FsUrlStreamHandlerFactory"
+    ],
+    "cluster_83": [
+      "org.apache.hadoop.fs.GlobExpander"
+    ],
+    "cluster_84": [
+      "org.apache.hadoop.fs.HarFileSystem"
+    ],
+    "cluster_85": [
+      "org.apache.hadoop.fs.InMemoryFileSystem"
+    ],
+    "cluster_86": [
+      "org.apache.hadoop.fs.LocalDirAllocator"
+    ],
+    "cluster_87": [
+      "org.apache.hadoop.fs.LocalFileSystem"
+    ],
+    "cluster_88": [
+      "org.apache.hadoop.fs.MD5MD5CRC32FileChecksum"
+    ],
+    "cluster_89": [
+      "org.apache.hadoop.fs.Path"
+    ],
+    "cluster_90": [
+      "org.apache.hadoop.fs.PathFilter"
+    ],
+    "cluster_91": [
+      "org.apache.hadoop.fs.PositionedReadable"
+    ],
+    "cluster_92": [
+      "org.apache.hadoop.fs.RawLocalFileSystem"
+    ],
+    "cluster_93": [
+      "org.apache.hadoop.fs.Seekable"
+    ],
+    "cluster_94": [
+      "org.apache.hadoop.fs.Syncable"
+    ],
+    "cluster_95": [
+      "org.apache.hadoop.fs.Trash"
+    ],
+    "cluster_96": [
+      "org.apache.hadoop.fs.ftp.FTPException"
+    ],
+    "cluster_97": [
+      "org.apache.hadoop.fs.ftp.FTPFileSystem"
+    ],
+    "cluster_98": [
+      "org.apache.hadoop.fs.ftp.FTPInputStream"
+    ],
+    "cluster_99": [
+      "org.apache.hadoop.fs.kfs.IFSImpl"
+    ],
+    "cluster_100": [
+      "org.apache.hadoop.fs.kfs.KFSImpl"
+    ],
+    "cluster_101": [
+      "org.apache.hadoop.fs.kfs.KFSInputStream"
+    ],
+    "cluster_102": [
+      "org.apache.hadoop.fs.kfs.KFSOutputStream"
+    ],
+    "cluster_103": [
+      "org.apache.hadoop.fs.kfs.KosmosFileSystem"
+    ],
+    "cluster_104": [
+      "org.apache.hadoop.fs.permission.AccessControlException"
+    ],
+    "cluster_105": [
+      "org.apache.hadoop.fs.permission.FsAction"
+    ],
+    "cluster_106": [
+      "org.apache.hadoop.fs.permission.FsPermission"
+    ],
+    "cluster_107": [
+      "org.apache.hadoop.fs.permission.PermissionStatus"
+    ],
+    "cluster_108": [
+      "org.apache.hadoop.fs.s3.Block"
+    ],
+    "cluster_109": [
+      "org.apache.hadoop.fs.s3.FileSystemStore"
+    ],
+    "cluster_110": [
+      "org.apache.hadoop.fs.s3.INode"
+    ],
+    "cluster_111": [
+      "org.apache.hadoop.fs.s3.Jets3tFileSystemStore"
+    ],
+    "cluster_112": [
+      "org.apache.hadoop.fs.s3.MigrationTool"
+    ],
+    "cluster_113": [
+      "org.apache.hadoop.fs.s3.S3Credentials"
+    ],
+    "cluster_114": [
+      "org.apache.hadoop.fs.s3.S3Exception"
+    ],
+    "cluster_115": [
+      "org.apache.hadoop.fs.s3.S3FileSystem"
+    ],
+    "cluster_116": [
+      "org.apache.hadoop.fs.s3.S3FileSystemException"
+    ],
+    "cluster_117": [
+      "org.apache.hadoop.fs.s3.S3InputStream"
+    ],
+    "cluster_118": [
+      "org.apache.hadoop.fs.s3.S3OutputStream"
+    ],
+    "cluster_119": [
+      "org.apache.hadoop.fs.s3.VersionMismatchException"
+    ],
+    "cluster_120": [
+      "org.apache.hadoop.fs.s3native.FileMetadata"
+    ],
+    "cluster_121": [
+      "org.apache.hadoop.fs.s3native.Jets3tNativeFileSystemStore"
+    ],
+    "cluster_122": [
+      "org.apache.hadoop.fs.s3native.NativeFileSystemStore"
+    ],
+    "cluster_123": [
+      "org.apache.hadoop.fs.s3native.NativeS3FileSystem"
+    ],
+    "cluster_124": [
+      "org.apache.hadoop.fs.s3native.PartialListing"
+    ],
+    "cluster_125": [
+      "org.apache.hadoop.fs.shell.Command"
+    ],
+    "cluster_126": [
+      "org.apache.hadoop.fs.shell.CommandFormat"
+    ],
+    "cluster_127": [
+      "org.apache.hadoop.fs.shell.CommandUtils"
+    ],
+    "cluster_128": [
+      "org.apache.hadoop.fs.shell.Count"
+    ],
+    "cluster_129": [
+      "org.apache.hadoop.hdfs"
+    ],
+    "cluster_130": [
+      "org.apache.hadoop.hdfs.ChecksumDistributedFileSystem"
+    ],
+    "cluster_131": [
+      "org.apache.hadoop.hdfs.DFSClient"
+    ],
+    "cluster_132": [
+      "org.apache.hadoop.hdfs.DFSUtil"
+    ],
+    "cluster_133": [
+      "org.apache.hadoop.hdfs.DistributedFileSystem"
+    ],
+    "cluster_134": [
+      "org.apache.hadoop.hdfs.HftpFileSystem"
+    ],
+    "cluster_135": [
+      "org.apache.hadoop.hdfs.HsftpFileSystem"
+    ],
+    "cluster_136": [
+      "org.apache.hadoop.hdfs.protocol.AlreadyBeingCreatedException"
+    ],
+    "cluster_137": [
+      "org.apache.hadoop.hdfs.protocol.Block"
+    ],
+    "cluster_138": [
+      "org.apache.hadoop.hdfs.protocol.BlockListAsLongs"
+    ],
+    "cluster_139": [
+      "org.apache.hadoop.hdfs.protocol.ClientDatanodeProtocol"
+    ],
+    "cluster_140": [
+      "org.apache.hadoop.hdfs.protocol.ClientProtocol"
+    ],
+    "cluster_141": [
+      "org.apache.hadoop.hdfs.protocol.DatanodeID"
+    ],
+    "cluster_142": [
+      "org.apache.hadoop.hdfs.protocol.DatanodeInfo"
+    ],
+    "cluster_143": [
+      "org.apache.hadoop.hdfs.protocol.FSConstants"
+    ],
+    "cluster_144": [
+      "org.apache.hadoop.hdfs.protocol.LocatedBlock"
+    ],
+    "cluster_145": [
+      "org.apache.hadoop.hdfs.protocol.LocatedBlocks"
+    ],
+    "cluster_146": [
+      "org.apache.hadoop.hdfs.protocol.QuotaExceededException"
+    ],
+    "cluster_147": [
+      "org.apache.hadoop.hdfs.protocol.UnregisteredDatanodeException"
+    ],
+    "cluster_148": [
+      "org.apache.hadoop.hdfs.server.balancer.Balancer"
+    ],
+    "cluster_149": [
+      "org.apache.hadoop.hdfs.server.common.GenerationStamp"
+    ],
+    "cluster_150": [
+      "org.apache.hadoop.hdfs.server.common.HdfsConstants"
+    ],
+    "cluster_151": [
+      "org.apache.hadoop.hdfs.server.common.InconsistentFSStateException"
+    ],
+    "cluster_152": [
+      "org.apache.hadoop.hdfs.server.common.IncorrectVersionException"
+    ],
+    "cluster_153": [
+      "org.apache.hadoop.hdfs.server.common.Storage"
+    ],
+    "cluster_154": [
+      "org.apache.hadoop.hdfs.server.common.StorageInfo"
+    ],
+    "cluster_155": [
+      "org.apache.hadoop.hdfs.server.common.UpgradeManager"
+    ],
+    "cluster_156": [
+      "org.apache.hadoop.hdfs.server.common.UpgradeObject"
+    ],
+    "cluster_157": [
+      "org.apache.hadoop.hdfs.server.common.UpgradeObjectCollection"
+    ],
+    "cluster_158": [
+      "org.apache.hadoop.hdfs.server.common.UpgradeStatusReport"
+    ],
+    "cluster_159": [
+      "org.apache.hadoop.hdfs.server.common.Upgradeable"
+    ],
+    "cluster_160": [
+      "org.apache.hadoop.hdfs.server.common.Util"
+    ],
+    "cluster_161": [
+      "org.apache.hadoop.hdfs.server.datanode.BlockMetadataHeader"
+    ],
+    "cluster_162": [
+      "org.apache.hadoop.hdfs.server.datanode.BlockReceiver"
+    ],
+    "cluster_163": [
+      "org.apache.hadoop.hdfs.server.datanode.BlockSender"
+    ],
+    "cluster_164": [
+      "org.apache.hadoop.hdfs.server.datanode.BlockTransferThrottler"
+    ],
+    "cluster_165": [
+      "org.apache.hadoop.hdfs.server.datanode.DataBlockScanner"
+    ],
+    "cluster_166": [
+      "org.apache.hadoop.hdfs.server.datanode.DataNode"
+    ],
+    "cluster_167": [
+      "org.apache.hadoop.hdfs.server.datanode.DataStorage"
+    ],
+    "cluster_168": [
+      "org.apache.hadoop.hdfs.server.datanode.DataXceiver"
+    ],
+    "cluster_169": [
+      "org.apache.hadoop.hdfs.server.datanode.DataXceiverServer"
+    ],
+    "cluster_170": [
+      "org.apache.hadoop.hdfs.server.datanode.DatanodeBlockInfo"
+    ],
+    "cluster_171": [
+      "org.apache.hadoop.hdfs.server.datanode.FSDataset"
+    ],
+    "cluster_172": [
+      "org.apache.hadoop.hdfs.server.datanode.FSDatasetInterface"
+    ],
+    "cluster_173": [
+      "org.apache.hadoop.hdfs.server.datanode.UpgradeManagerDatanode"
+    ],
+    "cluster_174": [
+      "org.apache.hadoop.hdfs.server.datanode.UpgradeObjectDatanode"
+    ],
+    "cluster_175": [
+      "org.apache.hadoop.hdfs.server.datanode.browseBlock_jsp"
+    ],
+    "cluster_176": [
+      "org.apache.hadoop.hdfs.server.datanode.browseDirectory_jsp"
+    ],
+    "cluster_177": [
+      "org.apache.hadoop.hdfs.server.datanode.metrics.DataNodeMetrics"
+    ],
+    "cluster_178": [
+      "org.apache.hadoop.hdfs.server.datanode.metrics.DataNodeStatistics"
+    ],
+    "cluster_179": [
+      "org.apache.hadoop.hdfs.server.datanode.tail_jsp"
+    ],
+    "cluster_180": [
+      "org.apache.hadoop.hdfs.server.namenode.BlocksMap"
+    ],
+    "cluster_181": [
+      "org.apache.hadoop.hdfs.server.namenode.CheckpointSignature"
+    ],
+    "cluster_182": [
+      "org.apache.hadoop.hdfs.server.namenode.CorruptReplicasMap"
+    ],
+    "cluster_183": [
+      "org.apache.hadoop.hdfs.server.namenode.DatanodeDescriptor"
+    ],
+    "cluster_184": [
+      "org.apache.hadoop.hdfs.server.namenode.DfsServlet"
+    ],
+    "cluster_185": [
+      "org.apache.hadoop.hdfs.server.namenode.EditLogInputStream"
+    ],
+    "cluster_186": [
+      "org.apache.hadoop.hdfs.server.namenode.EditLogOutputStream"
+    ],
+    "cluster_187": [
+      "org.apache.hadoop.hdfs.server.namenode.FSDirectory"
+    ],
+    "cluster_188": [
+      "org.apache.hadoop.hdfs.server.namenode.FSEditLog"
+    ],
+    "cluster_189": [
+      "org.apache.hadoop.hdfs.server.namenode.FSImage"
+    ],
+    "cluster_190": [
+      "org.apache.hadoop.hdfs.server.namenode.FSNamesystem"
+    ],
+    "cluster_191": [
+      "org.apache.hadoop.hdfs.server.namenode.FileChecksumServlets"
+    ],
+    "cluster_192": [
+      "org.apache.hadoop.hdfs.server.namenode.FileDataServlet"
+    ],
+    "cluster_193": [
+      "org.apache.hadoop.hdfs.server.namenode.FsckServlet"
+    ],
+    "cluster_194": [
+      "org.apache.hadoop.hdfs.server.namenode.GetImageServlet"
+    ],
+    "cluster_195": [
+      "org.apache.hadoop.hdfs.server.namenode.Host2NodesMap"
+    ],
+    "cluster_196": [
+      "org.apache.hadoop.hdfs.server.namenode.INode"
+    ],
+    "cluster_197": [
+      "org.apache.hadoop.hdfs.server.namenode.INodeDirectory"
+    ],
+    "cluster_198": [
+      "org.apache.hadoop.hdfs.server.namenode.INodeDirectoryWithQuota"
+    ],
+    "cluster_199": [
+      "org.apache.hadoop.hdfs.server.namenode.INodeFile"
+    ],
+    "cluster_200": [
+      "org.apache.hadoop.hdfs.server.namenode.INodeFileUnderConstruction"
+    ],
+    "cluster_201": [
+      "org.apache.hadoop.hdfs.server.namenode.JspHelper"
+    ],
+    "cluster_202": [
+      "org.apache.hadoop.hdfs.server.namenode.LeaseExpiredException"
+    ],
+    "cluster_203": [
+      "org.apache.hadoop.hdfs.server.namenode.LeaseManager"
+    ],
+    "cluster_204": [
+      "org.apache.hadoop.hdfs.server.namenode.ListPathsServlet"
+    ],
+    "cluster_205": [
+      "org.apache.hadoop.hdfs.server.namenode.NameNode"
+    ],
+    "cluster_206": [
+      "org.apache.hadoop.hdfs.server.namenode.NamenodeFsck"
+    ],
+    "cluster_207": [
+      "org.apache.hadoop.hdfs.server.namenode.NotReplicatedYetException"
+    ],
+    "cluster_208": [
+      "org.apache.hadoop.hdfs.server.namenode.PendingReplicationBlocks"
+    ],
+    "cluster_209": [
+      "org.apache.hadoop.hdfs.server.namenode.PermissionChecker"
+    ],
+    "cluster_210": [
+      "org.apache.hadoop.hdfs.server.namenode.ReplicationTargetChooser"
+    ],
+    "cluster_211": [
+      "org.apache.hadoop.hdfs.server.namenode.SafeModeException"
+    ],
+    "cluster_212": [
+      "org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode"
+    ],
+    "cluster_213": [
+      "org.apache.hadoop.hdfs.server.namenode.SerialNumberManager"
+    ],
+    "cluster_214": [
+      "org.apache.hadoop.hdfs.server.namenode.StreamFile"
+    ],
+    "cluster_215": [
+      "org.apache.hadoop.hdfs.server.namenode.StringBytesWritable"
+    ],
+    "cluster_216": [
+      "org.apache.hadoop.hdfs.server.namenode.TransferFsImage"
+    ],
+    "cluster_217": [
+      "org.apache.hadoop.hdfs.server.namenode.UnderReplicatedBlocks"
+    ],
+    "cluster_218": [
+      "org.apache.hadoop.hdfs.server.namenode.UpgradeManagerNamenode"
+    ],
+    "cluster_219": [
+      "org.apache.hadoop.hdfs.server.namenode.UpgradeObjectNamenode"
+    ],
+    "cluster_220": [
+      "org.apache.hadoop.hdfs.server.namenode.dfshealth_jsp"
+    ],
+    "cluster_221": [
+      "org.apache.hadoop.hdfs.server.namenode.metrics.FSNamesystemMetrics"
+    ],
+    "cluster_222": [
+      "org.apache.hadoop.hdfs.server.namenode.metrics.NameNodeMetrics"
+    ],
+    "cluster_223": [
+      "org.apache.hadoop.hdfs.server.namenode.metrics.NameNodeStatistics"
+    ],
+    "cluster_224": [
+      "org.apache.hadoop.hdfs.server.namenode.nn_005fbrowsedfscontent_jsp"
+    ],
+    "cluster_225": [
+      "org.apache.hadoop.hdfs.server.protocol.BlockCommand"
+    ],
+    "cluster_226": [
+      "org.apache.hadoop.hdfs.server.protocol.BlockMetaDataInfo"
+    ],
+    "cluster_227": [
+      "org.apache.hadoop.hdfs.server.protocol.BlocksWithLocations"
+    ],
+    "cluster_228": [
+      "org.apache.hadoop.hdfs.server.protocol.DatanodeCommand"
+    ],
+    "cluster_229": [
+      "org.apache.hadoop.hdfs.server.protocol.DatanodeProtocol"
+    ],
+    "cluster_230": [
+      "org.apache.hadoop.hdfs.server.protocol.DatanodeRegistration"
+    ],
+    "cluster_231": [
+      "org.apache.hadoop.hdfs.server.protocol.DisallowedDatanodeException"
+    ],
+    "cluster_232": [
+      "org.apache.hadoop.hdfs.server.protocol.InterDatanodeProtocol"
+    ],
+    "cluster_233": [
+      "org.apache.hadoop.hdfs.server.protocol.NamenodeProtocol"
+    ],
+    "cluster_234": [
+      "org.apache.hadoop.hdfs.server.protocol.NamespaceInfo"
+    ],
+    "cluster_235": [
+      "org.apache.hadoop.hdfs.server.protocol.UpgradeCommand"
+    ],
+    "cluster_236": [
+      "org.apache.hadoop.hdfs.tools.DFSAdmin"
+    ],
+    "cluster_237": [
+      "org.apache.hadoop.hdfs.tools.DFSck"
+    ],
+    "cluster_238": [
+      "org.apache.hadoop.http"
+    ],
+    "cluster_239": [
+      "org.apache.hadoop.http.FilterInitializer"
+    ],
+    "cluster_240": [
+      "org.apache.hadoop.http.HttpServer"
+    ],
+    "cluster_241": [
+      "org.apache.hadoop.io"
+    ],
+    "cluster_242": [
+      "org.apache.hadoop.io.AbstractMapWritable"
+    ],
+    "cluster_243": [
+      "org.apache.hadoop.io.ArrayFile"
+    ],
+    "cluster_244": [
+      "org.apache.hadoop.io.ArrayWritable"
+    ],
+    "cluster_245": [
+      "org.apache.hadoop.io.BinaryComparable"
+    ],
+    "cluster_246": [
+      "org.apache.hadoop.io.BooleanWritable"
+    ],
+    "cluster_247": [
+      "org.apache.hadoop.io.ByteWritable"
+    ],
+    "cluster_248": [
+      "org.apache.hadoop.io.BytesWritable"
+    ],
+    "cluster_249": [
+      "org.apache.hadoop.io.CompressedWritable"
+    ],
+    "cluster_250": [
+      "org.apache.hadoop.io.DataInputBuffer"
+    ],
+    "cluster_251": [
+      "org.apache.hadoop.io.DataOutputBuffer"
+    ],
+    "cluster_252": [
+      "org.apache.hadoop.io.DefaultStringifier"
+    ],
+    "cluster_253": [
+      "org.apache.hadoop.io.DoubleWritable"
+    ],
+    "cluster_254": [
+      "org.apache.hadoop.io.FloatWritable"
+    ],
+    "cluster_255": [
+      "org.apache.hadoop.io.GenericWritable"
+    ],
+    "cluster_256": [
+      "org.apache.hadoop.io.IOUtils"
+    ],
+    "cluster_257": [
+      "org.apache.hadoop.io.InputBuffer"
+    ],
+    "cluster_258": [
+      "org.apache.hadoop.io.IntWritable"
+    ],
+    "cluster_259": [
+      "org.apache.hadoop.io.LongWritable"
+    ],
+    "cluster_260": [
+      "org.apache.hadoop.io.MD5Hash"
+    ],
+    "cluster_261": [
+      "org.apache.hadoop.io.MapFile"
+    ],
+    "cluster_262": [
+      "org.apache.hadoop.io.MapWritable"
+    ],
+    "cluster_263": [
+      "org.apache.hadoop.io.MultipleIOException"
+    ],
+    "cluster_264": [
+      "org.apache.hadoop.io.NullWritable"
+    ],
+    "cluster_265": [
+      "org.apache.hadoop.io.ObjectWritable"
+    ],
+    "cluster_266": [
+      "org.apache.hadoop.io.OutputBuffer"
+    ],
+    "cluster_267": [
+      "org.apache.hadoop.io.RawComparator"
+    ],
+    "cluster_268": [
+      "org.apache.hadoop.io.SequenceFile"
+    ],
+    "cluster_269": [
+      "org.apache.hadoop.io.SetFile"
+    ],
+    "cluster_270": [
+      "org.apache.hadoop.io.SortedMapWritable"
+    ],
+    "cluster_271": [
+      "org.apache.hadoop.io.Stringifier"
+    ],
+    "cluster_272": [
+      "org.apache.hadoop.io.Text"
+    ],
+    "cluster_273": [
+      "org.apache.hadoop.io.TwoDArrayWritable"
+    ],
+    "cluster_274": [
+      "org.apache.hadoop.io.UTF8"
+    ],
+    "cluster_275": [
+      "org.apache.hadoop.io.VIntWritable"
+    ],
+    "cluster_276": [
+      "org.apache.hadoop.io.VLongWritable"
+    ],
+    "cluster_277": [
+      "org.apache.hadoop.io.VersionMismatchException"
+    ],
+    "cluster_278": [
+      "org.apache.hadoop.io.VersionedWritable"
+    ],
+    "cluster_279": [
+      "org.apache.hadoop.io.Writable"
+    ],
+    "cluster_280": [
+      "org.apache.hadoop.io.WritableComparable"
+    ],
+    "cluster_281": [
+      "org.apache.hadoop.io.WritableComparator"
+    ],
+    "cluster_282": [
+      "org.apache.hadoop.io.WritableFactories"
+    ],
+    "cluster_283": [
+      "org.apache.hadoop.io.WritableFactory"
+    ],
+    "cluster_284": [
+      "org.apache.hadoop.io.WritableName"
+    ],
+    "cluster_285": [
+      "org.apache.hadoop.io.WritableUtils"
+    ],
+    "cluster_286": [
+      "org.apache.hadoop.io.compress.BZip2Codec"
+    ],
+    "cluster_287": [
+      "org.apache.hadoop.io.compress.BlockCompressorStream"
+    ],
+    "cluster_288": [
+      "org.apache.hadoop.io.compress.BlockDecompressorStream"
+    ],
+    "cluster_289": [
+      "org.apache.hadoop.io.compress.CodecPool"
+    ],
+    "cluster_290": [
+      "org.apache.hadoop.io.compress.CompressionCodec"
+    ],
+    "cluster_291": [
+      "org.apache.hadoop.io.compress.CompressionCodecFactory"
+    ],
+    "cluster_292": [
+      "org.apache.hadoop.io.compress.CompressionInputStream"
+    ],
+    "cluster_293": [
+      "org.apache.hadoop.io.compress.CompressionOutputStream"
+    ],
+    "cluster_294": [
+      "org.apache.hadoop.io.compress.Compressor"
+    ],
+    "cluster_295": [
+      "org.apache.hadoop.io.compress.CompressorStream"
+    ],
+    "cluster_296": [
+      "org.apache.hadoop.io.compress.Decompressor"
+    ],
+    "cluster_297": [
+      "org.apache.hadoop.io.compress.DecompressorStream"
+    ],
+    "cluster_298": [
+      "org.apache.hadoop.io.compress.DefaultCodec"
+    ],
+    "cluster_299": [
+      "org.apache.hadoop.io.compress.GzipCodec"
+    ],
+    "cluster_300": [
+      "org.apache.hadoop.io.compress.LzoCodec"
+    ],
+    "cluster_301": [
+      "org.apache.hadoop.io.compress.LzopCodec"
+    ],
+    "cluster_302": [
+      "org.apache.hadoop.io.compress.bzip2.BZip2Constants"
+    ],
+    "cluster_303": [
+      "org.apache.hadoop.io.compress.bzip2.CBZip2InputStream"
+    ],
+    "cluster_304": [
+      "org.apache.hadoop.io.compress.bzip2.CBZip2OutputStream"
+    ],
+    "cluster_305": [
+      "org.apache.hadoop.io.compress.bzip2.CRC"
+    ],
+    "cluster_306": [
+      "org.apache.hadoop.io.compress.lzo.LzoCompressor"
+    ],
+    "cluster_307": [
+      "org.apache.hadoop.io.compress.lzo.LzoDecompressor"
+    ],
+    "cluster_308": [
+      "org.apache.hadoop.io.compress.zlib.BuiltInZlibDeflater"
+    ],
+    "cluster_309": [
+      "org.apache.hadoop.io.compress.zlib.BuiltInZlibInflater"
+    ],
+    "cluster_310": [
+      "org.apache.hadoop.io.compress.zlib.ZlibCompressor"
+    ],
+    "cluster_311": [
+      "org.apache.hadoop.io.compress.zlib.ZlibDecompressor"
+    ],
+    "cluster_312": [
+      "org.apache.hadoop.io.compress.zlib.ZlibFactory"
+    ],
+    "cluster_313": [
+      "org.apache.hadoop.io.retry.RetryInvocationHandler"
+    ],
+    "cluster_314": [
+      "org.apache.hadoop.io.retry.RetryPolicies"
+    ],
+    "cluster_315": [
+      "org.apache.hadoop.io.retry.RetryPolicy"
+    ],
+    "cluster_316": [
+      "org.apache.hadoop.io.retry.RetryProxy"
+    ],
+    "cluster_317": [
+      "org.apache.hadoop.io.serializer.Deserializer"
+    ],
+    "cluster_318": [
+      "org.apache.hadoop.io.serializer.DeserializerComparator"
+    ],
+    "cluster_319": [
+      "org.apache.hadoop.io.serializer.JavaSerialization"
+    ],
+    "cluster_320": [
+      "org.apache.hadoop.io.serializer.JavaSerializationComparator"
+    ],
+    "cluster_321": [
+      "org.apache.hadoop.io.serializer.Serialization"
+    ],
+    "cluster_322": [
+      "org.apache.hadoop.io.serializer.SerializationFactory"
+    ],
+    "cluster_323": [
+      "org.apache.hadoop.io.serializer.Serializer"
+    ],
+    "cluster_324": [
+      "org.apache.hadoop.io.serializer.WritableSerialization"
+    ],
+    "cluster_325": [
+      "org.apache.hadoop.ipc"
+    ],
+    "cluster_326": [
+      "org.apache.hadoop.ipc.Client"
+    ],
+    "cluster_327": [
+      "org.apache.hadoop.ipc.RPC"
+    ],
+    "cluster_328": [
+      "org.apache.hadoop.ipc.RemoteException"
+    ],
+    "cluster_329": [
+      "org.apache.hadoop.ipc.Server"
+    ],
+    "cluster_330": [
+      "org.apache.hadoop.ipc.VersionedProtocol"
+    ],
+    "cluster_331": [
+      "org.apache.hadoop.ipc.metrics.RpcMetrics"
+    ],
+    "cluster_332": [
+      "org.apache.hadoop.ipc.metrics.RpcMgt"
+    ],
+    "cluster_333": [
+      "org.apache.hadoop.log"
+    ],
+    "cluster_334": [
+      "org.apache.hadoop.log.LogLevel"
+    ],
+    "cluster_335": [
+      "org.apache.hadoop.mapred"
+    ],
+    "cluster_336": [
+      "org.apache.hadoop.mapred.BasicTypeSorterBase"
+    ],
+    "cluster_337": [
+      "org.apache.hadoop.mapred.Child"
+    ],
+    "cluster_338": [
+      "org.apache.hadoop.mapred.ClusterStatus"
+    ],
+    "cluster_339": [
+      "org.apache.hadoop.mapred.CommitTaskAction"
+    ],
+    "cluster_340": [
+      "org.apache.hadoop.mapred.CompletedJobStatusStore"
+    ],
+    "cluster_341": [
+      "org.apache.hadoop.mapred.Counters"
+    ],
+    "cluster_342": [
+      "org.apache.hadoop.mapred.DefaultJobHistoryParser"
+    ],
+    "cluster_343": [
+      "org.apache.hadoop.mapred.DisallowedTaskTrackerException"
+    ],
+    "cluster_344": [
+      "org.apache.hadoop.mapred.EagerTaskInitializationListener"
+    ],
+    "cluster_345": [
+      "org.apache.hadoop.mapred.FileAlreadyExistsException"
+    ],
+    "cluster_346": [
+      "org.apache.hadoop.mapred.FileInputFormat"
+    ],
+    "cluster_347": [
+      "org.apache.hadoop.mapred.FileOutputCommitter"
+    ],
+    "cluster_348": [
+      "org.apache.hadoop.mapred.FileOutputFormat"
+    ],
+    "cluster_349": [
+      "org.apache.hadoop.mapred.FileSplit"
+    ],
+    "cluster_350": [
+      "org.apache.hadoop.mapred.HeartbeatResponse"
+    ],
+    "cluster_351": [
+      "org.apache.hadoop.mapred.HistoryViewer"
+    ],
+    "cluster_352": [
+      "org.apache.hadoop.mapred.ID"
+    ],
+    "cluster_353": [
+      "org.apache.hadoop.mapred.IFile"
+    ],
+    "cluster_354": [
+      "org.apache.hadoop.mapred.IFileInputStream"
+    ],
+    "cluster_355": [
+      "org.apache.hadoop.mapred.IFileOutputStream"
+    ],
+    "cluster_356": [
+      "org.apache.hadoop.mapred.IndexCache"
+    ],
+    "cluster_357": [
+      "org.apache.hadoop.mapred.IndexRecord"
+    ],
+    "cluster_358": [
+      "org.apache.hadoop.mapred.InputFormat"
+    ],
+    "cluster_359": [
+      "org.apache.hadoop.mapred.InputSplit"
+    ],
+    "cluster_360": [
+      "org.apache.hadoop.mapred.InterTrackerProtocol"
+    ],
+    "cluster_361": [
+      "org.apache.hadoop.mapred.InvalidFileTypeException"
+    ],
+    "cluster_362": [
+      "org.apache.hadoop.mapred.InvalidInputException"
+    ],
+    "cluster_363": [
+      "org.apache.hadoop.mapred.InvalidJobConfException"
+    ],
+    "cluster_364": [
+      "org.apache.hadoop.mapred.IsolationRunner"
+    ],
+    "cluster_365": [
+      "org.apache.hadoop.mapred.JSPUtil"
+    ],
+    "cluster_366": [
+      "org.apache.hadoop.mapred.JVMId"
+    ],
+    "cluster_367": [
+      "org.apache.hadoop.mapred.JobChangeEvent"
+    ],
+    "cluster_368": [
+      "org.apache.hadoop.mapred.JobClient"
+    ],
+    "cluster_369": [
+      "org.apache.hadoop.mapred.JobConf"
+    ],
+    "cluster_370": [
+      "org.apache.hadoop.mapred.JobConfigurable"
+    ],
+    "cluster_371": [
+      "org.apache.hadoop.mapred.JobContext"
+    ],
+    "cluster_372": [
+      "org.apache.hadoop.mapred.JobEndNotifier"
+    ],
+    "cluster_373": [
+      "org.apache.hadoop.mapred.JobHistory"
+    ],
+    "cluster_374": [
+      "org.apache.hadoop.mapred.JobID"
+    ],
+    "cluster_375": [
+      "org.apache.hadoop.mapred.JobInProgress"
+    ],
+    "cluster_376": [
+      "org.apache.hadoop.mapred.JobInProgressListener"
+    ],
+    "cluster_377": [
+      "org.apache.hadoop.mapred.JobPriority"
+    ],
+    "cluster_378": [
+      "org.apache.hadoop.mapred.JobProfile"
+    ],
+    "cluster_379": [
+      "org.apache.hadoop.mapred.JobQueueClient"
+    ],
+    "cluster_380": [
+      "org.apache.hadoop.mapred.JobQueueInfo"
+    ],
+    "cluster_381": [
+      "org.apache.hadoop.mapred.JobQueueJobInProgressListener"
+    ],
+    "cluster_382": [
+      "org.apache.hadoop.mapred.JobQueueTaskScheduler"
+    ],
+    "cluster_383": [
+      "org.apache.hadoop.mapred.JobShell"
+    ],
+    "cluster_384": [
+      "org.apache.hadoop.mapred.JobStatus"
+    ],
+    "cluster_385": [
+      "org.apache.hadoop.mapred.JobStatusChangeEvent"
+    ],
+    "cluster_386": [
+      "org.apache.hadoop.mapred.JobSubmissionProtocol"
+    ],
+    "cluster_387": [
+      "org.apache.hadoop.mapred.JobTracker"
+    ],
+    "cluster_388": [
+      "org.apache.hadoop.mapred.JobTrackerInstrumentation"
+    ],
+    "cluster_389": [
+      "org.apache.hadoop.mapred.JobTrackerMetricsInst"
+    ],
+    "cluster_390": [
+      "org.apache.hadoop.mapred.JvmManager"
+    ],
+    "cluster_391": [
+      "org.apache.hadoop.mapred.JvmTask"
+    ],
+    "cluster_392": [
+      "org.apache.hadoop.mapred.KeyValueLineRecordReader"
+    ],
+    "cluster_393": [
+      "org.apache.hadoop.mapred.KeyValueTextInputFormat"
+    ],
+    "cluster_394": [
+      "org.apache.hadoop.mapred.KillJobAction"
+    ],
+    "cluster_395": [
+      "org.apache.hadoop.mapred.KillTaskAction"
+    ],
+    "cluster_396": [
+      "org.apache.hadoop.mapred.LaunchTaskAction"
+    ],
+    "cluster_397": [
+      "org.apache.hadoop.mapred.LimitTasksPerJobTaskScheduler"
+    ],
+    "cluster_398": [
+      "org.apache.hadoop.mapred.LineRecordReader"
+    ],
+    "cluster_399": [
+      "org.apache.hadoop.mapred.LocalJobRunner"
+    ],
+    "cluster_400": [
+      "org.apache.hadoop.mapred.MRSortResultIterator"
+    ],
+    "cluster_401": [
+      "org.apache.hadoop.mapred.MapFileOutputFormat"
+    ],
+    "cluster_402": [
+      "org.apache.hadoop.mapred.MapOutputFile"
+    ],
+    "cluster_403": [
+      "org.apache.hadoop.mapred.MapReduceBase"
+    ],
+    "cluster_404": [
+      "org.apache.hadoop.mapred.MapRunnable"
+    ],
+    "cluster_405": [
+      "org.apache.hadoop.mapred.MapRunner"
+    ],
+    "cluster_406": [
+      "org.apache.hadoop.mapred.MapTask"
+    ],
+    "cluster_407": [
+      "org.apache.hadoop.mapred.MapTaskCompletionEventsUpdate"
+    ],
+    "cluster_408": [
+      "org.apache.hadoop.mapred.MapTaskRunner"
+    ],
+    "cluster_409": [
+      "org.apache.hadoop.mapred.MapTaskStatus"
+    ],
+    "cluster_410": [
+      "org.apache.hadoop.mapred.Mapper"
+    ],
+    "cluster_411": [
+      "org.apache.hadoop.mapred.MergeSorter"
+    ],
+    "cluster_412": [
+      "org.apache.hadoop.mapred.Merger"
+    ],
+    "cluster_413": [
+      "org.apache.hadoop.mapred.MultiFileInputFormat"
+    ],
+    "cluster_414": [
+      "org.apache.hadoop.mapred.MultiFileSplit"
+    ],
+    "cluster_415": [
+      "org.apache.hadoop.mapred.OutputCollector"
+    ],
+    "cluster_416": [
+      "org.apache.hadoop.mapred.OutputCommitter"
+    ],
+    "cluster_417": [
+      "org.apache.hadoop.mapred.OutputFormat"
+    ],
+    "cluster_418": [
+      "org.apache.hadoop.mapred.OutputLogFilter"
+    ],
+    "cluster_419": [
+      "org.apache.hadoop.mapred.Partitioner"
+    ],
+    "cluster_420": [
+      "org.apache.hadoop.mapred.QueueManager"
+    ],
+    "cluster_421": [
+      "org.apache.hadoop.mapred.RamManager"
+    ],
+    "cluster_422": [
+      "org.apache.hadoop.mapred.RawKeyValueIterator"
+    ],
+    "cluster_423": [
+      "org.apache.hadoop.mapred.RecordReader"
+    ],
+    "cluster_424": [
+      "org.apache.hadoop.mapred.RecordWriter"
+    ],
+    "cluster_425": [
+      "org.apache.hadoop.mapred.ReduceTask"
+    ],
+    "cluster_426": [
+      "org.apache.hadoop.mapred.ReduceTaskRunner"
+    ],
+    "cluster_427": [
+      "org.apache.hadoop.mapred.ReduceTaskStatus"
+    ],
+    "cluster_428": [
+      "org.apache.hadoop.mapred.Reducer"
+    ],
+    "cluster_429": [
+      "org.apache.hadoop.mapred.ReinitTrackerAction"
+    ],
+    "cluster_430": [
+      "org.apache.hadoop.mapred.Reporter"
+    ],
+    "cluster_431": [
+      "org.apache.hadoop.mapred.ResourceEstimator"
+    ],
+    "cluster_432": [
+      "org.apache.hadoop.mapred.RunningJob"
+    ],
+    "cluster_433": [
+      "org.apache.hadoop.mapred.SequenceFileAsBinaryInputFormat"
+    ],
+    "cluster_434": [
+      "org.apache.hadoop.mapred.SequenceFileAsBinaryOutputFormat"
+    ],
+    "cluster_435": [
+      "org.apache.hadoop.mapred.SequenceFileAsTextInputFormat"
+    ],
+    "cluster_436": [
+      "org.apache.hadoop.mapred.SequenceFileAsTextRecordReader"
+    ],
+    "cluster_437": [
+      "org.apache.hadoop.mapred.SequenceFileInputFilter"
+    ],
+    "cluster_438": [
+      "org.apache.hadoop.mapred.SequenceFileInputFormat"
+    ],
+    "cluster_439": [
+      "org.apache.hadoop.mapred.SequenceFileOutputFormat"
+    ],
+    "cluster_440": [
+      "org.apache.hadoop.mapred.SequenceFileRecordReader"
+    ],
+    "cluster_441": [
+      "org.apache.hadoop.mapred.SkipBadRecords"
+    ],
+    "cluster_442": [
+      "org.apache.hadoop.mapred.SortedRanges"
+    ],
+    "cluster_443": [
+      "org.apache.hadoop.mapred.StatusHttpServer"
+    ],
+    "cluster_444": [
+      "org.apache.hadoop.mapred.Task"
+    ],
+    "cluster_445": [
+      "org.apache.hadoop.mapred.TaskAttemptContext"
+    ],
+    "cluster_446": [
+      "org.apache.hadoop.mapred.TaskAttemptID"
+    ],
+    "cluster_447": [
+      "org.apache.hadoop.mapred.TaskCompletionEvent"
+    ],
+    "cluster_448": [
+      "org.apache.hadoop.mapred.TaskID"
+    ],
+    "cluster_449": [
+      "org.apache.hadoop.mapred.TaskInProgress"
+    ],
+    "cluster_450": [
+      "org.apache.hadoop.mapred.TaskLog"
+    ],
+    "cluster_451": [
+      "org.apache.hadoop.mapred.TaskLogAppender"
+    ],
+    "cluster_452": [
+      "org.apache.hadoop.mapred.TaskLogServlet"
+    ],
+    "cluster_453": [
+      "org.apache.hadoop.mapred.TaskMemoryManagerThread"
+    ],
+    "cluster_454": [
+      "org.apache.hadoop.mapred.TaskReport"
+    ],
+    "cluster_455": [
+      "org.apache.hadoop.mapred.TaskRunner"
+    ],
+    "cluster_456": [
+      "org.apache.hadoop.mapred.TaskScheduler"
+    ],
+    "cluster_457": [
+      "org.apache.hadoop.mapred.TaskStatus"
+    ],
+    "cluster_458": [
+      "org.apache.hadoop.mapred.TaskTracker"
+    ],
+    "cluster_459": [
+      "org.apache.hadoop.mapred.TaskTrackerAction"
+    ],
+    "cluster_460": [
+      "org.apache.hadoop.mapred.TaskTrackerInstrumentation"
+    ],
+    "cluster_461": [
+      "org.apache.hadoop.mapred.TaskTrackerManager"
+    ],
+    "cluster_462": [
+      "org.apache.hadoop.mapred.TaskTrackerMetricsInst"
+    ],
+    "cluster_463": [
+      "org.apache.hadoop.mapred.TaskTrackerStatus"
+    ],
+    "cluster_464": [
+      "org.apache.hadoop.mapred.TaskUmbilicalProtocol"
+    ],
+    "cluster_465": [
+      "org.apache.hadoop.mapred.TextInputFormat"
+    ],
+    "cluster_466": [
+      "org.apache.hadoop.mapred.TextOutputFormat"
+    ],
+    "cluster_467": [
+      "org.apache.hadoop.mapred.analysejobhistory_jsp"
+    ],
+    "cluster_468": [
+      "org.apache.hadoop.mapred.jobblacklistedtrackers_jsp"
+    ],
+    "cluster_469": [
+      "org.apache.hadoop.mapred.jobconf_005fhistory_jsp"
+    ],
+    "cluster_470": [
+      "org.apache.hadoop.mapred.jobconf_jsp"
+    ],
+    "cluster_471": [
+      "org.apache.hadoop.mapred.jobcontrol.Job"
+    ],
+    "cluster_472": [
+      "org.apache.hadoop.mapred.jobcontrol.JobControl"
+    ],
+    "cluster_473": [
+      "org.apache.hadoop.mapred.jobdetails_jsp"
+    ],
+    "cluster_474": [
+      "org.apache.hadoop.mapred.jobdetailshistory_jsp"
+    ],
+    "cluster_475": [
+      "org.apache.hadoop.mapred.jobfailures_jsp"
+    ],
+    "cluster_476": [
+      "org.apache.hadoop.mapred.jobhistory_jsp"
+    ],
+    "cluster_477": [
+      "org.apache.hadoop.mapred.jobqueue_005fdetails_jsp"
+    ],
+    "cluster_478": [
+      "org.apache.hadoop.mapred.jobtasks_jsp"
+    ],
+    "cluster_479": [
+      "org.apache.hadoop.mapred.jobtaskshistory_jsp"
+    ],
+    "cluster_480": [
+      "org.apache.hadoop.mapred.jobtracker_jsp"
+    ],
+    "cluster_481": [
+      "org.apache.hadoop.mapred.join.ArrayListBackedIterator"
+    ],
+    "cluster_482": [
+      "org.apache.hadoop.mapred.join.ComposableRecordReader"
+    ],
+    "cluster_483": [
+      "org.apache.hadoop.mapred.join.CompositeInputFormat"
+    ],
+    "cluster_484": [
+      "org.apache.hadoop.mapred.join.CompositeInputSplit"
+    ],
+    "cluster_485": [
+      "org.apache.hadoop.mapred.join.CompositeRecordReader"
+    ],
+    "cluster_486": [
+      "org.apache.hadoop.mapred.join.InnerJoinRecordReader"
+    ],
+    "cluster_487": [
+      "org.apache.hadoop.mapred.join.JoinRecordReader"
+    ],
+    "cluster_488": [
+      "org.apache.hadoop.mapred.join.MultiFilterRecordReader"
+    ],
+    "cluster_489": [
+      "org.apache.hadoop.mapred.join.OuterJoinRecordReader"
+    ],
+    "cluster_490": [
+      "org.apache.hadoop.mapred.join.OverrideRecordReader"
+    ],
+    "cluster_491": [
+      "org.apache.hadoop.mapred.join.Parser"
+    ],
+    "cluster_492": [
+      "org.apache.hadoop.mapred.join.ResetableIterator"
+    ],
+    "cluster_493": [
+      "org.apache.hadoop.mapred.join.StreamBackedIterator"
+    ],
+    "cluster_494": [
+      "org.apache.hadoop.mapred.join.TupleWritable"
+    ],
+    "cluster_495": [
+      "org.apache.hadoop.mapred.join.WrappedRecordReader"
+    ],
+    "cluster_496": [
+      "org.apache.hadoop.mapred.lib.Chain"
+    ],
+    "cluster_497": [
+      "org.apache.hadoop.mapred.lib.ChainMapper"
+    ],
+    "cluster_498": [
+      "org.apache.hadoop.mapred.lib.ChainReducer"
+    ],
+    "cluster_499": [
+      "org.apache.hadoop.mapred.lib.DelegatingInputFormat"
+    ],
+    "cluster_500": [
+      "org.apache.hadoop.mapred.lib.DelegatingMapper"
+    ],
+    "cluster_501": [
+      "org.apache.hadoop.mapred.lib.FieldSelectionMapReduce"
+    ],
+    "cluster_502": [
+      "org.apache.hadoop.mapred.lib.HashPartitioner"
+    ],
+    "cluster_503": [
+      "org.apache.hadoop.mapred.lib.IdentityMapper"
+    ],
+    "cluster_504": [
+      "org.apache.hadoop.mapred.lib.IdentityReducer"
+    ],
+    "cluster_505": [
+      "org.apache.hadoop.mapred.lib.InputSampler"
+    ],
+    "cluster_506": [
+      "org.apache.hadoop.mapred.lib.InverseMapper"
+    ],
+    "cluster_507": [
+      "org.apache.hadoop.mapred.lib.KeyFieldBasedComparator"
+    ],
+    "cluster_508": [
+      "org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner"
+    ],
+    "cluster_509": [
+      "org.apache.hadoop.mapred.lib.KeyFieldHelper"
+    ],
+    "cluster_510": [
+      "org.apache.hadoop.mapred.lib.LongSumReducer"
+    ],
+    "cluster_511": [
+      "org.apache.hadoop.mapred.lib.MultipleInputs"
+    ],
+    "cluster_512": [
+      "org.apache.hadoop.mapred.lib.MultipleOutputFormat"
+    ],
+    "cluster_513": [
+      "org.apache.hadoop.mapred.lib.MultipleOutputs"
+    ],
+    "cluster_514": [
+      "org.apache.hadoop.mapred.lib.MultipleSequenceFileOutputFormat"
+    ],
+    "cluster_515": [
+      "org.apache.hadoop.mapred.lib.MultipleTextOutputFormat"
+    ],
+    "cluster_516": [
+      "org.apache.hadoop.mapred.lib.MultithreadedMapRunner"
+    ],
+    "cluster_517": [
+      "org.apache.hadoop.mapred.lib.NLineInputFormat"
+    ],
+    "cluster_518": [
+      "org.apache.hadoop.mapred.lib.NullOutputFormat"
+    ],
+    "cluster_519": [
+      "org.apache.hadoop.mapred.lib.RegexMapper"
+    ],
+    "cluster_520": [
+      "org.apache.hadoop.mapred.lib.TaggedInputSplit"
+    ],
+    "cluster_521": [
+      "org.apache.hadoop.mapred.lib.TokenCountMapper"
+    ],
+    "cluster_522": [
+      "org.apache.hadoop.mapred.lib.TotalOrderPartitioner"
+    ],
+    "cluster_523": [
+      "org.apache.hadoop.mapred.lib.aggregate.DoubleValueSum"
+    ],
+    "cluster_524": [
+      "org.apache.hadoop.mapred.lib.aggregate.LongValueMax"
+    ],
+    "cluster_525": [
+      "org.apache.hadoop.mapred.lib.aggregate.LongValueMin"
+    ],
+    "cluster_526": [
+      "org.apache.hadoop.mapred.lib.aggregate.LongValueSum"
+    ],
+    "cluster_527": [
+      "org.apache.hadoop.mapred.lib.aggregate.StringValueMax"
+    ],
+    "cluster_528": [
+      "org.apache.hadoop.mapred.lib.aggregate.StringValueMin"
+    ],
+    "cluster_529": [
+      "org.apache.hadoop.mapred.lib.aggregate.UniqValueCount"
+    ],
+    "cluster_530": [
+      "org.apache.hadoop.mapred.lib.aggregate.UserDefinedValueAggregatorDescriptor"
+    ],
+    "cluster_531": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregator"
+    ],
+    "cluster_532": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorBaseDescriptor"
+    ],
+    "cluster_533": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorCombiner"
+    ],
+    "cluster_534": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorDescriptor"
+    ],
+    "cluster_535": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorJob"
+    ],
+    "cluster_536": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorJobBase"
+    ],
+    "cluster_537": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorMapper"
+    ],
+    "cluster_538": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorReducer"
+    ],
+    "cluster_539": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueHistogram"
+    ],
+    "cluster_540": [
+      "org.apache.hadoop.mapred.lib.db.DBConfiguration"
+    ],
+    "cluster_541": [
+      "org.apache.hadoop.mapred.lib.db.DBInputFormat"
+    ],
+    "cluster_542": [
+      "org.apache.hadoop.mapred.lib.db.DBOutputFormat"
+    ],
+    "cluster_543": [
+      "org.apache.hadoop.mapred.lib.db.DBWritable"
+    ],
+    "cluster_544": [
+      "org.apache.hadoop.mapred.loadhistory_jsp"
+    ],
+    "cluster_545": [
+      "org.apache.hadoop.mapred.machines_jsp"
+    ],
+    "cluster_546": [
+      "org.apache.hadoop.mapred.pipes.Application"
+    ],
+    "cluster_547": [
+      "org.apache.hadoop.mapred.pipes.BinaryProtocol"
+    ],
+    "cluster_548": [
+      "org.apache.hadoop.mapred.pipes.DownwardProtocol"
+    ],
+    "cluster_549": [
+      "org.apache.hadoop.mapred.pipes.OutputHandler"
+    ],
+    "cluster_550": [
+      "org.apache.hadoop.mapred.pipes.PipesMapRunner"
+    ],
+    "cluster_551": [
+      "org.apache.hadoop.mapred.pipes.PipesNonJavaInputFormat"
+    ],
+    "cluster_552": [
+      "org.apache.hadoop.mapred.pipes.PipesPartitioner"
+    ],
+    "cluster_553": [
+      "org.apache.hadoop.mapred.pipes.PipesReducer"
+    ],
+    "cluster_554": [
+      "org.apache.hadoop.mapred.pipes.Submitter"
+    ],
+    "cluster_555": [
+      "org.apache.hadoop.mapred.pipes.UpwardProtocol"
+    ],
+    "cluster_556": [
+      "org.apache.hadoop.mapred.taskdetails_jsp"
+    ],
+    "cluster_557": [
+      "org.apache.hadoop.mapred.taskdetailshistory_jsp"
+    ],
+    "cluster_558": [
+      "org.apache.hadoop.mapred.taskstats_jsp"
+    ],
+    "cluster_559": [
+      "org.apache.hadoop.mapred.tasktracker_jsp"
+    ],
+    "cluster_560": [
+      "org.apache.hadoop.metrics"
+    ],
+    "cluster_561": [
+      "org.apache.hadoop.metrics.ContextFactory"
+    ],
+    "cluster_562": [
+      "org.apache.hadoop.metrics.MetricsContext"
+    ],
+    "cluster_563": [
+      "org.apache.hadoop.metrics.MetricsException"
+    ],
+    "cluster_564": [
+      "org.apache.hadoop.metrics.MetricsRecord"
+    ],
+    "cluster_565": [
+      "org.apache.hadoop.metrics.MetricsUtil"
+    ],
+    "cluster_566": [
+      "org.apache.hadoop.metrics.Updater"
+    ],
+    "cluster_567": [
+      "org.apache.hadoop.metrics.file.FileContext"
+    ],
+    "cluster_568": [
+      "org.apache.hadoop.metrics.ganglia.GangliaContext"
+    ],
+    "cluster_569": [
+      "org.apache.hadoop.metrics.jvm.EventCounter"
+    ],
+    "cluster_570": [
+      "org.apache.hadoop.metrics.jvm.JvmMetrics"
+    ],
+    "cluster_571": [
+      "org.apache.hadoop.metrics.spi.AbstractMetricsContext"
+    ],
+    "cluster_572": [
+      "org.apache.hadoop.metrics.spi.MetricValue"
+    ],
+    "cluster_573": [
+      "org.apache.hadoop.metrics.spi.MetricsRecordImpl"
+    ],
+    "cluster_574": [
+      "org.apache.hadoop.metrics.spi.NullContext"
+    ],
+    "cluster_575": [
+      "org.apache.hadoop.metrics.spi.NullContextWithUpdateThread"
+    ],
+    "cluster_576": [
+      "org.apache.hadoop.metrics.spi.OutputRecord"
+    ],
+    "cluster_577": [
+      "org.apache.hadoop.metrics.spi.Util"
+    ],
+    "cluster_578": [
+      "org.apache.hadoop.metrics.util.MBeanUtil"
+    ],
+    "cluster_579": [
+      "org.apache.hadoop.metrics.util.MetricsIntValue"
+    ],
+    "cluster_580": [
+      "org.apache.hadoop.metrics.util.MetricsLongValue"
+    ],
+    "cluster_581": [
+      "org.apache.hadoop.metrics.util.MetricsTimeVaryingInt"
+    ],
+    "cluster_582": [
+      "org.apache.hadoop.metrics.util.MetricsTimeVaryingRate"
+    ],
+    "cluster_583": [
+      "org.apache.hadoop.net"
+    ],
+    "cluster_584": [
+      "org.apache.hadoop.net.CachedDNSToSwitchMapping"
+    ],
+    "cluster_585": [
+      "org.apache.hadoop.net.DNS"
+    ],
+    "cluster_586": [
+      "org.apache.hadoop.net.DNSToSwitchMapping"
+    ],
+    "cluster_587": [
+      "org.apache.hadoop.net.NetUtils"
+    ],
+    "cluster_588": [
+      "org.apache.hadoop.net.NetworkTopology"
+    ],
+    "cluster_589": [
+      "org.apache.hadoop.net.Node"
+    ],
+    "cluster_590": [
+      "org.apache.hadoop.net.NodeBase"
+    ],
+    "cluster_591": [
+      "org.apache.hadoop.net.ScriptBasedMapping"
+    ],
+    "cluster_592": [
+      "org.apache.hadoop.net.SocketIOWithTimeout"
+    ],
+    "cluster_593": [
+      "org.apache.hadoop.net.SocketInputStream"
+    ],
+    "cluster_594": [
+      "org.apache.hadoop.net.SocketOutputStream"
+    ],
+    "cluster_595": [
+      "org.apache.hadoop.net.SocksSocketFactory"
+    ],
+    "cluster_596": [
+      "org.apache.hadoop.net.StandardSocketFactory"
+    ],
+    "cluster_597": [
+      "org.apache.hadoop.record"
+    ],
+    "cluster_598": [
+      "org.apache.hadoop.record.BinaryRecordInput"
+    ],
+    "cluster_599": [
+      "org.apache.hadoop.record.BinaryRecordOutput"
+    ],
+    "cluster_600": [
+      "org.apache.hadoop.record.Buffer"
+    ],
+    "cluster_601": [
+      "org.apache.hadoop.record.CsvRecordInput"
+    ],
+    "cluster_602": [
+      "org.apache.hadoop.record.CsvRecordOutput"
+    ],
+    "cluster_603": [
+      "org.apache.hadoop.record.Index"
+    ],
+    "cluster_604": [
+      "org.apache.hadoop.record.Record"
+    ],
+    "cluster_605": [
+      "org.apache.hadoop.record.RecordComparator"
+    ],
+    "cluster_606": [
+      "org.apache.hadoop.record.RecordInput"
+    ],
+    "cluster_607": [
+      "org.apache.hadoop.record.RecordOutput"
+    ],
+    "cluster_608": [
+      "org.apache.hadoop.record.Utils"
+    ],
+    "cluster_609": [
+      "org.apache.hadoop.record.XmlRecordInput"
+    ],
+    "cluster_610": [
+      "org.apache.hadoop.record.XmlRecordOutput"
+    ],
+    "cluster_611": [
+      "org.apache.hadoop.record.compiler.CGenerator"
+    ],
+    "cluster_612": [
+      "org.apache.hadoop.record.compiler.CodeBuffer"
+    ],
+    "cluster_613": [
+      "org.apache.hadoop.record.compiler.CodeGenerator"
+    ],
+    "cluster_614": [
+      "org.apache.hadoop.record.compiler.Consts"
+    ],
+    "cluster_615": [
+      "org.apache.hadoop.record.compiler.CppGenerator"
+    ],
+    "cluster_616": [
+      "org.apache.hadoop.record.compiler.JBoolean"
+    ],
+    "cluster_617": [
+      "org.apache.hadoop.record.compiler.JBuffer"
+    ],
+    "cluster_618": [
+      "org.apache.hadoop.record.compiler.JByte"
+    ],
+    "cluster_619": [
+      "org.apache.hadoop.record.compiler.JCompType"
+    ],
+    "cluster_620": [
+      "org.apache.hadoop.record.compiler.JDouble"
+    ],
+    "cluster_621": [
+      "org.apache.hadoop.record.compiler.JField"
+    ],
+    "cluster_622": [
+      "org.apache.hadoop.record.compiler.JFile"
+    ],
+    "cluster_623": [
+      "org.apache.hadoop.record.compiler.JFloat"
+    ],
+    "cluster_624": [
+      "org.apache.hadoop.record.compiler.JInt"
+    ],
+    "cluster_625": [
+      "org.apache.hadoop.record.compiler.JLong"
+    ],
+    "cluster_626": [
+      "org.apache.hadoop.record.compiler.JMap"
+    ],
+    "cluster_627": [
+      "org.apache.hadoop.record.compiler.JRecord"
+    ],
+    "cluster_628": [
+      "org.apache.hadoop.record.compiler.JString"
+    ],
+    "cluster_629": [
+      "org.apache.hadoop.record.compiler.JType"
+    ],
+    "cluster_630": [
+      "org.apache.hadoop.record.compiler.JVector"
+    ],
+    "cluster_631": [
+      "org.apache.hadoop.record.compiler.JavaGenerator"
+    ],
+    "cluster_632": [
+      "org.apache.hadoop.record.compiler.ant.RccTask"
+    ],
+    "cluster_633": [
+      "org.apache.hadoop.record.compiler.generated.ParseException"
+    ],
+    "cluster_634": [
+      "org.apache.hadoop.record.compiler.generated.Rcc"
+    ],
+    "cluster_635": [
+      "org.apache.hadoop.record.compiler.generated.RccConstants"
+    ],
+    "cluster_636": [
+      "org.apache.hadoop.record.compiler.generated.RccTokenManager"
+    ],
+    "cluster_637": [
+      "org.apache.hadoop.record.compiler.generated.SimpleCharStream"
+    ],
+    "cluster_638": [
+      "org.apache.hadoop.record.compiler.generated.Token"
+    ],
+    "cluster_639": [
+      "org.apache.hadoop.record.compiler.generated.TokenMgrError"
+    ],
+    "cluster_640": [
+      "org.apache.hadoop.record.meta.FieldTypeInfo"
+    ],
+    "cluster_641": [
+      "org.apache.hadoop.record.meta.MapTypeID"
+    ],
+    "cluster_642": [
+      "org.apache.hadoop.record.meta.RecordTypeInfo"
+    ],
+    "cluster_643": [
+      "org.apache.hadoop.record.meta.StructTypeID"
+    ],
+    "cluster_644": [
+      "org.apache.hadoop.record.meta.TypeID"
+    ],
+    "cluster_645": [
+      "org.apache.hadoop.record.meta.Utils"
+    ],
+    "cluster_646": [
+      "org.apache.hadoop.record.meta.VectorTypeID"
+    ],
+    "cluster_647": [
+      "org.apache.hadoop.security"
+    ],
+    "cluster_648": [
+      "org.apache.hadoop.security.AccessControlException"
+    ],
+    "cluster_649": [
+      "org.apache.hadoop.security.UnixUserGroupInformation"
+    ],
+    "cluster_650": [
+      "org.apache.hadoop.security.UserGroupInformation"
+    ],
+    "cluster_651": [
+      "org.apache.hadoop.util"
+    ],
+    "cluster_652": [
+      "org.apache.hadoop.util.Daemon"
+    ],
+    "cluster_653": [
+      "org.apache.hadoop.util.DataChecksum"
+    ],
+    "cluster_654": [
+      "org.apache.hadoop.util.DiskChecker"
+    ],
+    "cluster_655": [
+      "org.apache.hadoop.util.GenericOptionsParser"
+    ],
+    "cluster_656": [
+      "org.apache.hadoop.util.GenericsUtil"
+    ],
+    "cluster_657": [
+      "org.apache.hadoop.util.HeapSort"
+    ],
+    "cluster_658": [
+      "org.apache.hadoop.util.HostsFileReader"
+    ],
+    "cluster_659": [
+      "org.apache.hadoop.util.IndexedSortable"
+    ],
+    "cluster_660": [
+      "org.apache.hadoop.util.IndexedSorter"
+    ],
+    "cluster_661": [
+      "org.apache.hadoop.util.LineReader"
+    ],
+    "cluster_662": [
+      "org.apache.hadoop.util.MergeSort"
+    ],
+    "cluster_663": [
+      "org.apache.hadoop.util.NativeCodeLoader"
+    ],
+    "cluster_664": [
+      "org.apache.hadoop.util.PlatformName"
+    ],
+    "cluster_665": [
+      "org.apache.hadoop.util.PrintJarMainClass"
+    ],
+    "cluster_666": [
+      "org.apache.hadoop.util.PriorityQueue"
+    ],
+    "cluster_667": [
+      "org.apache.hadoop.util.ProcfsBasedProcessTree"
+    ],
+    "cluster_668": [
+      "org.apache.hadoop.util.ProgramDriver"
+    ],
+    "cluster_669": [
+      "org.apache.hadoop.util.Progress"
+    ],
+    "cluster_670": [
+      "org.apache.hadoop.util.Progressable"
+    ],
+    "cluster_671": [
+      "org.apache.hadoop.util.QuickSort"
+    ],
+    "cluster_672": [
+      "org.apache.hadoop.util.ReflectionUtils"
+    ],
+    "cluster_673": [
+      "org.apache.hadoop.util.RunJar"
+    ],
+    "cluster_674": [
+      "org.apache.hadoop.util.ServletUtil"
+    ],
+    "cluster_675": [
+      "org.apache.hadoop.util.Shell"
+    ],
+    "cluster_676": [
+      "org.apache.hadoop.util.StringUtils"
+    ],
+    "cluster_677": [
+      "org.apache.hadoop.util.Tool"
+    ],
+    "cluster_678": [
+      "org.apache.hadoop.util.ToolRunner"
+    ],
+    "cluster_679": [
+      "org.apache.hadoop.util.UTF8ByteArrayUtils"
+    ],
+    "cluster_680": [
+      "org.apache.hadoop.util.VersionInfo"
+    ],
+    "cluster_681": [
+      "org.apache.hadoop.util.XMLUtils"
+    ]
+  },
+  "final_clustering": {
+    "cluster_0": [
+      "0__Metrics"
+    ],
+    "cluster_1": [
+      "11__Balancer"
+    ],
+    "cluster_2": [
+      "13__Connectors"
+    ],
+    "cluster_3": [
+      "14__Task_(Data_storage_component)"
+    ],
+    "cluster_4": [
+      "16__Namenode"
+    ],
+    "cluster_5": [
+      "16a__NameNode_HDFS_Protocol_Core"
+    ],
+    "cluster_6": [
+      "16b__Transfer_HDFS_over_HTTP"
+    ],
+    "cluster_7": [
+      "16c__Client-facing_Exceptions"
+    ],
+    "cluster_8": [
+      "16d__Secondary_Name_Node"
+    ],
+    "cluster_9": [
+      "16e__Core_Name_Node_Structures"
+    ],
+    "cluster_10": [
+      "17__Task_Tracking_and_Running"
+    ],
+    "cluster_11": [
+      "19__Distributed_File_System"
+    ],
+    "cluster_12": [
+      "1__Other_utilities"
+    ],
+    "cluster_13": [
+      "20__DataNode"
+    ],
+    "cluster_14": [
+      "21__JobClient"
+    ],
+    "cluster_15": [
+      "22__Job_History"
+    ],
+    "cluster_16": [
+      "23__Progress"
+    ],
+    "cluster_17": [
+      "24__FS_Logging"
+    ],
+    "cluster_18": [
+      "27__DFS_Tools"
+    ],
+    "cluster_19": [
+      "28__HTTP_Protocol_Access"
+    ],
+    "cluster_20": [
+      "29__Namenode_Protocol"
+    ],
+    "cluster_21": [
+      "29a__Datanode_Protocol"
+    ],
+    "cluster_22": [
+      "2__Join_utilities"
+    ],
+    "cluster_23": [
+      "30__InterDataNode_Protocol"
+    ],
+    "cluster_24": [
+      "31__Client_Protocol"
+    ],
+    "cluster_25": [
+      "32__Client_Datanode_Protocol"
+    ],
+    "cluster_26": [
+      "32__Protocol_Utilities"
+    ],
+    "cluster_27": [
+      "33__Orphaned_Protocol_Utilities"
+    ],
+    "cluster_28": [
+      "34__Mapred_utilities"
+    ],
+    "cluster_29": [
+      "34a__Mapred_client"
+    ],
+    "cluster_30": [
+      "35__Job_Tracking"
+    ],
+    "cluster_31": [
+      "36__Sequence_File_Handling"
+    ],
+    "cluster_32": [
+      "37__Tracker_Protocols"
+    ],
+    "cluster_33": [
+      "39__JobQueueClient"
+    ],
+    "cluster_34": [
+      "3__Domain_data_structures"
+    ],
+    "cluster_35": [
+      "3a__Security_Data_Structures"
+    ],
+    "cluster_36": [
+      "3b__Input_Format_Data_Structures"
+    ],
+    "cluster_37": [
+      "40__JobShell"
+    ],
+    "cluster_38": [
+      "41__JvmManager"
+    ],
+    "cluster_39": [
+      "42__Chain_MapReduce"
+    ],
+    "cluster_40": [
+      "43__Multiple_Output_File_Formatting"
+    ],
+    "cluster_41": [
+      "44__DelegatingMapper"
+    ],
+    "cluster_42": [
+      "45__TotalOrderPartitioner"
+    ],
+    "cluster_43": [
+      "46__KeyFieldBasedPartitioner"
+    ],
+    "cluster_44": [
+      "47__Value_Aggregator"
+    ],
+    "cluster_45": [
+      "48__DB_I/O"
+    ],
+    "cluster_46": [
+      "49__C++_Pipes_Job"
+    ],
+    "cluster_47": [
+      "4__DFS_Utils"
+    ],
+    "cluster_48": [
+      "4a__HDFS_Upgrade_Management"
+    ],
+    "cluster_49": [
+      "50__C++_Pipes_Protocol"
+    ],
+    "cluster_50": [
+      "5__FSDataSet"
+    ],
+    "cluster_51": [
+      "7__Filters"
+    ],
+    "cluster_52": [
+      "9__Network_Utilities"
+    ],
+    "cluster_53": [
+      "org.apache.hadoop.conf"
+    ],
+    "cluster_54": [
+      "org.apache.hadoop.conf.Configurable"
+    ],
+    "cluster_55": [
+      "org.apache.hadoop.conf.Configuration"
+    ],
+    "cluster_56": [
+      "org.apache.hadoop.conf.Configured"
+    ],
+    "cluster_57": [
+      "org.apache.hadoop.filecache"
+    ],
+    "cluster_58": [
+      "org.apache.hadoop.filecache.DistributedCache"
+    ],
+    "cluster_59": [
+      "org.apache.hadoop.fs"
+    ],
+    "cluster_60": [
+      "org.apache.hadoop.fs.BlockLocation"
+    ],
+    "cluster_61": [
+      "org.apache.hadoop.fs.BufferedFSInputStream"
+    ],
+    "cluster_62": [
+      "org.apache.hadoop.fs.ChecksumException"
+    ],
+    "cluster_63": [
+      "org.apache.hadoop.fs.ChecksumFileSystem"
+    ],
+    "cluster_64": [
+      "org.apache.hadoop.fs.ContentSummary"
+    ],
+    "cluster_65": [
+      "org.apache.hadoop.fs.DF"
+    ],
+    "cluster_66": [
+      "org.apache.hadoop.fs.DU"
+    ],
+    "cluster_67": [
+      "org.apache.hadoop.fs.FSDataInputStream"
+    ],
+    "cluster_68": [
+      "org.apache.hadoop.fs.FSDataOutputStream"
+    ],
+    "cluster_69": [
+      "org.apache.hadoop.fs.FSError"
+    ],
+    "cluster_70": [
+      "org.apache.hadoop.fs.FSInputChecker"
+    ],
+    "cluster_71": [
+      "org.apache.hadoop.fs.FSInputStream"
+    ],
+    "cluster_72": [
+      "org.apache.hadoop.fs.FSOutputSummer"
+    ],
+    "cluster_73": [
+      "org.apache.hadoop.fs.FileChecksum"
+    ],
+    "cluster_74": [
+      "org.apache.hadoop.fs.FileStatus"
+    ],
+    "cluster_75": [
+      "org.apache.hadoop.fs.FileSystem"
+    ],
+    "cluster_76": [
+      "org.apache.hadoop.fs.FileUtil"
+    ],
+    "cluster_77": [
+      "org.apache.hadoop.fs.FilterFileSystem"
+    ],
+    "cluster_78": [
+      "org.apache.hadoop.fs.FsShell"
+    ],
+    "cluster_79": [
+      "org.apache.hadoop.fs.FsShellPermissions"
+    ],
+    "cluster_80": [
+      "org.apache.hadoop.fs.FsUrlConnection"
+    ],
+    "cluster_81": [
+      "org.apache.hadoop.fs.FsUrlStreamHandler"
+    ],
+    "cluster_82": [
+      "org.apache.hadoop.fs.FsUrlStreamHandlerFactory"
+    ],
+    "cluster_83": [
+      "org.apache.hadoop.fs.GlobExpander"
+    ],
+    "cluster_84": [
+      "org.apache.hadoop.fs.HarFileSystem"
+    ],
+    "cluster_85": [
+      "org.apache.hadoop.fs.InMemoryFileSystem"
+    ],
+    "cluster_86": [
+      "org.apache.hadoop.fs.LocalDirAllocator"
+    ],
+    "cluster_87": [
+      "org.apache.hadoop.fs.LocalFileSystem"
+    ],
+    "cluster_88": [
+      "org.apache.hadoop.fs.MD5MD5CRC32FileChecksum"
+    ],
+    "cluster_89": [
+      "org.apache.hadoop.fs.Path"
+    ],
+    "cluster_90": [
+      "org.apache.hadoop.fs.PathFilter"
+    ],
+    "cluster_91": [
+      "org.apache.hadoop.fs.PositionedReadable"
+    ],
+    "cluster_92": [
+      "org.apache.hadoop.fs.RawLocalFileSystem"
+    ],
+    "cluster_93": [
+      "org.apache.hadoop.fs.Seekable"
+    ],
+    "cluster_94": [
+      "org.apache.hadoop.fs.Syncable"
+    ],
+    "cluster_95": [
+      "org.apache.hadoop.fs.Trash"
+    ],
+    "cluster_96": [
+      "org.apache.hadoop.fs.ftp.FTPException"
+    ],
+    "cluster_97": [
+      "org.apache.hadoop.fs.ftp.FTPFileSystem"
+    ],
+    "cluster_98": [
+      "org.apache.hadoop.fs.ftp.FTPInputStream"
+    ],
+    "cluster_99": [
+      "org.apache.hadoop.fs.kfs.IFSImpl"
+    ],
+    "cluster_100": [
+      "org.apache.hadoop.fs.kfs.KFSImpl"
+    ],
+    "cluster_101": [
+      "org.apache.hadoop.fs.kfs.KFSInputStream"
+    ],
+    "cluster_102": [
+      "org.apache.hadoop.fs.kfs.KFSOutputStream"
+    ],
+    "cluster_103": [
+      "org.apache.hadoop.fs.kfs.KosmosFileSystem"
+    ],
+    "cluster_104": [
+      "org.apache.hadoop.fs.permission.AccessControlException"
+    ],
+    "cluster_105": [
+      "org.apache.hadoop.fs.permission.FsAction"
+    ],
+    "cluster_106": [
+      "org.apache.hadoop.fs.permission.FsPermission"
+    ],
+    "cluster_107": [
+      "org.apache.hadoop.fs.permission.PermissionStatus"
+    ],
+    "cluster_108": [
+      "org.apache.hadoop.fs.s3.Block"
+    ],
+    "cluster_109": [
+      "org.apache.hadoop.fs.s3.FileSystemStore"
+    ],
+    "cluster_110": [
+      "org.apache.hadoop.fs.s3.INode"
+    ],
+    "cluster_111": [
+      "org.apache.hadoop.fs.s3.Jets3tFileSystemStore"
+    ],
+    "cluster_112": [
+      "org.apache.hadoop.fs.s3.MigrationTool"
+    ],
+    "cluster_113": [
+      "org.apache.hadoop.fs.s3.S3Credentials"
+    ],
+    "cluster_114": [
+      "org.apache.hadoop.fs.s3.S3Exception"
+    ],
+    "cluster_115": [
+      "org.apache.hadoop.fs.s3.S3FileSystem"
+    ],
+    "cluster_116": [
+      "org.apache.hadoop.fs.s3.S3FileSystemException"
+    ],
+    "cluster_117": [
+      "org.apache.hadoop.fs.s3.S3InputStream"
+    ],
+    "cluster_118": [
+      "org.apache.hadoop.fs.s3.S3OutputStream"
+    ],
+    "cluster_119": [
+      "org.apache.hadoop.fs.s3.VersionMismatchException"
+    ],
+    "cluster_120": [
+      "org.apache.hadoop.fs.s3native.FileMetadata"
+    ],
+    "cluster_121": [
+      "org.apache.hadoop.fs.s3native.Jets3tNativeFileSystemStore"
+    ],
+    "cluster_122": [
+      "org.apache.hadoop.fs.s3native.NativeFileSystemStore"
+    ],
+    "cluster_123": [
+      "org.apache.hadoop.fs.s3native.NativeS3FileSystem"
+    ],
+    "cluster_124": [
+      "org.apache.hadoop.fs.s3native.PartialListing"
+    ],
+    "cluster_125": [
+      "org.apache.hadoop.fs.shell.Command"
+    ],
+    "cluster_126": [
+      "org.apache.hadoop.fs.shell.CommandFormat"
+    ],
+    "cluster_127": [
+      "org.apache.hadoop.fs.shell.CommandUtils"
+    ],
+    "cluster_128": [
+      "org.apache.hadoop.fs.shell.Count"
+    ],
+    "cluster_129": [
+      "org.apache.hadoop.hdfs"
+    ],
+    "cluster_130": [
+      "org.apache.hadoop.hdfs.ChecksumDistributedFileSystem"
+    ],
+    "cluster_131": [
+      "org.apache.hadoop.hdfs.DFSClient"
+    ],
+    "cluster_132": [
+      "org.apache.hadoop.hdfs.DFSUtil"
+    ],
+    "cluster_133": [
+      "org.apache.hadoop.hdfs.DistributedFileSystem"
+    ],
+    "cluster_134": [
+      "org.apache.hadoop.hdfs.HftpFileSystem"
+    ],
+    "cluster_135": [
+      "org.apache.hadoop.hdfs.HsftpFileSystem"
+    ],
+    "cluster_136": [
+      "org.apache.hadoop.hdfs.protocol.AlreadyBeingCreatedException"
+    ],
+    "cluster_137": [
+      "org.apache.hadoop.hdfs.protocol.Block"
+    ],
+    "cluster_138": [
+      "org.apache.hadoop.hdfs.protocol.BlockListAsLongs"
+    ],
+    "cluster_139": [
+      "org.apache.hadoop.hdfs.protocol.ClientDatanodeProtocol"
+    ],
+    "cluster_140": [
+      "org.apache.hadoop.hdfs.protocol.ClientProtocol"
+    ],
+    "cluster_141": [
+      "org.apache.hadoop.hdfs.protocol.DatanodeID"
+    ],
+    "cluster_142": [
+      "org.apache.hadoop.hdfs.protocol.DatanodeInfo"
+    ],
+    "cluster_143": [
+      "org.apache.hadoop.hdfs.protocol.FSConstants"
+    ],
+    "cluster_144": [
+      "org.apache.hadoop.hdfs.protocol.LocatedBlock"
+    ],
+    "cluster_145": [
+      "org.apache.hadoop.hdfs.protocol.LocatedBlocks"
+    ],
+    "cluster_146": [
+      "org.apache.hadoop.hdfs.protocol.QuotaExceededException"
+    ],
+    "cluster_147": [
+      "org.apache.hadoop.hdfs.protocol.UnregisteredDatanodeException"
+    ],
+    "cluster_148": [
+      "org.apache.hadoop.hdfs.server.balancer.Balancer"
+    ],
+    "cluster_149": [
+      "org.apache.hadoop.hdfs.server.common.GenerationStamp"
+    ],
+    "cluster_150": [
+      "org.apache.hadoop.hdfs.server.common.HdfsConstants"
+    ],
+    "cluster_151": [
+      "org.apache.hadoop.hdfs.server.common.InconsistentFSStateException"
+    ],
+    "cluster_152": [
+      "org.apache.hadoop.hdfs.server.common.IncorrectVersionException"
+    ],
+    "cluster_153": [
+      "org.apache.hadoop.hdfs.server.common.Storage"
+    ],
+    "cluster_154": [
+      "org.apache.hadoop.hdfs.server.common.StorageInfo"
+    ],
+    "cluster_155": [
+      "org.apache.hadoop.hdfs.server.common.UpgradeManager"
+    ],
+    "cluster_156": [
+      "org.apache.hadoop.hdfs.server.common.UpgradeObject"
+    ],
+    "cluster_157": [
+      "org.apache.hadoop.hdfs.server.common.UpgradeObjectCollection"
+    ],
+    "cluster_158": [
+      "org.apache.hadoop.hdfs.server.common.UpgradeStatusReport"
+    ],
+    "cluster_159": [
+      "org.apache.hadoop.hdfs.server.common.Upgradeable"
+    ],
+    "cluster_160": [
+      "org.apache.hadoop.hdfs.server.common.Util"
+    ],
+    "cluster_161": [
+      "org.apache.hadoop.hdfs.server.datanode.BlockMetadataHeader"
+    ],
+    "cluster_162": [
+      "org.apache.hadoop.hdfs.server.datanode.BlockReceiver"
+    ],
+    "cluster_163": [
+      "org.apache.hadoop.hdfs.server.datanode.BlockSender"
+    ],
+    "cluster_164": [
+      "org.apache.hadoop.hdfs.server.datanode.BlockTransferThrottler"
+    ],
+    "cluster_165": [
+      "org.apache.hadoop.hdfs.server.datanode.DataBlockScanner"
+    ],
+    "cluster_166": [
+      "org.apache.hadoop.hdfs.server.datanode.DataNode"
+    ],
+    "cluster_167": [
+      "org.apache.hadoop.hdfs.server.datanode.DataStorage"
+    ],
+    "cluster_168": [
+      "org.apache.hadoop.hdfs.server.datanode.DataXceiver"
+    ],
+    "cluster_169": [
+      "org.apache.hadoop.hdfs.server.datanode.DataXceiverServer"
+    ],
+    "cluster_170": [
+      "org.apache.hadoop.hdfs.server.datanode.DatanodeBlockInfo"
+    ],
+    "cluster_171": [
+      "org.apache.hadoop.hdfs.server.datanode.FSDataset"
+    ],
+    "cluster_172": [
+      "org.apache.hadoop.hdfs.server.datanode.FSDatasetInterface"
+    ],
+    "cluster_173": [
+      "org.apache.hadoop.hdfs.server.datanode.UpgradeManagerDatanode"
+    ],
+    "cluster_174": [
+      "org.apache.hadoop.hdfs.server.datanode.UpgradeObjectDatanode"
+    ],
+    "cluster_175": [
+      "org.apache.hadoop.hdfs.server.datanode.browseBlock_jsp"
+    ],
+    "cluster_176": [
+      "org.apache.hadoop.hdfs.server.datanode.browseDirectory_jsp"
+    ],
+    "cluster_177": [
+      "org.apache.hadoop.hdfs.server.datanode.metrics.DataNodeMetrics"
+    ],
+    "cluster_178": [
+      "org.apache.hadoop.hdfs.server.datanode.metrics.DataNodeStatistics"
+    ],
+    "cluster_179": [
+      "org.apache.hadoop.hdfs.server.datanode.tail_jsp"
+    ],
+    "cluster_180": [
+      "org.apache.hadoop.hdfs.server.namenode.BlocksMap"
+    ],
+    "cluster_181": [
+      "org.apache.hadoop.hdfs.server.namenode.CheckpointSignature"
+    ],
+    "cluster_182": [
+      "org.apache.hadoop.hdfs.server.namenode.CorruptReplicasMap"
+    ],
+    "cluster_183": [
+      "org.apache.hadoop.hdfs.server.namenode.DatanodeDescriptor"
+    ],
+    "cluster_184": [
+      "org.apache.hadoop.hdfs.server.namenode.DfsServlet"
+    ],
+    "cluster_185": [
+      "org.apache.hadoop.hdfs.server.namenode.EditLogInputStream"
+    ],
+    "cluster_186": [
+      "org.apache.hadoop.hdfs.server.namenode.EditLogOutputStream"
+    ],
+    "cluster_187": [
+      "org.apache.hadoop.hdfs.server.namenode.FSDirectory"
+    ],
+    "cluster_188": [
+      "org.apache.hadoop.hdfs.server.namenode.FSEditLog"
+    ],
+    "cluster_189": [
+      "org.apache.hadoop.hdfs.server.namenode.FSImage"
+    ],
+    "cluster_190": [
+      "org.apache.hadoop.hdfs.server.namenode.FSNamesystem"
+    ],
+    "cluster_191": [
+      "org.apache.hadoop.hdfs.server.namenode.FileChecksumServlets"
+    ],
+    "cluster_192": [
+      "org.apache.hadoop.hdfs.server.namenode.FileDataServlet"
+    ],
+    "cluster_193": [
+      "org.apache.hadoop.hdfs.server.namenode.FsckServlet"
+    ],
+    "cluster_194": [
+      "org.apache.hadoop.hdfs.server.namenode.GetImageServlet"
+    ],
+    "cluster_195": [
+      "org.apache.hadoop.hdfs.server.namenode.Host2NodesMap"
+    ],
+    "cluster_196": [
+      "org.apache.hadoop.hdfs.server.namenode.INode"
+    ],
+    "cluster_197": [
+      "org.apache.hadoop.hdfs.server.namenode.INodeDirectory"
+    ],
+    "cluster_198": [
+      "org.apache.hadoop.hdfs.server.namenode.INodeDirectoryWithQuota"
+    ],
+    "cluster_199": [
+      "org.apache.hadoop.hdfs.server.namenode.INodeFile"
+    ],
+    "cluster_200": [
+      "org.apache.hadoop.hdfs.server.namenode.INodeFileUnderConstruction"
+    ],
+    "cluster_201": [
+      "org.apache.hadoop.hdfs.server.namenode.JspHelper"
+    ],
+    "cluster_202": [
+      "org.apache.hadoop.hdfs.server.namenode.LeaseExpiredException"
+    ],
+    "cluster_203": [
+      "org.apache.hadoop.hdfs.server.namenode.LeaseManager"
+    ],
+    "cluster_204": [
+      "org.apache.hadoop.hdfs.server.namenode.ListPathsServlet"
+    ],
+    "cluster_205": [
+      "org.apache.hadoop.hdfs.server.namenode.NameNode"
+    ],
+    "cluster_206": [
+      "org.apache.hadoop.hdfs.server.namenode.NamenodeFsck"
+    ],
+    "cluster_207": [
+      "org.apache.hadoop.hdfs.server.namenode.NotReplicatedYetException"
+    ],
+    "cluster_208": [
+      "org.apache.hadoop.hdfs.server.namenode.PendingReplicationBlocks"
+    ],
+    "cluster_209": [
+      "org.apache.hadoop.hdfs.server.namenode.PermissionChecker"
+    ],
+    "cluster_210": [
+      "org.apache.hadoop.hdfs.server.namenode.ReplicationTargetChooser"
+    ],
+    "cluster_211": [
+      "org.apache.hadoop.hdfs.server.namenode.SafeModeException"
+    ],
+    "cluster_212": [
+      "org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode"
+    ],
+    "cluster_213": [
+      "org.apache.hadoop.hdfs.server.namenode.SerialNumberManager"
+    ],
+    "cluster_214": [
+      "org.apache.hadoop.hdfs.server.namenode.StreamFile"
+    ],
+    "cluster_215": [
+      "org.apache.hadoop.hdfs.server.namenode.StringBytesWritable"
+    ],
+    "cluster_216": [
+      "org.apache.hadoop.hdfs.server.namenode.TransferFsImage"
+    ],
+    "cluster_217": [
+      "org.apache.hadoop.hdfs.server.namenode.UnderReplicatedBlocks"
+    ],
+    "cluster_218": [
+      "org.apache.hadoop.hdfs.server.namenode.UpgradeManagerNamenode"
+    ],
+    "cluster_219": [
+      "org.apache.hadoop.hdfs.server.namenode.UpgradeObjectNamenode"
+    ],
+    "cluster_220": [
+      "org.apache.hadoop.hdfs.server.namenode.dfshealth_jsp"
+    ],
+    "cluster_221": [
+      "org.apache.hadoop.hdfs.server.namenode.metrics.FSNamesystemMetrics"
+    ],
+    "cluster_222": [
+      "org.apache.hadoop.hdfs.server.namenode.metrics.NameNodeMetrics"
+    ],
+    "cluster_223": [
+      "org.apache.hadoop.hdfs.server.namenode.metrics.NameNodeStatistics"
+    ],
+    "cluster_224": [
+      "org.apache.hadoop.hdfs.server.namenode.nn_005fbrowsedfscontent_jsp"
+    ],
+    "cluster_225": [
+      "org.apache.hadoop.hdfs.server.protocol.BlockCommand"
+    ],
+    "cluster_226": [
+      "org.apache.hadoop.hdfs.server.protocol.BlockMetaDataInfo"
+    ],
+    "cluster_227": [
+      "org.apache.hadoop.hdfs.server.protocol.BlocksWithLocations"
+    ],
+    "cluster_228": [
+      "org.apache.hadoop.hdfs.server.protocol.DatanodeCommand"
+    ],
+    "cluster_229": [
+      "org.apache.hadoop.hdfs.server.protocol.DatanodeProtocol"
+    ],
+    "cluster_230": [
+      "org.apache.hadoop.hdfs.server.protocol.DatanodeRegistration"
+    ],
+    "cluster_231": [
+      "org.apache.hadoop.hdfs.server.protocol.DisallowedDatanodeException"
+    ],
+    "cluster_232": [
+      "org.apache.hadoop.hdfs.server.protocol.InterDatanodeProtocol"
+    ],
+    "cluster_233": [
+      "org.apache.hadoop.hdfs.server.protocol.NamenodeProtocol"
+    ],
+    "cluster_234": [
+      "org.apache.hadoop.hdfs.server.protocol.NamespaceInfo"
+    ],
+    "cluster_235": [
+      "org.apache.hadoop.hdfs.server.protocol.UpgradeCommand"
+    ],
+    "cluster_236": [
+      "org.apache.hadoop.hdfs.tools.DFSAdmin"
+    ],
+    "cluster_237": [
+      "org.apache.hadoop.hdfs.tools.DFSck"
+    ],
+    "cluster_238": [
+      "org.apache.hadoop.http"
+    ],
+    "cluster_239": [
+      "org.apache.hadoop.http.FilterInitializer"
+    ],
+    "cluster_240": [
+      "org.apache.hadoop.http.HttpServer"
+    ],
+    "cluster_241": [
+      "org.apache.hadoop.io"
+    ],
+    "cluster_242": [
+      "org.apache.hadoop.io.AbstractMapWritable"
+    ],
+    "cluster_243": [
+      "org.apache.hadoop.io.ArrayFile"
+    ],
+    "cluster_244": [
+      "org.apache.hadoop.io.ArrayWritable"
+    ],
+    "cluster_245": [
+      "org.apache.hadoop.io.BinaryComparable"
+    ],
+    "cluster_246": [
+      "org.apache.hadoop.io.BooleanWritable"
+    ],
+    "cluster_247": [
+      "org.apache.hadoop.io.ByteWritable"
+    ],
+    "cluster_248": [
+      "org.apache.hadoop.io.BytesWritable"
+    ],
+    "cluster_249": [
+      "org.apache.hadoop.io.CompressedWritable"
+    ],
+    "cluster_250": [
+      "org.apache.hadoop.io.DataInputBuffer"
+    ],
+    "cluster_251": [
+      "org.apache.hadoop.io.DataOutputBuffer"
+    ],
+    "cluster_252": [
+      "org.apache.hadoop.io.DefaultStringifier"
+    ],
+    "cluster_253": [
+      "org.apache.hadoop.io.DoubleWritable"
+    ],
+    "cluster_254": [
+      "org.apache.hadoop.io.FloatWritable"
+    ],
+    "cluster_255": [
+      "org.apache.hadoop.io.GenericWritable"
+    ],
+    "cluster_256": [
+      "org.apache.hadoop.io.IOUtils"
+    ],
+    "cluster_257": [
+      "org.apache.hadoop.io.InputBuffer"
+    ],
+    "cluster_258": [
+      "org.apache.hadoop.io.IntWritable"
+    ],
+    "cluster_259": [
+      "org.apache.hadoop.io.LongWritable"
+    ],
+    "cluster_260": [
+      "org.apache.hadoop.io.MD5Hash"
+    ],
+    "cluster_261": [
+      "org.apache.hadoop.io.MapFile"
+    ],
+    "cluster_262": [
+      "org.apache.hadoop.io.MapWritable"
+    ],
+    "cluster_263": [
+      "org.apache.hadoop.io.MultipleIOException"
+    ],
+    "cluster_264": [
+      "org.apache.hadoop.io.NullWritable"
+    ],
+    "cluster_265": [
+      "org.apache.hadoop.io.ObjectWritable"
+    ],
+    "cluster_266": [
+      "org.apache.hadoop.io.OutputBuffer"
+    ],
+    "cluster_267": [
+      "org.apache.hadoop.io.RawComparator"
+    ],
+    "cluster_268": [
+      "org.apache.hadoop.io.SequenceFile"
+    ],
+    "cluster_269": [
+      "org.apache.hadoop.io.SetFile"
+    ],
+    "cluster_270": [
+      "org.apache.hadoop.io.SortedMapWritable"
+    ],
+    "cluster_271": [
+      "org.apache.hadoop.io.Stringifier"
+    ],
+    "cluster_272": [
+      "org.apache.hadoop.io.Text"
+    ],
+    "cluster_273": [
+      "org.apache.hadoop.io.TwoDArrayWritable"
+    ],
+    "cluster_274": [
+      "org.apache.hadoop.io.UTF8"
+    ],
+    "cluster_275": [
+      "org.apache.hadoop.io.VIntWritable"
+    ],
+    "cluster_276": [
+      "org.apache.hadoop.io.VLongWritable"
+    ],
+    "cluster_277": [
+      "org.apache.hadoop.io.VersionMismatchException"
+    ],
+    "cluster_278": [
+      "org.apache.hadoop.io.VersionedWritable"
+    ],
+    "cluster_279": [
+      "org.apache.hadoop.io.Writable"
+    ],
+    "cluster_280": [
+      "org.apache.hadoop.io.WritableComparable"
+    ],
+    "cluster_281": [
+      "org.apache.hadoop.io.WritableComparator"
+    ],
+    "cluster_282": [
+      "org.apache.hadoop.io.WritableFactories"
+    ],
+    "cluster_283": [
+      "org.apache.hadoop.io.WritableFactory"
+    ],
+    "cluster_284": [
+      "org.apache.hadoop.io.WritableName"
+    ],
+    "cluster_285": [
+      "org.apache.hadoop.io.WritableUtils"
+    ],
+    "cluster_286": [
+      "org.apache.hadoop.io.compress.BZip2Codec"
+    ],
+    "cluster_287": [
+      "org.apache.hadoop.io.compress.BlockCompressorStream"
+    ],
+    "cluster_288": [
+      "org.apache.hadoop.io.compress.BlockDecompressorStream"
+    ],
+    "cluster_289": [
+      "org.apache.hadoop.io.compress.CodecPool"
+    ],
+    "cluster_290": [
+      "org.apache.hadoop.io.compress.CompressionCodec"
+    ],
+    "cluster_291": [
+      "org.apache.hadoop.io.compress.CompressionCodecFactory"
+    ],
+    "cluster_292": [
+      "org.apache.hadoop.io.compress.CompressionInputStream"
+    ],
+    "cluster_293": [
+      "org.apache.hadoop.io.compress.CompressionOutputStream"
+    ],
+    "cluster_294": [
+      "org.apache.hadoop.io.compress.Compressor"
+    ],
+    "cluster_295": [
+      "org.apache.hadoop.io.compress.CompressorStream"
+    ],
+    "cluster_296": [
+      "org.apache.hadoop.io.compress.Decompressor"
+    ],
+    "cluster_297": [
+      "org.apache.hadoop.io.compress.DecompressorStream"
+    ],
+    "cluster_298": [
+      "org.apache.hadoop.io.compress.DefaultCodec"
+    ],
+    "cluster_299": [
+      "org.apache.hadoop.io.compress.GzipCodec"
+    ],
+    "cluster_300": [
+      "org.apache.hadoop.io.compress.LzoCodec"
+    ],
+    "cluster_301": [
+      "org.apache.hadoop.io.compress.LzopCodec"
+    ],
+    "cluster_302": [
+      "org.apache.hadoop.io.compress.bzip2.BZip2Constants"
+    ],
+    "cluster_303": [
+      "org.apache.hadoop.io.compress.bzip2.CBZip2InputStream"
+    ],
+    "cluster_304": [
+      "org.apache.hadoop.io.compress.bzip2.CBZip2OutputStream"
+    ],
+    "cluster_305": [
+      "org.apache.hadoop.io.compress.bzip2.CRC"
+    ],
+    "cluster_306": [
+      "org.apache.hadoop.io.compress.lzo.LzoCompressor"
+    ],
+    "cluster_307": [
+      "org.apache.hadoop.io.compress.lzo.LzoDecompressor"
+    ],
+    "cluster_308": [
+      "org.apache.hadoop.io.compress.zlib.BuiltInZlibDeflater"
+    ],
+    "cluster_309": [
+      "org.apache.hadoop.io.compress.zlib.BuiltInZlibInflater"
+    ],
+    "cluster_310": [
+      "org.apache.hadoop.io.compress.zlib.ZlibCompressor"
+    ],
+    "cluster_311": [
+      "org.apache.hadoop.io.compress.zlib.ZlibDecompressor"
+    ],
+    "cluster_312": [
+      "org.apache.hadoop.io.compress.zlib.ZlibFactory"
+    ],
+    "cluster_313": [
+      "org.apache.hadoop.io.retry.RetryInvocationHandler"
+    ],
+    "cluster_314": [
+      "org.apache.hadoop.io.retry.RetryPolicies"
+    ],
+    "cluster_315": [
+      "org.apache.hadoop.io.retry.RetryPolicy"
+    ],
+    "cluster_316": [
+      "org.apache.hadoop.io.retry.RetryProxy"
+    ],
+    "cluster_317": [
+      "org.apache.hadoop.io.serializer.Deserializer"
+    ],
+    "cluster_318": [
+      "org.apache.hadoop.io.serializer.DeserializerComparator"
+    ],
+    "cluster_319": [
+      "org.apache.hadoop.io.serializer.JavaSerialization"
+    ],
+    "cluster_320": [
+      "org.apache.hadoop.io.serializer.JavaSerializationComparator"
+    ],
+    "cluster_321": [
+      "org.apache.hadoop.io.serializer.Serialization"
+    ],
+    "cluster_322": [
+      "org.apache.hadoop.io.serializer.SerializationFactory"
+    ],
+    "cluster_323": [
+      "org.apache.hadoop.io.serializer.Serializer"
+    ],
+    "cluster_324": [
+      "org.apache.hadoop.io.serializer.WritableSerialization"
+    ],
+    "cluster_325": [
+      "org.apache.hadoop.ipc"
+    ],
+    "cluster_326": [
+      "org.apache.hadoop.ipc.Client"
+    ],
+    "cluster_327": [
+      "org.apache.hadoop.ipc.RPC"
+    ],
+    "cluster_328": [
+      "org.apache.hadoop.ipc.RemoteException"
+    ],
+    "cluster_329": [
+      "org.apache.hadoop.ipc.Server"
+    ],
+    "cluster_330": [
+      "org.apache.hadoop.ipc.VersionedProtocol"
+    ],
+    "cluster_331": [
+      "org.apache.hadoop.ipc.metrics.RpcMetrics"
+    ],
+    "cluster_332": [
+      "org.apache.hadoop.ipc.metrics.RpcMgt"
+    ],
+    "cluster_333": [
+      "org.apache.hadoop.log"
+    ],
+    "cluster_334": [
+      "org.apache.hadoop.log.LogLevel"
+    ],
+    "cluster_335": [
+      "org.apache.hadoop.mapred"
+    ],
+    "cluster_336": [
+      "org.apache.hadoop.mapred.BasicTypeSorterBase"
+    ],
+    "cluster_337": [
+      "org.apache.hadoop.mapred.Child"
+    ],
+    "cluster_338": [
+      "org.apache.hadoop.mapred.ClusterStatus"
+    ],
+    "cluster_339": [
+      "org.apache.hadoop.mapred.CommitTaskAction"
+    ],
+    "cluster_340": [
+      "org.apache.hadoop.mapred.CompletedJobStatusStore"
+    ],
+    "cluster_341": [
+      "org.apache.hadoop.mapred.Counters"
+    ],
+    "cluster_342": [
+      "org.apache.hadoop.mapred.DefaultJobHistoryParser"
+    ],
+    "cluster_343": [
+      "org.apache.hadoop.mapred.DisallowedTaskTrackerException"
+    ],
+    "cluster_344": [
+      "org.apache.hadoop.mapred.EagerTaskInitializationListener"
+    ],
+    "cluster_345": [
+      "org.apache.hadoop.mapred.FileAlreadyExistsException"
+    ],
+    "cluster_346": [
+      "org.apache.hadoop.mapred.FileInputFormat"
+    ],
+    "cluster_347": [
+      "org.apache.hadoop.mapred.FileOutputCommitter"
+    ],
+    "cluster_348": [
+      "org.apache.hadoop.mapred.FileOutputFormat"
+    ],
+    "cluster_349": [
+      "org.apache.hadoop.mapred.FileSplit"
+    ],
+    "cluster_350": [
+      "org.apache.hadoop.mapred.HeartbeatResponse"
+    ],
+    "cluster_351": [
+      "org.apache.hadoop.mapred.HistoryViewer"
+    ],
+    "cluster_352": [
+      "org.apache.hadoop.mapred.ID"
+    ],
+    "cluster_353": [
+      "org.apache.hadoop.mapred.IFile"
+    ],
+    "cluster_354": [
+      "org.apache.hadoop.mapred.IFileInputStream"
+    ],
+    "cluster_355": [
+      "org.apache.hadoop.mapred.IFileOutputStream"
+    ],
+    "cluster_356": [
+      "org.apache.hadoop.mapred.IndexCache"
+    ],
+    "cluster_357": [
+      "org.apache.hadoop.mapred.IndexRecord"
+    ],
+    "cluster_358": [
+      "org.apache.hadoop.mapred.InputFormat"
+    ],
+    "cluster_359": [
+      "org.apache.hadoop.mapred.InputSplit"
+    ],
+    "cluster_360": [
+      "org.apache.hadoop.mapred.InterTrackerProtocol"
+    ],
+    "cluster_361": [
+      "org.apache.hadoop.mapred.InvalidFileTypeException"
+    ],
+    "cluster_362": [
+      "org.apache.hadoop.mapred.InvalidInputException"
+    ],
+    "cluster_363": [
+      "org.apache.hadoop.mapred.InvalidJobConfException"
+    ],
+    "cluster_364": [
+      "org.apache.hadoop.mapred.IsolationRunner"
+    ],
+    "cluster_365": [
+      "org.apache.hadoop.mapred.JSPUtil"
+    ],
+    "cluster_366": [
+      "org.apache.hadoop.mapred.JVMId"
+    ],
+    "cluster_367": [
+      "org.apache.hadoop.mapred.JobChangeEvent"
+    ],
+    "cluster_368": [
+      "org.apache.hadoop.mapred.JobClient"
+    ],
+    "cluster_369": [
+      "org.apache.hadoop.mapred.JobConf"
+    ],
+    "cluster_370": [
+      "org.apache.hadoop.mapred.JobConfigurable"
+    ],
+    "cluster_371": [
+      "org.apache.hadoop.mapred.JobContext"
+    ],
+    "cluster_372": [
+      "org.apache.hadoop.mapred.JobEndNotifier"
+    ],
+    "cluster_373": [
+      "org.apache.hadoop.mapred.JobHistory"
+    ],
+    "cluster_374": [
+      "org.apache.hadoop.mapred.JobID"
+    ],
+    "cluster_375": [
+      "org.apache.hadoop.mapred.JobInProgress"
+    ],
+    "cluster_376": [
+      "org.apache.hadoop.mapred.JobInProgressListener"
+    ],
+    "cluster_377": [
+      "org.apache.hadoop.mapred.JobPriority"
+    ],
+    "cluster_378": [
+      "org.apache.hadoop.mapred.JobProfile"
+    ],
+    "cluster_379": [
+      "org.apache.hadoop.mapred.JobQueueClient"
+    ],
+    "cluster_380": [
+      "org.apache.hadoop.mapred.JobQueueInfo"
+    ],
+    "cluster_381": [
+      "org.apache.hadoop.mapred.JobQueueJobInProgressListener"
+    ],
+    "cluster_382": [
+      "org.apache.hadoop.mapred.JobQueueTaskScheduler"
+    ],
+    "cluster_383": [
+      "org.apache.hadoop.mapred.JobShell"
+    ],
+    "cluster_384": [
+      "org.apache.hadoop.mapred.JobStatus"
+    ],
+    "cluster_385": [
+      "org.apache.hadoop.mapred.JobStatusChangeEvent"
+    ],
+    "cluster_386": [
+      "org.apache.hadoop.mapred.JobSubmissionProtocol"
+    ],
+    "cluster_387": [
+      "org.apache.hadoop.mapred.JobTracker"
+    ],
+    "cluster_388": [
+      "org.apache.hadoop.mapred.JobTrackerInstrumentation"
+    ],
+    "cluster_389": [
+      "org.apache.hadoop.mapred.JobTrackerMetricsInst"
+    ],
+    "cluster_390": [
+      "org.apache.hadoop.mapred.JvmManager"
+    ],
+    "cluster_391": [
+      "org.apache.hadoop.mapred.JvmTask"
+    ],
+    "cluster_392": [
+      "org.apache.hadoop.mapred.KeyValueLineRecordReader"
+    ],
+    "cluster_393": [
+      "org.apache.hadoop.mapred.KeyValueTextInputFormat"
+    ],
+    "cluster_394": [
+      "org.apache.hadoop.mapred.KillJobAction"
+    ],
+    "cluster_395": [
+      "org.apache.hadoop.mapred.KillTaskAction"
+    ],
+    "cluster_396": [
+      "org.apache.hadoop.mapred.LaunchTaskAction"
+    ],
+    "cluster_397": [
+      "org.apache.hadoop.mapred.LimitTasksPerJobTaskScheduler"
+    ],
+    "cluster_398": [
+      "org.apache.hadoop.mapred.LineRecordReader"
+    ],
+    "cluster_399": [
+      "org.apache.hadoop.mapred.LocalJobRunner"
+    ],
+    "cluster_400": [
+      "org.apache.hadoop.mapred.MRSortResultIterator"
+    ],
+    "cluster_401": [
+      "org.apache.hadoop.mapred.MapFileOutputFormat"
+    ],
+    "cluster_402": [
+      "org.apache.hadoop.mapred.MapOutputFile"
+    ],
+    "cluster_403": [
+      "org.apache.hadoop.mapred.MapReduceBase"
+    ],
+    "cluster_404": [
+      "org.apache.hadoop.mapred.MapRunnable"
+    ],
+    "cluster_405": [
+      "org.apache.hadoop.mapred.MapRunner"
+    ],
+    "cluster_406": [
+      "org.apache.hadoop.mapred.MapTask"
+    ],
+    "cluster_407": [
+      "org.apache.hadoop.mapred.MapTaskCompletionEventsUpdate"
+    ],
+    "cluster_408": [
+      "org.apache.hadoop.mapred.MapTaskRunner"
+    ],
+    "cluster_409": [
+      "org.apache.hadoop.mapred.MapTaskStatus"
+    ],
+    "cluster_410": [
+      "org.apache.hadoop.mapred.Mapper"
+    ],
+    "cluster_411": [
+      "org.apache.hadoop.mapred.MergeSorter"
+    ],
+    "cluster_412": [
+      "org.apache.hadoop.mapred.Merger"
+    ],
+    "cluster_413": [
+      "org.apache.hadoop.mapred.MultiFileInputFormat"
+    ],
+    "cluster_414": [
+      "org.apache.hadoop.mapred.MultiFileSplit"
+    ],
+    "cluster_415": [
+      "org.apache.hadoop.mapred.OutputCollector"
+    ],
+    "cluster_416": [
+      "org.apache.hadoop.mapred.OutputCommitter"
+    ],
+    "cluster_417": [
+      "org.apache.hadoop.mapred.OutputFormat"
+    ],
+    "cluster_418": [
+      "org.apache.hadoop.mapred.OutputLogFilter"
+    ],
+    "cluster_419": [
+      "org.apache.hadoop.mapred.Partitioner"
+    ],
+    "cluster_420": [
+      "org.apache.hadoop.mapred.QueueManager"
+    ],
+    "cluster_421": [
+      "org.apache.hadoop.mapred.RamManager"
+    ],
+    "cluster_422": [
+      "org.apache.hadoop.mapred.RawKeyValueIterator"
+    ],
+    "cluster_423": [
+      "org.apache.hadoop.mapred.RecordReader"
+    ],
+    "cluster_424": [
+      "org.apache.hadoop.mapred.RecordWriter"
+    ],
+    "cluster_425": [
+      "org.apache.hadoop.mapred.ReduceTask"
+    ],
+    "cluster_426": [
+      "org.apache.hadoop.mapred.ReduceTaskRunner"
+    ],
+    "cluster_427": [
+      "org.apache.hadoop.mapred.ReduceTaskStatus"
+    ],
+    "cluster_428": [
+      "org.apache.hadoop.mapred.Reducer"
+    ],
+    "cluster_429": [
+      "org.apache.hadoop.mapred.ReinitTrackerAction"
+    ],
+    "cluster_430": [
+      "org.apache.hadoop.mapred.Reporter"
+    ],
+    "cluster_431": [
+      "org.apache.hadoop.mapred.ResourceEstimator"
+    ],
+    "cluster_432": [
+      "org.apache.hadoop.mapred.RunningJob"
+    ],
+    "cluster_433": [
+      "org.apache.hadoop.mapred.SequenceFileAsBinaryInputFormat"
+    ],
+    "cluster_434": [
+      "org.apache.hadoop.mapred.SequenceFileAsBinaryOutputFormat"
+    ],
+    "cluster_435": [
+      "org.apache.hadoop.mapred.SequenceFileAsTextInputFormat"
+    ],
+    "cluster_436": [
+      "org.apache.hadoop.mapred.SequenceFileAsTextRecordReader"
+    ],
+    "cluster_437": [
+      "org.apache.hadoop.mapred.SequenceFileInputFilter"
+    ],
+    "cluster_438": [
+      "org.apache.hadoop.mapred.SequenceFileInputFormat"
+    ],
+    "cluster_439": [
+      "org.apache.hadoop.mapred.SequenceFileOutputFormat"
+    ],
+    "cluster_440": [
+      "org.apache.hadoop.mapred.SequenceFileRecordReader"
+    ],
+    "cluster_441": [
+      "org.apache.hadoop.mapred.SkipBadRecords"
+    ],
+    "cluster_442": [
+      "org.apache.hadoop.mapred.SortedRanges"
+    ],
+    "cluster_443": [
+      "org.apache.hadoop.mapred.StatusHttpServer"
+    ],
+    "cluster_444": [
+      "org.apache.hadoop.mapred.Task"
+    ],
+    "cluster_445": [
+      "org.apache.hadoop.mapred.TaskAttemptContext"
+    ],
+    "cluster_446": [
+      "org.apache.hadoop.mapred.TaskAttemptID"
+    ],
+    "cluster_447": [
+      "org.apache.hadoop.mapred.TaskCompletionEvent"
+    ],
+    "cluster_448": [
+      "org.apache.hadoop.mapred.TaskID"
+    ],
+    "cluster_449": [
+      "org.apache.hadoop.mapred.TaskInProgress"
+    ],
+    "cluster_450": [
+      "org.apache.hadoop.mapred.TaskLog"
+    ],
+    "cluster_451": [
+      "org.apache.hadoop.mapred.TaskLogAppender"
+    ],
+    "cluster_452": [
+      "org.apache.hadoop.mapred.TaskLogServlet"
+    ],
+    "cluster_453": [
+      "org.apache.hadoop.mapred.TaskMemoryManagerThread"
+    ],
+    "cluster_454": [
+      "org.apache.hadoop.mapred.TaskReport"
+    ],
+    "cluster_455": [
+      "org.apache.hadoop.mapred.TaskRunner"
+    ],
+    "cluster_456": [
+      "org.apache.hadoop.mapred.TaskScheduler"
+    ],
+    "cluster_457": [
+      "org.apache.hadoop.mapred.TaskStatus"
+    ],
+    "cluster_458": [
+      "org.apache.hadoop.mapred.TaskTracker"
+    ],
+    "cluster_459": [
+      "org.apache.hadoop.mapred.TaskTrackerAction"
+    ],
+    "cluster_460": [
+      "org.apache.hadoop.mapred.TaskTrackerInstrumentation"
+    ],
+    "cluster_461": [
+      "org.apache.hadoop.mapred.TaskTrackerManager"
+    ],
+    "cluster_462": [
+      "org.apache.hadoop.mapred.TaskTrackerMetricsInst"
+    ],
+    "cluster_463": [
+      "org.apache.hadoop.mapred.TaskTrackerStatus"
+    ],
+    "cluster_464": [
+      "org.apache.hadoop.mapred.TaskUmbilicalProtocol"
+    ],
+    "cluster_465": [
+      "org.apache.hadoop.mapred.TextInputFormat"
+    ],
+    "cluster_466": [
+      "org.apache.hadoop.mapred.TextOutputFormat"
+    ],
+    "cluster_467": [
+      "org.apache.hadoop.mapred.analysejobhistory_jsp"
+    ],
+    "cluster_468": [
+      "org.apache.hadoop.mapred.jobblacklistedtrackers_jsp"
+    ],
+    "cluster_469": [
+      "org.apache.hadoop.mapred.jobconf_005fhistory_jsp"
+    ],
+    "cluster_470": [
+      "org.apache.hadoop.mapred.jobconf_jsp"
+    ],
+    "cluster_471": [
+      "org.apache.hadoop.mapred.jobcontrol.Job"
+    ],
+    "cluster_472": [
+      "org.apache.hadoop.mapred.jobcontrol.JobControl"
+    ],
+    "cluster_473": [
+      "org.apache.hadoop.mapred.jobdetails_jsp"
+    ],
+    "cluster_474": [
+      "org.apache.hadoop.mapred.jobdetailshistory_jsp"
+    ],
+    "cluster_475": [
+      "org.apache.hadoop.mapred.jobfailures_jsp"
+    ],
+    "cluster_476": [
+      "org.apache.hadoop.mapred.jobhistory_jsp"
+    ],
+    "cluster_477": [
+      "org.apache.hadoop.mapred.jobqueue_005fdetails_jsp"
+    ],
+    "cluster_478": [
+      "org.apache.hadoop.mapred.jobtasks_jsp"
+    ],
+    "cluster_479": [
+      "org.apache.hadoop.mapred.jobtaskshistory_jsp"
+    ],
+    "cluster_480": [
+      "org.apache.hadoop.mapred.jobtracker_jsp"
+    ],
+    "cluster_481": [
+      "org.apache.hadoop.mapred.join.ArrayListBackedIterator"
+    ],
+    "cluster_482": [
+      "org.apache.hadoop.mapred.join.ComposableRecordReader"
+    ],
+    "cluster_483": [
+      "org.apache.hadoop.mapred.join.CompositeInputFormat"
+    ],
+    "cluster_484": [
+      "org.apache.hadoop.mapred.join.CompositeInputSplit"
+    ],
+    "cluster_485": [
+      "org.apache.hadoop.mapred.join.CompositeRecordReader"
+    ],
+    "cluster_486": [
+      "org.apache.hadoop.mapred.join.InnerJoinRecordReader"
+    ],
+    "cluster_487": [
+      "org.apache.hadoop.mapred.join.JoinRecordReader"
+    ],
+    "cluster_488": [
+      "org.apache.hadoop.mapred.join.MultiFilterRecordReader"
+    ],
+    "cluster_489": [
+      "org.apache.hadoop.mapred.join.OuterJoinRecordReader"
+    ],
+    "cluster_490": [
+      "org.apache.hadoop.mapred.join.OverrideRecordReader"
+    ],
+    "cluster_491": [
+      "org.apache.hadoop.mapred.join.Parser"
+    ],
+    "cluster_492": [
+      "org.apache.hadoop.mapred.join.ResetableIterator"
+    ],
+    "cluster_493": [
+      "org.apache.hadoop.mapred.join.StreamBackedIterator"
+    ],
+    "cluster_494": [
+      "org.apache.hadoop.mapred.join.TupleWritable"
+    ],
+    "cluster_495": [
+      "org.apache.hadoop.mapred.join.WrappedRecordReader"
+    ],
+    "cluster_496": [
+      "org.apache.hadoop.mapred.lib.Chain"
+    ],
+    "cluster_497": [
+      "org.apache.hadoop.mapred.lib.ChainMapper"
+    ],
+    "cluster_498": [
+      "org.apache.hadoop.mapred.lib.ChainReducer"
+    ],
+    "cluster_499": [
+      "org.apache.hadoop.mapred.lib.DelegatingInputFormat"
+    ],
+    "cluster_500": [
+      "org.apache.hadoop.mapred.lib.DelegatingMapper"
+    ],
+    "cluster_501": [
+      "org.apache.hadoop.mapred.lib.FieldSelectionMapReduce"
+    ],
+    "cluster_502": [
+      "org.apache.hadoop.mapred.lib.HashPartitioner"
+    ],
+    "cluster_503": [
+      "org.apache.hadoop.mapred.lib.IdentityMapper"
+    ],
+    "cluster_504": [
+      "org.apache.hadoop.mapred.lib.IdentityReducer"
+    ],
+    "cluster_505": [
+      "org.apache.hadoop.mapred.lib.InputSampler"
+    ],
+    "cluster_506": [
+      "org.apache.hadoop.mapred.lib.InverseMapper"
+    ],
+    "cluster_507": [
+      "org.apache.hadoop.mapred.lib.KeyFieldBasedComparator"
+    ],
+    "cluster_508": [
+      "org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner"
+    ],
+    "cluster_509": [
+      "org.apache.hadoop.mapred.lib.KeyFieldHelper"
+    ],
+    "cluster_510": [
+      "org.apache.hadoop.mapred.lib.LongSumReducer"
+    ],
+    "cluster_511": [
+      "org.apache.hadoop.mapred.lib.MultipleInputs"
+    ],
+    "cluster_512": [
+      "org.apache.hadoop.mapred.lib.MultipleOutputFormat"
+    ],
+    "cluster_513": [
+      "org.apache.hadoop.mapred.lib.MultipleOutputs"
+    ],
+    "cluster_514": [
+      "org.apache.hadoop.mapred.lib.MultipleSequenceFileOutputFormat"
+    ],
+    "cluster_515": [
+      "org.apache.hadoop.mapred.lib.MultipleTextOutputFormat"
+    ],
+    "cluster_516": [
+      "org.apache.hadoop.mapred.lib.MultithreadedMapRunner"
+    ],
+    "cluster_517": [
+      "org.apache.hadoop.mapred.lib.NLineInputFormat"
+    ],
+    "cluster_518": [
+      "org.apache.hadoop.mapred.lib.NullOutputFormat"
+    ],
+    "cluster_519": [
+      "org.apache.hadoop.mapred.lib.RegexMapper"
+    ],
+    "cluster_520": [
+      "org.apache.hadoop.mapred.lib.TaggedInputSplit"
+    ],
+    "cluster_521": [
+      "org.apache.hadoop.mapred.lib.TokenCountMapper"
+    ],
+    "cluster_522": [
+      "org.apache.hadoop.mapred.lib.TotalOrderPartitioner"
+    ],
+    "cluster_523": [
+      "org.apache.hadoop.mapred.lib.aggregate.DoubleValueSum"
+    ],
+    "cluster_524": [
+      "org.apache.hadoop.mapred.lib.aggregate.LongValueMax"
+    ],
+    "cluster_525": [
+      "org.apache.hadoop.mapred.lib.aggregate.LongValueMin"
+    ],
+    "cluster_526": [
+      "org.apache.hadoop.mapred.lib.aggregate.LongValueSum"
+    ],
+    "cluster_527": [
+      "org.apache.hadoop.mapred.lib.aggregate.StringValueMax"
+    ],
+    "cluster_528": [
+      "org.apache.hadoop.mapred.lib.aggregate.StringValueMin"
+    ],
+    "cluster_529": [
+      "org.apache.hadoop.mapred.lib.aggregate.UniqValueCount"
+    ],
+    "cluster_530": [
+      "org.apache.hadoop.mapred.lib.aggregate.UserDefinedValueAggregatorDescriptor"
+    ],
+    "cluster_531": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregator"
+    ],
+    "cluster_532": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorBaseDescriptor"
+    ],
+    "cluster_533": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorCombiner"
+    ],
+    "cluster_534": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorDescriptor"
+    ],
+    "cluster_535": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorJob"
+    ],
+    "cluster_536": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorJobBase"
+    ],
+    "cluster_537": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorMapper"
+    ],
+    "cluster_538": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueAggregatorReducer"
+    ],
+    "cluster_539": [
+      "org.apache.hadoop.mapred.lib.aggregate.ValueHistogram"
+    ],
+    "cluster_540": [
+      "org.apache.hadoop.mapred.lib.db.DBConfiguration"
+    ],
+    "cluster_541": [
+      "org.apache.hadoop.mapred.lib.db.DBInputFormat"
+    ],
+    "cluster_542": [
+      "org.apache.hadoop.mapred.lib.db.DBOutputFormat"
+    ],
+    "cluster_543": [
+      "org.apache.hadoop.mapred.lib.db.DBWritable"
+    ],
+    "cluster_544": [
+      "org.apache.hadoop.mapred.loadhistory_jsp"
+    ],
+    "cluster_545": [
+      "org.apache.hadoop.mapred.machines_jsp"
+    ],
+    "cluster_546": [
+      "org.apache.hadoop.mapred.pipes.Application"
+    ],
+    "cluster_547": [
+      "org.apache.hadoop.mapred.pipes.BinaryProtocol"
+    ],
+    "cluster_548": [
+      "org.apache.hadoop.mapred.pipes.DownwardProtocol"
+    ],
+    "cluster_549": [
+      "org.apache.hadoop.mapred.pipes.OutputHandler"
+    ],
+    "cluster_550": [
+      "org.apache.hadoop.mapred.pipes.PipesMapRunner"
+    ],
+    "cluster_551": [
+      "org.apache.hadoop.mapred.pipes.PipesNonJavaInputFormat"
+    ],
+    "cluster_552": [
+      "org.apache.hadoop.mapred.pipes.PipesPartitioner"
+    ],
+    "cluster_553": [
+      "org.apache.hadoop.mapred.pipes.PipesReducer"
+    ],
+    "cluster_554": [
+      "org.apache.hadoop.mapred.pipes.Submitter"
+    ],
+    "cluster_555": [
+      "org.apache.hadoop.mapred.pipes.UpwardProtocol"
+    ],
+    "cluster_556": [
+      "org.apache.hadoop.mapred.taskdetails_jsp"
+    ],
+    "cluster_557": [
+      "org.apache.hadoop.mapred.taskdetailshistory_jsp"
+    ],
+    "cluster_558": [
+      "org.apache.hadoop.mapred.taskstats_jsp"
+    ],
+    "cluster_559": [
+      "org.apache.hadoop.mapred.tasktracker_jsp"
+    ],
+    "cluster_560": [
+      "org.apache.hadoop.metrics"
+    ],
+    "cluster_561": [
+      "org.apache.hadoop.metrics.ContextFactory"
+    ],
+    "cluster_562": [
+      "org.apache.hadoop.metrics.MetricsContext"
+    ],
+    "cluster_563": [
+      "org.apache.hadoop.metrics.MetricsException"
+    ],
+    "cluster_564": [
+      "org.apache.hadoop.metrics.MetricsRecord"
+    ],
+    "cluster_565": [
+      "org.apache.hadoop.metrics.MetricsUtil"
+    ],
+    "cluster_566": [
+      "org.apache.hadoop.metrics.Updater"
+    ],
+    "cluster_567": [
+      "org.apache.hadoop.metrics.file.FileContext"
+    ],
+    "cluster_568": [
+      "org.apache.hadoop.metrics.ganglia.GangliaContext"
+    ],
+    "cluster_569": [
+      "org.apache.hadoop.metrics.jvm.EventCounter"
+    ],
+    "cluster_570": [
+      "org.apache.hadoop.metrics.jvm.JvmMetrics"
+    ],
+    "cluster_571": [
+      "org.apache.hadoop.metrics.spi.AbstractMetricsContext"
+    ],
+    "cluster_572": [
+      "org.apache.hadoop.metrics.spi.MetricValue"
+    ],
+    "cluster_573": [
+      "org.apache.hadoop.metrics.spi.MetricsRecordImpl"
+    ],
+    "cluster_574": [
+      "org.apache.hadoop.metrics.spi.NullContext"
+    ],
+    "cluster_575": [
+      "org.apache.hadoop.metrics.spi.NullContextWithUpdateThread"
+    ],
+    "cluster_576": [
+      "org.apache.hadoop.metrics.spi.OutputRecord"
+    ],
+    "cluster_577": [
+      "org.apache.hadoop.metrics.spi.Util"
+    ],
+    "cluster_578": [
+      "org.apache.hadoop.metrics.util.MBeanUtil"
+    ],
+    "cluster_579": [
+      "org.apache.hadoop.metrics.util.MetricsIntValue"
+    ],
+    "cluster_580": [
+      "org.apache.hadoop.metrics.util.MetricsLongValue"
+    ],
+    "cluster_581": [
+      "org.apache.hadoop.metrics.util.MetricsTimeVaryingInt"
+    ],
+    "cluster_582": [
+      "org.apache.hadoop.metrics.util.MetricsTimeVaryingRate"
+    ],
+    "cluster_583": [
+      "org.apache.hadoop.net"
+    ],
+    "cluster_584": [
+      "org.apache.hadoop.net.CachedDNSToSwitchMapping"
+    ],
+    "cluster_585": [
+      "org.apache.hadoop.net.DNS"
+    ],
+    "cluster_586": [
+      "org.apache.hadoop.net.DNSToSwitchMapping"
+    ],
+    "cluster_587": [
+      "org.apache.hadoop.net.NetUtils"
+    ],
+    "cluster_588": [
+      "org.apache.hadoop.net.NetworkTopology"
+    ],
+    "cluster_589": [
+      "org.apache.hadoop.net.Node"
+    ],
+    "cluster_590": [
+      "org.apache.hadoop.net.NodeBase"
+    ],
+    "cluster_591": [
+      "org.apache.hadoop.net.ScriptBasedMapping"
+    ],
+    "cluster_592": [
+      "org.apache.hadoop.net.SocketIOWithTimeout"
+    ],
+    "cluster_593": [
+      "org.apache.hadoop.net.SocketInputStream"
+    ],
+    "cluster_594": [
+      "org.apache.hadoop.net.SocketOutputStream"
+    ],
+    "cluster_595": [
+      "org.apache.hadoop.net.SocksSocketFactory"
+    ],
+    "cluster_596": [
+      "org.apache.hadoop.net.StandardSocketFactory"
+    ],
+    "cluster_597": [
+      "org.apache.hadoop.record"
+    ],
+    "cluster_598": [
+      "org.apache.hadoop.record.BinaryRecordInput"
+    ],
+    "cluster_599": [
+      "org.apache.hadoop.record.BinaryRecordOutput"
+    ],
+    "cluster_600": [
+      "org.apache.hadoop.record.Buffer"
+    ],
+    "cluster_601": [
+      "org.apache.hadoop.record.CsvRecordInput"
+    ],
+    "cluster_602": [
+      "org.apache.hadoop.record.CsvRecordOutput"
+    ],
+    "cluster_603": [
+      "org.apache.hadoop.record.Index"
+    ],
+    "cluster_604": [
+      "org.apache.hadoop.record.Record"
+    ],
+    "cluster_605": [
+      "org.apache.hadoop.record.RecordComparator"
+    ],
+    "cluster_606": [
+      "org.apache.hadoop.record.RecordInput"
+    ],
+    "cluster_607": [
+      "org.apache.hadoop.record.RecordOutput"
+    ],
+    "cluster_608": [
+      "org.apache.hadoop.record.Utils"
+    ],
+    "cluster_609": [
+      "org.apache.hadoop.record.XmlRecordInput"
+    ],
+    "cluster_610": [
+      "org.apache.hadoop.record.XmlRecordOutput"
+    ],
+    "cluster_611": [
+      "org.apache.hadoop.record.compiler.CGenerator"
+    ],
+    "cluster_612": [
+      "org.apache.hadoop.record.compiler.CodeBuffer"
+    ],
+    "cluster_613": [
+      "org.apache.hadoop.record.compiler.CodeGenerator"
+    ],
+    "cluster_614": [
+      "org.apache.hadoop.record.compiler.Consts"
+    ],
+    "cluster_615": [
+      "org.apache.hadoop.record.compiler.CppGenerator"
+    ],
+    "cluster_616": [
+      "org.apache.hadoop.record.compiler.JBoolean"
+    ],
+    "cluster_617": [
+      "org.apache.hadoop.record.compiler.JBuffer"
+    ],
+    "cluster_618": [
+      "org.apache.hadoop.record.compiler.JByte"
+    ],
+    "cluster_619": [
+      "org.apache.hadoop.record.compiler.JCompType"
+    ],
+    "cluster_620": [
+      "org.apache.hadoop.record.compiler.JDouble"
+    ],
+    "cluster_621": [
+      "org.apache.hadoop.record.compiler.JField"
+    ],
+    "cluster_622": [
+      "org.apache.hadoop.record.compiler.JFile"
+    ],
+    "cluster_623": [
+      "org.apache.hadoop.record.compiler.JFloat"
+    ],
+    "cluster_624": [
+      "org.apache.hadoop.record.compiler.JInt"
+    ],
+    "cluster_625": [
+      "org.apache.hadoop.record.compiler.JLong"
+    ],
+    "cluster_626": [
+      "org.apache.hadoop.record.compiler.JMap"
+    ],
+    "cluster_627": [
+      "org.apache.hadoop.record.compiler.JRecord"
+    ],
+    "cluster_628": [
+      "org.apache.hadoop.record.compiler.JString"
+    ],
+    "cluster_629": [
+      "org.apache.hadoop.record.compiler.JType"
+    ],
+    "cluster_630": [
+      "org.apache.hadoop.record.compiler.JVector"
+    ],
+    "cluster_631": [
+      "org.apache.hadoop.record.compiler.JavaGenerator"
+    ],
+    "cluster_632": [
+      "org.apache.hadoop.record.compiler.ant.RccTask"
+    ],
+    "cluster_633": [
+      "org.apache.hadoop.record.compiler.generated.ParseException"
+    ],
+    "cluster_634": [
+      "org.apache.hadoop.record.compiler.generated.Rcc"
+    ],
+    "cluster_635": [
+      "org.apache.hadoop.record.compiler.generated.RccConstants"
+    ],
+    "cluster_636": [
+      "org.apache.hadoop.record.compiler.generated.RccTokenManager"
+    ],
+    "cluster_637": [
+      "org.apache.hadoop.record.compiler.generated.SimpleCharStream"
+    ],
+    "cluster_638": [
+      "org.apache.hadoop.record.compiler.generated.Token"
+    ],
+    "cluster_639": [
+      "org.apache.hadoop.record.compiler.generated.TokenMgrError"
+    ],
+    "cluster_640": [
+      "org.apache.hadoop.record.meta.FieldTypeInfo"
+    ],
+    "cluster_641": [
+      "org.apache.hadoop.record.meta.MapTypeID"
+    ],
+    "cluster_642": [
+      "org.apache.hadoop.record.meta.RecordTypeInfo"
+    ],
+    "cluster_643": [
+      "org.apache.hadoop.record.meta.StructTypeID"
+    ],
+    "cluster_644": [
+      "org.apache.hadoop.record.meta.TypeID"
+    ],
+    "cluster_645": [
+      "org.apache.hadoop.record.meta.Utils"
+    ],
+    "cluster_646": [
+      "org.apache.hadoop.record.meta.VectorTypeID"
+    ],
+    "cluster_647": [
+      "org.apache.hadoop.security"
+    ],
+    "cluster_648": [
+      "org.apache.hadoop.security.AccessControlException"
+    ],
+    "cluster_649": [
+      "org.apache.hadoop.security.UnixUserGroupInformation"
+    ],
+    "cluster_650": [
+      "org.apache.hadoop.security.UserGroupInformation"
+    ],
+    "cluster_651": [
+      "org.apache.hadoop.util"
+    ],
+    "cluster_652": [
+      "org.apache.hadoop.util.Daemon"
+    ],
+    "cluster_653": [
+      "org.apache.hadoop.util.DataChecksum"
+    ],
+    "cluster_654": [
+      "org.apache.hadoop.util.DiskChecker"
+    ],
+    "cluster_655": [
+      "org.apache.hadoop.util.GenericOptionsParser"
+    ],
+    "cluster_656": [
+      "org.apache.hadoop.util.GenericsUtil"
+    ],
+    "cluster_657": [
+      "org.apache.hadoop.util.HeapSort"
+    ],
+    "cluster_658": [
+      "org.apache.hadoop.util.HostsFileReader"
+    ],
+    "cluster_659": [
+      "org.apache.hadoop.util.IndexedSortable"
+    ],
+    "cluster_660": [
+      "org.apache.hadoop.util.IndexedSorter"
+    ],
+    "cluster_661": [
+      "org.apache.hadoop.util.LineReader"
+    ],
+    "cluster_662": [
+      "org.apache.hadoop.util.MergeSort"
+    ],
+    "cluster_663": [
+      "org.apache.hadoop.util.NativeCodeLoader"
+    ],
+    "cluster_664": [
+      "org.apache.hadoop.util.PlatformName"
+    ],
+    "cluster_665": [
+      "org.apache.hadoop.util.PrintJarMainClass"
+    ],
+    "cluster_666": [
+      "org.apache.hadoop.util.PriorityQueue"
+    ],
+    "cluster_667": [
+      "org.apache.hadoop.util.ProcfsBasedProcessTree"
+    ],
+    "cluster_668": [
+      "org.apache.hadoop.util.ProgramDriver"
+    ],
+    "cluster_669": [
+      "org.apache.hadoop.util.Progress"
+    ],
+    "cluster_670": [
+      "org.apache.hadoop.util.Progressable"
+    ],
+    "cluster_671": [
+      "org.apache.hadoop.util.QuickSort"
+    ],
+    "cluster_672": [
+      "org.apache.hadoop.util.ReflectionUtils"
+    ],
+    "cluster_673": [
+      "org.apache.hadoop.util.RunJar"
+    ],
+    "cluster_674": [
+      "org.apache.hadoop.util.ServletUtil"
+    ],
+    "cluster_675": [
+      "org.apache.hadoop.util.Shell"
+    ],
+    "cluster_676": [
+      "org.apache.hadoop.util.StringUtils"
+    ],
+    "cluster_677": [
+      "org.apache.hadoop.util.Tool"
+    ],
+    "cluster_678": [
+      "org.apache.hadoop.util.ToolRunner"
+    ],
+    "cluster_679": [
+      "org.apache.hadoop.util.UTF8ByteArrayUtils"
+    ],
+    "cluster_680": [
+      "org.apache.hadoop.util.VersionInfo"
+    ],
+    "cluster_681": [
+      "org.apache.hadoop.util.XMLUtils"
+    ]
+  },
+  "coarse_edges": [],
+  "llm_response": null,
+  "output_rsf": "test_results\\hadoop_hierarchical_results.rsf"
+}

@@ -133,5 +133,27 @@ dmypy.json
 *.csv
 *.txt
 GA/worker.sh
+
+# OS files
 .DS_Store
+
+# IDE
+.idea/
+
+# Virtual environments
+autogen_env/
+
+# Debug / temp files
+*debug*.txt
+*debug*.log
+autogen_debug.log
+
+# Database files
+*.db
+
+# Large generated files (rebuild with graph_builder.py)
+test_results/*.graphml
+test_results/*_adj.json
+test_results/*_edges.txt
+repo_mining/UYMS/*.zip
 
